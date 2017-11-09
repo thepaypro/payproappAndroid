@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name" translatable="false">CountryCodePicker</string>
+  <string name="app_name" translatable="false">PayProApp</string>
+
   <string name="phone_code" translatable="false">+%s</string>
   <string name="country_name_and_code" translatable="false">%1$s (%2$s)</string>
   <string name="search_hint">Search&#8230;</string>
@@ -9,4 +10,19 @@
   <string name="country_code_and_phone_code">(%1$s) +%2$s</string>
   <string name="country_full_name_and_phone_code">%1$s +%2$s</string>
   <string name="error_unregister_carrier_number">EditText for carrier number is not registered. Register it using registerPhoneNumberTextView() before getFullNumber() or setFullNumber().</string>
+
+
+  <string name="continue_button">Continue</string>
+
+
+  <string name="slide_1_title">PayPro app</string>
+  <string name="slide_1_desc">PayPro App is a free, safe and easy-to-use Bitcoin Wallet for spending and saving your preferred crypto-currency.</string>
+
+  <string name="slide_2_title">Instant payments</string>
+  <string name="slide_2_desc">Send instant payments to anyone in your Contact List just by using their phone number./nIt’s easy, free and fast.</string>
+
+  <string name="ray">ray</string>
+  <string name="screen_shot">screen_shot</string>
+
+
 </resources>
