@@ -7,8 +7,15 @@
   <color name="colorPrimaryDark">#303F9F</color>
   <color name="colorAccent">#57FFB3</color>
 
-  <!-- Screens background color-->
+  <!-- Screens background colors-->
   <color name="bg_slider">#3D3D7A</color>
+  <color name="bg_gray">#EBEBF1</color>
+  <color name="bg_gray2">#FAFAFA</color>
+
+  <!--Other colors-->
+  <color name="pp_purple">#7271FF</color>
+  <color name="pp_white">#FFFFFF</color>
+
 
   <!-- dots inactive colors -->
   <color name="dot_dark_slider">#ffffff</color>

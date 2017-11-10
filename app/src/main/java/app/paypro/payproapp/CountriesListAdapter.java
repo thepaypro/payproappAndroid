@@ -14,8 +14,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import android.widget.AlphabetIndexer;
-import org.json.JSONObject;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -40,10 +38,9 @@ public class CountriesListAdapter extends RecyclerView.Adapter<CountriesListAdap
     public void onBindViewHolder(CountriesListAdapter.ViewHolder holder, int position) {
 
         Country country = filtered_data.get(position);
-        String callingCodes_value = country.getCallingCodes();
-        String name_value = country.getName();
 
-        holder.mTextView.setText(name_value.trim() + " (+" + callingCodes_value.trim() + ")");
+        holder.mTextView.setText(country.getName().trim() + " (+" + country.getCallingCodes().trim() + ")");
+        holder.mTextView.getRootView().setTag(country);
 
     }
 

@@ -5,6 +5,7 @@ package app.paypro.payproapp;
  */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import java.io.InputStream;
 import org.json.JSONArray;
@@ -22,6 +23,9 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.app.AppCompatActivity;
 import java.util.Collections;
 import java.util.Comparator;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.view.View;
+import android.widget.LinearLayout;
 
 
 public class PhoneNumberListActivity extends AppCompatActivity{
@@ -34,6 +38,20 @@ public class PhoneNumberListActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_number_list);
         mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Intent intent = new Intent(PhoneNumberListActivity.this, PhoneNumberActivity.class);
+                Country country = (Country) v.getTag();
+                intent.putExtra("alpha2Code", (String) country.getAlpha2Code());
+                intent.putExtra("callingCodes", (String) country.getCallingCodes());
+                startActivity(intent);
+                finish();
+            }
+        });
 
         ArrayList<Country> myDataset = loadCountriesJSON();
 
@@ -77,7 +95,7 @@ public class PhoneNumberListActivity extends AppCompatActivity{
             if (jArray != null) {
                 for (int i=0;i<jArray.length();i++){
                     JSONObject jo_inside = (JSONObject) jArray.get(i);
-                    Country country = new Country(jo_inside.getString("name"), jo_inside.getString("callingCodes"));
+                    Country country = new Country(jo_inside.getString("name"), jo_inside.getString("callingCodes"),jo_inside.getString("alpha2Code"));
                     listdata.add(country);
                 }
             }

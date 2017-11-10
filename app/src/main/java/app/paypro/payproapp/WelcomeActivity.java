@@ -93,7 +93,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
     public void launchPhoneActivity(View v) {
-        startActivity(new Intent(WelcomeActivity.this, PhoneNumberListActivity.class));
+        startActivity(new Intent(WelcomeActivity.this, PhoneNumberActivity.class));
         finish();
     }
 
