@@ -8,50 +8,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.RecyclerView;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 
-import org.json.JSONArray;
+import android.widget.AlphabetIndexer;
 import org.json.JSONObject;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class CountriesListAdapter extends RecyclerView.Adapter<CountriesListAdapter.ViewHolder> implements Filterable {
-    private ArrayList<JSONObject>  data;
-    private ArrayList<JSONObject> filtered_data;
+public class CountriesListAdapter extends RecyclerView.Adapter<CountriesListAdapter.ViewHolder> implements Filterable, SectionIndexer {
 
+    private ArrayList<Country>  data;
+    private ArrayList<Country> filtered_data;
+    AlphabetIndexer mAlphabetIndexer;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public CountriesListAdapter(ArrayList<JSONObject> myDataset) {
+    public CountriesListAdapter(ArrayList<Country> myDataset) {
         data = myDataset;
         filtered_data = myDataset;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public CountriesListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.country_list_item, parent, false);
         return new ViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(CountriesListAdapter.ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
 
-        try {
-            JSONObject jo_inside = filtered_data.get(position);
-            String callingCodes_value = jo_inside.getString("callingCodes");
-            String name_value = jo_inside.getString("name");
+        Country country = filtered_data.get(position);
+        String callingCodes_value = country.getCallingCodes();
+        String name_value = country.getName();
 
-            holder.mTextView.setText(name_value.trim() + " (+" + callingCodes_value.trim() + ")");
+        holder.mTextView.setText(name_value.trim() + " (+" + callingCodes_value.trim() + ")");
 
-        }catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -69,24 +62,20 @@ public class CountriesListAdapter extends RecyclerView.Adapter<CountriesListAdap
 
                 String charString = charSequence.toString();
 
-                try{
-                    if (charString.isEmpty()) {
-                        filtered_data = data;
-                    } else {
+                if (charString.isEmpty()) {
+                    filtered_data = data;
+                } else {
 
-                        ArrayList<JSONObject> filteredList = new ArrayList<>();
+                    ArrayList<Country> filteredList = new ArrayList<>();
 
-                        for (JSONObject dataObject : data) {
+                    for (Country dataObject : data) {
 
-                            if (dataObject.getString("callingCodes").toLowerCase().contains(charString) || dataObject.getString("name").toLowerCase().contains(charString)) {
-                                filteredList.add(dataObject);
-                            }
+                        if (dataObject.getCallingCodes().toLowerCase().contains(charString) || dataObject.getName().toLowerCase().contains(charString)) {
+                            filteredList.add(dataObject);
                         }
-
-                        filtered_data = filteredList;
                     }
-                }catch (JSONException e) {
-                    e.printStackTrace();
+
+                    filtered_data = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
@@ -96,10 +85,25 @@ public class CountriesListAdapter extends RecyclerView.Adapter<CountriesListAdap
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                filtered_data = (ArrayList<JSONObject>) filterResults.values;
+                filtered_data = (ArrayList<Country>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
+    }
+
+    @Override
+    public Object[] getSections() {
+        return mAlphabetIndexer.getSections();
+    }
+
+    @Override
+    public int getPositionForSection(int i) {
+        return mAlphabetIndexer.getPositionForSection(i);
+    }
+
+    @Override
+    public int getSectionForPosition(int i) {
+        return mAlphabetIndexer.getSectionForPosition(i);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

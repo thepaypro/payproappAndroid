@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.support.v7.app.AppCompatActivity;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class PhoneNumberListActivity extends AppCompatActivity{
@@ -33,16 +35,23 @@ public class PhoneNumberListActivity extends AppCompatActivity{
         setContentView(R.layout.activity_phone_number_list);
         mRecyclerView = findViewById(R.id.recyclerView);
 
-        ArrayList<JSONObject> myDataset = loadCountriesJSON();
+        ArrayList<Country> myDataset = loadCountriesJSON();
 
-
-        // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter
-        mAdapter = new CountriesListAdapter(myDataset);
+        mAdapter = new CountriesListAdapter(sortList(myDataset));
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    ArrayList<Country> sortList(ArrayList<Country> list) {
+        Collections.sort(list, new Comparator<Country>() {
+            @Override
+            public int compare(Country country1, Country country2) {
+                return country1.getName().compareTo(country2.getName());
+            }
+        });
+        return list;
     }
 
     @Override
@@ -56,8 +65,8 @@ public class PhoneNumberListActivity extends AppCompatActivity{
         return true;
     }
 
-    public ArrayList<JSONObject> loadCountriesJSON() {
-        ArrayList<JSONObject> listdata = new ArrayList<>();
+    public ArrayList<Country> loadCountriesJSON() {
+        ArrayList<Country> listdata = new ArrayList<>();
         try {
             InputStream is = getResources().openRawResource(R.raw.countries);
             int size = is.available();
@@ -67,7 +76,9 @@ public class PhoneNumberListActivity extends AppCompatActivity{
             JSONArray jArray = new JSONArray(new String(buffer, "UTF-8"));
             if (jArray != null) {
                 for (int i=0;i<jArray.length();i++){
-                    listdata.add((JSONObject) jArray.get(i));
+                    JSONObject jo_inside = (JSONObject) jArray.get(i);
+                    Country country = new Country(jo_inside.getString("name"), jo_inside.getString("callingCodes"));
+                    listdata.add(country);
                 }
             }
         } catch (IOException ex) {
