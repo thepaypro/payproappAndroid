@@ -90,12 +90,10 @@ public class WelcomeActivity extends AppCompatActivity {
             dots[currentPage].setTextColor(colorsActive);
     }
 
-    private int getItem(int i) {
-        return viewPager.getCurrentItem() + i;
-    }
 
-    private void launchHomeScreen() {
-        startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+
+    public void launchPhoneActivity(View v) {
+        startActivity(new Intent(WelcomeActivity.this, PhoneNumberListActivity.class));
         finish();
     }
 

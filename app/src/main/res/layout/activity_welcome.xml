@@ -29,7 +29,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_pager"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1" />
+        app:layout_constraintVertical_bias="1"
+        android:onClick="launchPhoneActivity"/>
 
     <LinearLayout
         android:id="@+id/layoutDots"

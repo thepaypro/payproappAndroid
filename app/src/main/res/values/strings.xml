@@ -24,5 +24,6 @@
   <string name="ray">ray</string>
   <string name="screen_shot">screen_shot</string>
 
+  <string name="action_search">action_search</string>
 
 </resources>

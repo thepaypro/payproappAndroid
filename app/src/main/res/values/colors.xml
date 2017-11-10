@@ -11,10 +11,10 @@
   <color name="bg_slider">#3D3D7A</color>
 
   <!-- dots inactive colors -->
-  <color name="dot_dark">#d1395c</color>
+  <color name="dot_dark_slider">#ffffff</color>
 
   <!-- dots active colors -->
-  <color name="dot_light">#f98da5</color>
+  <color name="dot_light_slider">#7271FF</color>
 
 
 </resources>
