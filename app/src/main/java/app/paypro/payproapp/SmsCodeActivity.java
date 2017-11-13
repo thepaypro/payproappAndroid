@@ -1,5 +1,6 @@
 package app.paypro.payproapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -8,8 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.text.TextWatcher;
+import android.widget.TextView;
 
 /**
  * Created by rogerbaiget on 13/11/17.
@@ -17,10 +20,11 @@ import android.text.TextWatcher;
 
 public class SmsCodeActivity extends AppCompatActivity{
 
-    public EditText firstText;
-    public EditText secondText;
-    public EditText thirdText;
-    public EditText fourText;
+    public EditText editText;
+    public TextView firstTextView;
+    public TextView secondTextView;
+    public TextView thirdTextView;
+    public TextView fourTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +33,17 @@ public class SmsCodeActivity extends AppCompatActivity{
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        EditText firstText= findViewById(R.id.editText1);
-        EditText secondText= findViewById(R.id.editText2);
-        EditText thirdText= findViewById(R.id.editText3);
-        EditText fourText= findViewById(R.id.editText4);
-        firstText.requestFocus();
+        editText= findViewById(R.id.editText);
+        firstTextView= findViewById(R.id.viewText1);
+        secondTextView= findViewById(R.id.viewText2);
+        thirdTextView= findViewById(R.id.viewText3);
+        fourTextView= findViewById(R.id.viewText4);
+        editText.requestFocus();
 
-        secondText.addTextChangedListener(filterTextWatcher);
-        thirdText.addTextChangedListener(filterTextWatcher);
-        fourText.addTextChangedListener(filterTextWatcher);
+        InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+        editText.addTextChangedListener(filterTextWatcher);
 
     }
 
@@ -52,36 +58,47 @@ public class SmsCodeActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    public void launchPasscodeActivity(View v) {
-//        startActivity(new Intent(PhoneNumberActivity.this, PhoneNumberListActivity.class));
-//        finish();
-    }
-
     private TextWatcher filterTextWatcher = new TextWatcher() {
 
         public void afterTextChanged(Editable s) {
-            Boolean isfirstTextNull = firstText.getText().toString() == null;
-            Boolean issecondTextNull =secondText.getText().toString() == null;
-            Boolean isthirdTextNull =thirdText.getText().toString() == null;
-            Boolean isfourTextNull =fourText.getText().toString() == null;
+            Integer editedTextLengt = editText.length();
+            String editTextString = editText.getText().toString();
 
-            if(!isfirstTextNull){
-                if(!issecondTextNull){
-                    if(!isthirdTextNull){
-                        if(isfourTextNull){
-                            fourText.requestFocus();
-                        }else{
-                            //show nextButton
-                        }
-                    }else{
-                        thirdText.requestFocus();
-                    }
-                }else{
-                    secondText.requestFocus();
-                }
-            }else{
-                firstText.requestFocus();
+            switch (editedTextLengt) {
+                case 0:
+                    firstTextView.setText("");
+                    secondTextView.setText("");
+                    thirdTextView.setText("");
+                    fourTextView.setText("");
+                    break;
+                case 1:
+                    firstTextView.setText(Character.toString(editTextString.charAt(0)));
+                    secondTextView.setText("");
+                    thirdTextView.setText("");
+                    fourTextView.setText("");
+                    break;
+                case 2:
+                    firstTextView.setText(Character.toString(editTextString.charAt(0)));
+                    secondTextView.setText(Character.toString(editTextString.charAt(1)));
+                    thirdTextView.setText("");
+                    fourTextView.setText("");
+                    break;
+                case 3:
+                    firstTextView.setText(Character.toString(editTextString.charAt(0)));
+                    secondTextView.setText(Character.toString(editTextString.charAt(1)));
+                    thirdTextView.setText(Character.toString(editTextString.charAt(2)));
+                    fourTextView.setText("");
+                    break;
+                case 4:
+                    firstTextView.setText(Character.toString(editTextString.charAt(0)));
+                    secondTextView.setText(Character.toString(editTextString.charAt(1)));
+                    thirdTextView.setText(Character.toString(editTextString.charAt(2)));
+                    fourTextView.setText(Character.toString(editTextString.charAt(3)));
+                    startActivity(new Intent(SmsCodeActivity.this, PasscodeActivity.class));
+                    finish();
+                    break;
             }
+
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -19,6 +19,7 @@
         </activity>
         <activity
             android:name=".PhoneNumberActivity"
+            android:windowSoftInputMode="stateVisible"
             android:label="@string/title_activity_phone_number"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
@@ -29,8 +30,14 @@
         </activity>
         <activity
             android:name=".SmsCodeActivity"
+            android:windowSoftInputMode="stateVisible"
             android:parentActivityName=".PhoneNumberActivity"
             android:label="@string/title_activity_sms_code">
+        </activity>
+        <activity
+            android:name=".PasscodeActivity"
+            android:parentActivityName=".PhoneNumberActivity"
+            android:label="@string/title_activity_phone_number">
         </activity>
     </application>
 
