@@ -29,4 +29,8 @@
   <string name="phone_number_activity_info">TYPE YOUR PHONE NUMBER</string>
   <string name="title_activity_phone_number">Phone number</string>
 
+  <string name="title_activity_sms_code">SMS Code</string>
+  <string name="enter_sms_code">Enter the SMS code</string>
+  <string name="enter_sms_code_desc">Enter the SMS code you have received to register in the PayPro app</string>
+
 </resources>

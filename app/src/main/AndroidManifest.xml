@@ -19,13 +19,18 @@
         </activity>
         <activity
             android:name=".PhoneNumberActivity"
-            android:parentActivityName=".WelcomeActivity"
-            >
+            android:label="@string/title_activity_phone_number"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".PhoneNumberListActivity"
             android:parentActivityName=".PhoneNumberActivity"
             android:label="@string/title_activity_phone_number">
+        </activity>
+        <activity
+            android:name=".SmsCodeActivity"
+            android:parentActivityName=".PhoneNumberActivity"
+            android:label="@string/title_activity_sms_code">
         </activity>
     </application>
 
