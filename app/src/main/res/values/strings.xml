@@ -19,11 +19,14 @@
   <string name="slide_1_desc">PayPro App is a free, safe and easy-to-use Bitcoin Wallet for spending and saving your preferred crypto-currency.</string>
 
   <string name="slide_2_title">Instant payments</string>
-  <string name="slide_2_desc">Send instant payments to anyone in your Contact List just by using their phone number./nIt’s easy, free and fast.</string>
+  <string name="slide_2_desc">Send instant payments to anyone in your Contact List just by using their phone number.\nIt’s easy, free and fast.</string>
 
   <string name="ray">ray</string>
   <string name="screen_shot">screen_shot</string>
 
   <string name="action_search">action_search</string>
+
+  <string name="phone_number_activity_info">TYPE YOUR PHONE NUMBER</string>
+  <string name="title_activity_phone_number">Phone number</string>
 
 </resources>

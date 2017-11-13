@@ -67,7 +67,7 @@ public class CountriesListAdapter extends RecyclerView.Adapter<CountriesListAdap
 
                     for (Country dataObject : data) {
 
-                        if (dataObject.getCallingCodes().toLowerCase().contains(charString) || dataObject.getName().toLowerCase().contains(charString)) {
+                        if (dataObject.getAlpha2Code().toLowerCase().startsWith(charString) || dataObject.getName().toLowerCase().startsWith(charString)) {
                             filteredList.add(dataObject);
                         }
                     }

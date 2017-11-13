@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
@@ -25,7 +26,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.support.v7.app.ActionBar;
+
 
 
 public class PhoneNumberListActivity extends AppCompatActivity{
@@ -37,6 +39,7 @@ public class PhoneNumberListActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_number_list);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -60,6 +63,17 @@ public class PhoneNumberListActivity extends AppCompatActivity{
 
         mAdapter = new CountriesListAdapter(sortList(myDataset));
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     ArrayList<Country> sortList(ArrayList<Country> list) {

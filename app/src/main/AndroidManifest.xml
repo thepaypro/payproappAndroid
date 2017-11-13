@@ -17,9 +17,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PhoneNumberActivity">
+        <activity
+            android:name=".PhoneNumberActivity"
+            android:parentActivityName=".WelcomeActivity"
+            >
         </activity>
-        <activity android:name=".PhoneNumberListActivity">
+        <activity
+            android:name=".PhoneNumberListActivity"
+            android:parentActivityName=".PhoneNumberActivity"
+            android:label="@string/title_activity_phone_number">
         </activity>
     </application>
 
