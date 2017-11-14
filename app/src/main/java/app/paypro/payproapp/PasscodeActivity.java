@@ -60,23 +60,28 @@ public class PasscodeActivity extends AppCompatActivity{
                 case "create":
                     titleTextView.setText(R.string.enter_passcode_create);
                     descTextView.setText(R.string.enter_passcode_desc_create);
+                    getSupportActionBar().setTitle(R.string.title_passcode_create);
                     break;
                 case "login":
                     titleTextView.setText(R.string.enter_passcode_login);
                     descTextView.setText(R.string.enter_passcode_desc_login);
+                    getSupportActionBar().setTitle(R.string.title_passcode_login);
                     break;
                 case "old":
                     titleTextView.setText(R.string.enter_passcode_old);
                     descTextView.setText(R.string.enter_passcode_desc_old);
+                    getSupportActionBar().setTitle(R.string.title_passcode_create);
                     break;
                 case "new":
                     titleTextView.setText(R.string.enter_passcode_new);
                     descTextView.setText(R.string.enter_passcode_desc_new);
+                    getSupportActionBar().setTitle(R.string.title_passcode_new);
                     break;
                 case "confirm":
                     first_passcode = extras.getString("first_passcode");
                     titleTextView.setText(R.string.enter_passcode_confirm);
                     descTextView.setText(R.string.enter_passcode_desc_confirm);
+                    getSupportActionBar().setTitle(R.string.title_passcode_confirm);
                     break;
             }
         }

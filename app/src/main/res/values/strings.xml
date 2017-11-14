@@ -34,19 +34,23 @@
   <string name="enter_sms_code_desc">Enter the SMS code you have received to register in the PayPro app</string>
 
 
-
+  <string name="title_passcode_create">Passcode</string>
   <string name="enter_passcode_create">Create a passcode</string>
   <string name="enter_passcode_desc_create">A passcode protects your data and is used to unlock the PayPro app</string>
 
+  <string name="title_passcode_login">Log in</string>
   <string name="enter_passcode_login">Enter your Passcode in PayPro</string>
   <string name="enter_passcode_desc_login">Enter your passcode to unlock the PayPro app</string>
 
+  <string name="title_passcode_old">Old Passcode</string>
   <string name="enter_passcode_old">Old passcode in PayPro</string>
   <string name="enter_passcode_desc_old">Enter your passcode to change for one new</string>
 
+  <string name="title_passcode_new">New Passcode</string>
   <string name="enter_passcode_new">New passcode in PayPro</string>
   <string name="enter_passcode_desc_new">A passcode protects your data and is used to unlock the PayPro app</string>
 
+  <string name="title_passcode_confirm">Confirm Passcode</string>
   <string name="enter_passcode_confirm">Confirm your passcode</string>
   <string name="enter_passcode_desc_confirm">A passcode protects your data and is used to unlock the PayPro app</string>
 
