@@ -36,8 +36,10 @@
         </activity>
         <activity
             android:name=".PasscodeActivity"
-            android:parentActivityName=".PhoneNumberActivity"
-            android:label="@string/title_activity_phone_number">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+        <activity
+            android:name=".TabActivity">
         </activity>
     </application>
 

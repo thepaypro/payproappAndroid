@@ -9,22 +9,22 @@
     android:gravity="center_horizontal">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/titleTextView"
         android:layout_marginTop="90dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enter_sms_code"
+        android:text="@string/enter_passcode_login"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/descTextView"
         android:layout_marginTop="25dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enter_sms_code_desc"
+        android:text="@string/enter_passcode_desc_login"
         android:textAlignment="center"
         android:textColor="@android:color/white" />
 
@@ -44,67 +44,76 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:cursorVisible="false"
             android:ems="10"
             android:inputType="number"
-            android:maxLength="4"
+            android:maxLength="6"
             android:textColor="@android:color/transparent"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-            android:background="@android:color/transparent"
-            android:cursorVisible="false"/>
+            app:layout_constraintTop_toTopOf="@+id/linearLayout" />
 
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
+            android:id="@+id/circlelinearLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@+id/editText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText">
 
             <ImageView
-                android:id="@+id/line1"
+                android:id="@+id/circle1"
                 android:layout_width="@dimen/passcode_circle_diameter"
                 android:layout_height="@dimen/passcode_circle_diameter"
                 android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/empty_circle" />
 
             <ImageView
-                android:id="@+id/line2"
+                android:id="@+id/circle2"
                 android:layout_width="@dimen/passcode_circle_diameter"
                 android:layout_height="@dimen/passcode_circle_diameter"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/empty_circle" />
 
             <ImageView
-                android:id="@+id/line3"
+                android:id="@+id/circle3"
                 android:layout_width="@dimen/passcode_circle_diameter"
                 android:layout_height="@dimen/passcode_circle_diameter"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/empty_circle" />
 
             <ImageView
-                android:id="@+id/line4"
+                android:id="@+id/circle4"
                 android:layout_width="@dimen/passcode_circle_diameter"
                 android:layout_height="@dimen/passcode_circle_diameter"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/empty_circle" />
 
             <ImageView
-                android:id="@+id/line5"
+                android:id="@+id/circle5"
                 android:layout_width="@dimen/passcode_circle_diameter"
                 android:layout_height="@dimen/passcode_circle_diameter"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/empty_circle" />
 
             <ImageView
-                android:id="@+id/line6"
+                android:id="@+id/circle6"
                 android:layout_width="@dimen/passcode_circle_diameter"
                 android:layout_height="@dimen/passcode_circle_diameter"
                 android:layout_marginLeft="10dp"
+                android:layout_weight="1"
                 app:srcCompat="@drawable/empty_circle" />
 
         </LinearLayout>

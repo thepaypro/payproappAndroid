@@ -94,7 +94,9 @@ public class SmsCodeActivity extends AppCompatActivity{
                     secondTextView.setText(Character.toString(editTextString.charAt(1)));
                     thirdTextView.setText(Character.toString(editTextString.charAt(2)));
                     fourTextView.setText(Character.toString(editTextString.charAt(3)));
-                    startActivity(new Intent(SmsCodeActivity.this, PasscodeActivity.class));
+                    Intent intent = new Intent(SmsCodeActivity.this, PasscodeActivity.class);
+                    intent.putExtra("passcode_state", "create");
+                    startActivity(intent);
                     finish();
                     break;
             }

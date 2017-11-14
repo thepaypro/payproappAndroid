@@ -89,7 +89,7 @@ public class PhoneNumberActivity extends AppCompatActivity {
 
     public void launchListActivity(View v) {
         startActivity(new Intent(PhoneNumberActivity.this, PhoneNumberListActivity.class));
-        finish();
+//        finish();
     }
 
     private TextWatcher filterTextWatcher = new TextWatcher() {
