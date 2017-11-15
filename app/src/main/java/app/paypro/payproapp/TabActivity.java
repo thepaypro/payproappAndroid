@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.android.support.BottomNavigationViewHelper;
+
 
 public class TabActivity extends AppCompatActivity {
 
@@ -49,10 +51,17 @@ public class TabActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        //Manually displaying the first fragment - one time only
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, AccountFragment.newInstance());
-        transaction.commit();
+        BottomNavigationViewHelper.disableShiftMode(navigation);
+
+        navigation.setSelectedItemId(R.id.navigation_account);
+
+//        Menu menu = navigation.getMenu();
+//        mOnNavigationItemSelectedListener.onNavigationItemSelected(menu.findItem(R.id.navigation_account));
+
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.frame_layout, AccountFragment.newInstance());
+//        transaction.commit();
+//        navigation.setSelectedItemId(R.id.navigation_account);
     }
 
 }
