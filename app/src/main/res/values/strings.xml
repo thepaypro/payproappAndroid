@@ -11,9 +11,7 @@
   <string name="country_full_name_and_phone_code">%1$s +%2$s</string>
   <string name="error_unregister_carrier_number">EditText for carrier number is not registered. Register it using registerPhoneNumberTextView() before getFullNumber() or setFullNumber().</string>
 
-
   <string name="continue_button">Continue</string>
-
 
   <string name="slide_1_title">PayPro app</string>
   <string name="slide_1_desc">PayPro App is a free, safe and easy-to-use Bitcoin Wallet for spending and saving your preferred crypto-currency.</string>
@@ -28,6 +26,9 @@
 
   <string name="phone_number_activity_info">TYPE YOUR PHONE NUMBER</string>
   <string name="title_activity_phone_number">Phone number</string>
+  <string name="confirmation_code_actionbar">Done</string>
+
+
 
   <string name="title_activity_sms_code">SMS Code</string>
   <string name="enter_sms_code">Enter the SMS code</string>

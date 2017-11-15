@@ -3,11 +3,15 @@ package app.paypro.payproapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +23,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import app.paypro.payproapp.http.ResponseListener;
+import app.paypro.payproapp.user.User;
+
 
 /**
  * Created by rogerbaiget on 10/11/17.
@@ -28,7 +38,7 @@ public class PhoneNumberActivity extends AppCompatActivity {
 
     String alpha2Code;
     String callingCodes;
-    EditText editText;
+    TextInputEditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,28 +74,59 @@ public class PhoneNumberActivity extends AppCompatActivity {
 
 
         LinearLayout toolbarLayout =  findViewById(R.id.toolbar_layout);
-        toolbarLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PhoneNumberActivity.this, SmsCodeActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
         toolbarLayout.setVisibility(LinearLayout.INVISIBLE);
 
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            // Respond to the action bar's Up/Home button
-//            case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    public void launchSmsCodeActivity(View v){
+        final String phoneNumber = "+"+callingCodes+editText.getText().toString();
+        try {
+            User.mobileVerificationCode(this, phoneNumber, new ResponseListener<JSONObject>() {
+                @Override
+                public void getResult(JSONObject object) throws JSONException {
+                    try {
+                        if (object.getString("status").equals("true") && object.getString("isUser").equals("true")) {
+                            Intent intentLogin = new Intent(PhoneNumberActivity.this, PasscodeActivity.class);
+                            intentLogin.putExtra("username", phoneNumber);
+                            intentLogin.putExtra("passcode_state", "login");
+                            startActivity(intentLogin);
+                            finish();
+
+
+                        } else if (object.getString("status").equals("true") && object.getString("isUser").equals("false")){
+                            Intent intentSms = new Intent(PhoneNumberActivity.this, SmsCodeActivity.class);
+                            intentSms.putExtra("username", phoneNumber);
+                            startActivity(intentSms);
+                            finish();
+                        }else{
+                            TextInputLayout til = (TextInputLayout) findViewById(R.id.text_input_layout);
+                            til.setError("Invalid phone number");
+                            /*AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                            builder.setMessage(R.string.dialog_message_invalid_phone_number)
+                                    .setTitle(R.string.dialog_title_invalid_phone_number)
+                                    .setPositiveButton(R.string.fire, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // FIRE ZE MISSILES!
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // User cancelled the dialog
+                                        }
+                                    });
+
+                            // 3. Get the AlertDialog from create()
+                            AlertDialog dialog = builder.create();*/
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void launchListActivity(View v) {
         startActivity(new Intent(PhoneNumberActivity.this, PhoneNumberListActivity.class));

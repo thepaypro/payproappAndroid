@@ -25,6 +25,7 @@ public class SmsCodeActivity extends AppCompatActivity{
     public TextView secondTextView;
     public TextView thirdTextView;
     public TextView fourTextView;
+    public String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,11 @@ public class SmsCodeActivity extends AppCompatActivity{
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         editText.addTextChangedListener(filterTextWatcher);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            username = extras.getString("username");
+        }
 
     }
 
@@ -96,6 +102,8 @@ public class SmsCodeActivity extends AppCompatActivity{
                     fourTextView.setText(Character.toString(editTextString.charAt(3)));
                     Intent intent = new Intent(SmsCodeActivity.this, PasscodeActivity.class);
                     intent.putExtra("passcode_state", "create");
+                    intent.putExtra("sms_code", editTextString );
+                    intent.putExtra("username", username);
                     startActivity(intent);
                     finish();
                     break;

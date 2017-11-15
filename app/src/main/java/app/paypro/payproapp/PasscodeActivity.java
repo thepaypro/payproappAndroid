@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
@@ -15,6 +16,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import app.paypro.payproapp.global.Global;
+import app.paypro.payproapp.http.ResponseListener;
+import app.paypro.payproapp.user.User;
 
 /**
  * Created by rogerbaiget on 13/11/17.
@@ -30,6 +38,8 @@ public class PasscodeActivity extends AppCompatActivity{
     public ImageView fiveImageView;
     public ImageView sixImageView;
     public String passcode_state;
+    public String username;
+    public String sms_code;
     public String first_passcode = "";
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +62,14 @@ public class PasscodeActivity extends AppCompatActivity{
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             passcode_state = extras.getString("passcode_state");
+            username = extras.getString("username");
 
             TextView titleTextView = this.findViewById(R.id.titleTextView);
             TextView descTextView = this.findViewById(R.id.descTextView);
 
             switch (passcode_state){
                 case "create":
+                    sms_code = extras.getString("sms_code");
                     titleTextView.setText(R.string.enter_passcode_create);
                     descTextView.setText(R.string.enter_passcode_desc_create);
                     getSupportActionBar().setTitle(R.string.title_passcode_create);
@@ -79,6 +91,7 @@ public class PasscodeActivity extends AppCompatActivity{
                     break;
                 case "confirm":
                     first_passcode = extras.getString("first_passcode");
+                    sms_code = extras.getString("sms_code");
                     titleTextView.setText(R.string.enter_passcode_confirm);
                     descTextView.setText(R.string.enter_passcode_desc_confirm);
                     getSupportActionBar().setTitle(R.string.title_passcode_confirm);
@@ -98,20 +111,6 @@ public class PasscodeActivity extends AppCompatActivity{
         sixImageView.setImageResource(R.drawable.empty_circle);
         AnimationSet shakeAnim = new AnimationSet(true);
         shakeAnim.addAnimation(AnimationUtils.loadAnimation(getApplicationContext(),  R.anim.solid_circle_translation));
-        /*shakeAnim.setAnimationListener(new Animation.AnimationListener(){
-            @Override
-            public void onAnimationStart(Animation arg0) {
-            }
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-                editText.requestFocus();
-                InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
-        });*/
         LinearLayout circlelinearLayout= findViewById(R.id.circlelinearLayout);
         circlelinearLayout.setAnimation(shakeAnim);
         circlelinearLayout.startAnimation(shakeAnim);
@@ -183,14 +182,44 @@ public class PasscodeActivity extends AppCompatActivity{
                         case "create":
                             Intent createIntent = new Intent(PasscodeActivity.this, PasscodeActivity.class);
                             createIntent.putExtra("passcode_state", "confirm");
+                            createIntent.putExtra("username", username);
+                            createIntent.putExtra("sms_code", sms_code);
                             createIntent.putExtra("first_passcode", editTextString);
                             startActivity(createIntent);
-//                            finish();
+                            finish();
                             break;
                         case "login":
-//                                Intent intent = new Intent(PasscodeActivity.this, PasscodeActivity.class);
-//                                startActivity(intent);
-//                                finish();
+                            JSONObject parameters = new JSONObject();
+                            try {
+                                parameters.put("_username",username);
+                                parameters.put("_password",editTextString);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            try {
+                                User.login(getApplicationContext(), parameters, new ResponseListener<JSONObject>(){
+                                    @Override
+                                    public void getResult(JSONObject object) {
+                                        try {
+                                            if(object.getBoolean("status")){
+                                                Global.setUsername(username);
+                                                Intent intentLogin = new Intent(PasscodeActivity.this, TabActivity.class);
+                                                startActivity(intentLogin);
+                                                finish();
+                                            }else{
+                                                shake();
+                                                editText.setText("");
+                                            }
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case "old":
 
@@ -199,14 +228,46 @@ public class PasscodeActivity extends AppCompatActivity{
 
                             break;
                         case "confirm":
-                            if(first_passcode.equals(editTextString)){
-                                startActivity(new Intent(PasscodeActivity.this, TabActivity.class));
-                                finish();
-                            }else{
-                                shake();
-                                editText.setText("");
-                                InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                            JSONObject registerParameters = new JSONObject();
+                            try {
+                                JSONObject userInfo = new JSONObject();
+                                userInfo.put("username", username);
+
+                                JSONObject password = new JSONObject();
+                                password.put("first", first_passcode);
+                                password.put("second", editTextString);
+
+                                userInfo.put("plainPassword", password.toString());
+                                userInfo.put("mobileVerificationCode", sms_code);
+
+                                registerParameters.put("app_user_registration", userInfo.toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            try {
+                                User.register(getApplicationContext(), registerParameters, new ResponseListener<JSONObject>() {
+                                    @Override
+                                    public void getResult(JSONObject object) throws JSONException {
+                                        try {
+                                            if (object.getString("status").equals("true")) {
+                                                Global.setUsername(username);
+                                                Intent intentComfirm = new Intent(PasscodeActivity.this, TabActivity.class);
+                                                startActivity(intentComfirm);
+                                                finish();
+                                            } else {
+                                                shake();
+                                                editText.setText("");
+                                                InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                             break;
                     }

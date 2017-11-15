@@ -8,6 +8,7 @@ import android.app.Application;
 
 public class Global extends Application {
     private static String token = "";
+    private static String username = "";
 
     public static void setToken(String tokenValue)
     {
@@ -17,5 +18,15 @@ public class Global extends Application {
     public static String getToken()
     {
         return token;
+    }
+
+    public static void setUsername(String usernameValue)
+    {
+        username = usernameValue;
+    }
+
+    public static String getUsername()
+    {
+        return username;
     }
 }
