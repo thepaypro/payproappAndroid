@@ -1,7 +1,9 @@
 package app.paypro.payproapp;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,10 @@ import org.json.JSONObject;
 
 import app.paypro.payproapp.account.Account;
 import app.paypro.payproapp.http.ResponseListener;
+
+/**
+ * Created by rogerbaiget on 15/11/17.
+ */
 
 public class AccountFragment extends Fragment {
     public static AccountFragment newInstance() {
@@ -45,8 +51,23 @@ public class AccountFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.account_tab, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ViewPager viewPager = (ViewPager) getView().findViewById(R.id.viewpager);
+
+        AccountFragmentPagerAdapter adapter = new AccountFragmentPagerAdapter(getContext(), getFragmentManager());
+
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = (TabLayout) getView().findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
     }
 }
