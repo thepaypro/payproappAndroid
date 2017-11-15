@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_gray">
@@ -14,6 +15,7 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         android:background="@color/colorPrimary"
+        app:titleTextColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,35 +23,25 @@
 
         <LinearLayout
             android:id="@+id/toolbar_layout"
-            android:clickable="true"
-            android:onClick="launchSmsCodeActivity"
             android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/done_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_done_black_24dp"
-                android:tint="@android:color/white" />
+            android:clickable="true"
+            android:padding="15dp"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:onClick="launchSmsCodeActivity"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/done_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/confirmation_code_actionbar"
-                android:layout_marginLeft="10dp"
-                android:textColor="@android:color/white"
-                app:layout_constraintStart_toEndOf="@id/done_logo"/>
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
-
-
-
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/content"

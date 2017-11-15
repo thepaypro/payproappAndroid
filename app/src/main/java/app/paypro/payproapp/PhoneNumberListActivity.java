@@ -27,13 +27,14 @@ import java.util.Comparator;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.view.View;
 import android.support.v7.app.ActionBar;
-
+import android.widget.TextView;
 
 
 public class PhoneNumberListActivity extends AppCompatActivity{
     private RecyclerView mRecyclerView;
     private CountriesListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private String phone_number = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class PhoneNumberListActivity extends AppCompatActivity{
                 Country country = (Country) v.getTag();
                 intent.putExtra("alpha2Code", (String) country.getAlpha2Code());
                 intent.putExtra("callingCodes", (String) country.getCallingCodes());
+                intent.putExtra("phone_number", phone_number);
                 startActivity(intent);
                 finish();
             }
@@ -63,6 +65,11 @@ public class PhoneNumberListActivity extends AppCompatActivity{
 
         mAdapter = new CountriesListAdapter(sortList(myDataset));
         mRecyclerView.setAdapter(mAdapter);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            phone_number = extras.getString("phone_number");
+        }
     }
 
 //    @Override

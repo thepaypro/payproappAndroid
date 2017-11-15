@@ -36,9 +36,10 @@ import app.paypro.payproapp.user.User;
 
 public class PhoneNumberActivity extends AppCompatActivity {
 
-    String alpha2Code;
-    String callingCodes;
-    TextInputEditText editText;
+    private String alpha2Code;
+    private String callingCodes;
+    private String phone_number = "";
+    private TextInputEditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,23 +59,31 @@ public class PhoneNumberActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+//        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             alpha2Code = extras.getString("alpha2Code");
             callingCodes = extras.getString("callingCodes");
+            phone_number = extras.getString("phone_number");
 
             TextView alpha2CodeView = this.findViewById(R.id.alpha2CodeView);
             alpha2CodeView.setText(alpha2Code);
 
             TextView callingCodesView = this.findViewById(R.id.callingCodesView);
             callingCodesView.setText("+"+callingCodes);
+
+            editText.setText(phone_number);
         }
 
 
         LinearLayout toolbarLayout =  findViewById(R.id.toolbar_layout);
-        toolbarLayout.setVisibility(LinearLayout.INVISIBLE);
+
+        if(editText.getText().toString().length() > 0){
+            toolbarLayout.setVisibility(LinearLayout.VISIBLE);
+        }else{
+            toolbarLayout.setVisibility(LinearLayout.INVISIBLE);
+        }
 
     }
 
@@ -129,7 +138,9 @@ public class PhoneNumberActivity extends AppCompatActivity {
     }
 
     public void launchListActivity(View v) {
-        startActivity(new Intent(PhoneNumberActivity.this, PhoneNumberListActivity.class));
+        Intent intentList = new Intent(PhoneNumberActivity.this, PhoneNumberListActivity.class);
+        intentList.putExtra("phone_number", editText.getText().toString());
+        startActivity(intentList);
 //        finish();
     }
 
@@ -139,11 +150,11 @@ public class PhoneNumberActivity extends AppCompatActivity {
             EditText editText= findViewById(R.id.editText);
             LinearLayout toolbarLayout = findViewById(R.id.toolbar_layout);
             if(editText.getText().toString().length() > 0){
-                getSupportActionBar().setDisplayShowTitleEnabled(false);
+//                getSupportActionBar().setDisplayShowTitleEnabled(false);
                 toolbarLayout.setVisibility(LinearLayout.VISIBLE);
             }else{
                 toolbarLayout.setVisibility(LinearLayout.INVISIBLE);
-                getSupportActionBar().setDisplayShowTitleEnabled(true);
+//                getSupportActionBar().setDisplayShowTitleEnabled(true);
             }
         }
 
