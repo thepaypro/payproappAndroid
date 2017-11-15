@@ -64,4 +64,10 @@
   <string name="info_tab_title">Info</string>
   <string name="transactions_tab_title">Transactions</string>
 
+  <string name="bits">Bits</string>
+  <string name="bits_unit">μ₿</string>
+
+  <string name="bitcoin_account_header">BITCOIN ACCOUNT</string>
+  <string name="latest_transactions_header">LATEST TRANSACTIONS</string>
+
 </resources>
