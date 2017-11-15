@@ -8,5 +8,8 @@
   <dimen name="slide_desc">16dp</dimen>
   <dimen name="desc_padding">40dp</dimen>
 
+  <dimen name="design_bottom_navigation_text_size">10sp</dimen>
+  <dimen name="design_bottom_navigation_active_text_size">10sp</dimen>
+
   <dimen name="passcode_circle_diameter">20dp</dimen>
 </resources>
