@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -89,6 +90,11 @@ public class PhoneNumberActivity extends AppCompatActivity {
 
     public void launchSmsCodeActivity(View v){
         final String phoneNumber = "+"+callingCodes+editText.getText().toString();
+        final TextView nextText = findViewById(R.id.next_text);
+        final ProgressBar progressBar = findViewById(R.id.progress_bar);
+        nextText.setVisibility(LinearLayout.INVISIBLE);
+        progressBar.setVisibility(LinearLayout.VISIBLE);
+
         try {
             User.mobileVerificationCode(this, phoneNumber, new ResponseListener<JSONObject>() {
                 @Override
@@ -100,16 +106,20 @@ public class PhoneNumberActivity extends AppCompatActivity {
                             intentLogin.putExtra("passcode_state", "login");
                             startActivity(intentLogin);
                             finish();
-
-
+                            nextText.setVisibility(LinearLayout.VISIBLE);
+                            progressBar.setVisibility(LinearLayout.GONE);
                         } else if (object.getString("status").equals("true") && object.getString("isUser").equals("false")){
                             Intent intentSms = new Intent(PhoneNumberActivity.this, SmsCodeActivity.class);
                             intentSms.putExtra("username", phoneNumber);
                             startActivity(intentSms);
                             finish();
+                            nextText.setVisibility(LinearLayout.VISIBLE);
+                            progressBar.setVisibility(LinearLayout.GONE);
                         }else{
                             TextInputLayout til = (TextInputLayout) findViewById(R.id.text_input_layout);
                             til.setError("Invalid phone number");
+                            nextText.setVisibility(LinearLayout.VISIBLE);
+                            progressBar.setVisibility(LinearLayout.GONE);
                             /*AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
                             builder.setMessage(R.string.dialog_message_invalid_phone_number)
                                     .setTitle(R.string.dialog_title_invalid_phone_number)

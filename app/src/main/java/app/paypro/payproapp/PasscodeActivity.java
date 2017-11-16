@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -66,35 +68,36 @@ public class PasscodeActivity extends AppCompatActivity{
 
             TextView titleTextView = this.findViewById(R.id.titleTextView);
             TextView descTextView = this.findViewById(R.id.descTextView);
+            Toolbar toolbar = this.findViewById(R.id.toolbar);
 
             switch (passcode_state){
                 case "create":
                     sms_code = extras.getString("sms_code");
                     titleTextView.setText(R.string.enter_passcode_create);
                     descTextView.setText(R.string.enter_passcode_desc_create);
-                    getSupportActionBar().setTitle(R.string.title_passcode_create);
+                    toolbar.setTitle(R.string.title_passcode_create);
                     break;
                 case "login":
                     titleTextView.setText(R.string.enter_passcode_login);
                     descTextView.setText(R.string.enter_passcode_desc_login);
-                    getSupportActionBar().setTitle(R.string.title_passcode_login);
+                    toolbar.setTitle(R.string.title_passcode_login);
                     break;
                 case "old":
                     titleTextView.setText(R.string.enter_passcode_old);
                     descTextView.setText(R.string.enter_passcode_desc_old);
-                    getSupportActionBar().setTitle(R.string.title_passcode_create);
+                    toolbar.setTitle(R.string.title_passcode_create);
                     break;
                 case "new":
                     titleTextView.setText(R.string.enter_passcode_new);
                     descTextView.setText(R.string.enter_passcode_desc_new);
-                    getSupportActionBar().setTitle(R.string.title_passcode_new);
+                    toolbar.setTitle(R.string.title_passcode_new);
                     break;
                 case "confirm":
                     first_passcode = extras.getString("first_passcode");
                     sms_code = extras.getString("sms_code");
                     titleTextView.setText(R.string.enter_passcode_confirm);
                     descTextView.setText(R.string.enter_passcode_desc_confirm);
-                    getSupportActionBar().setTitle(R.string.title_passcode_confirm);
+                    toolbar.setTitle(R.string.title_passcode_confirm);
                     break;
             }
         }
@@ -178,6 +181,7 @@ public class PasscodeActivity extends AppCompatActivity{
                     fourImageView.setImageResource(R.drawable.solid_circle);
                     fiveImageView.setImageResource(R.drawable.solid_circle);
                     sixImageView.setImageResource(R.drawable.solid_circle);
+                    final ProgressBar progressBar = findViewById(R.id.progress_bar);
                     switch (passcode_state){
                         case "create":
                             Intent createIntent = new Intent(PasscodeActivity.this, PasscodeActivity.class);
@@ -198,16 +202,19 @@ public class PasscodeActivity extends AppCompatActivity{
                             }
 
                             try {
+                                progressBar.setVisibility(LinearLayout.VISIBLE);
                                 User.login(getApplicationContext(), parameters, new ResponseListener<JSONObject>(){
                                     @Override
                                     public void getResult(JSONObject object) {
                                         try {
                                             if(object.getBoolean("status")){
+                                                progressBar.setVisibility(LinearLayout.GONE);
                                                 Global.setUsername(username);
                                                 Intent intentLogin = new Intent(PasscodeActivity.this, TabActivity.class);
                                                 startActivity(intentLogin);
                                                 finish();
                                             }else{
+                                                progressBar.setVisibility(LinearLayout.GONE);
                                                 shake();
                                                 editText.setText("");
                                             }

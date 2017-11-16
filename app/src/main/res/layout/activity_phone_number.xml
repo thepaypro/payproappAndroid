@@ -33,11 +33,19 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/done_text"
+                android:id="@+id/next_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/confirmation_code_actionbar"
                 android:textColor="@android:color/white" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:indeterminateDrawable="@drawable/custom_progress_loader"
+                android:indeterminate="true"/>
 
         </LinearLayout>
 

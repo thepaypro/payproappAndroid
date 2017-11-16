@@ -37,7 +37,8 @@
             android:label="@string/title_activity_sms_code">
         </activity>
         <activity
-            android:name=".PasscodeActivity">
+            android:name=".PasscodeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".TabActivity"
