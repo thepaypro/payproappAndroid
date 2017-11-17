@@ -1,10 +1,13 @@
 package app.paypro.payproapp.user;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
+import app.paypro.payproapp.asynctask.db.user.SaveUserAsyncTask;
 import app.paypro.payproapp.http.PayProRequest;
 import app.paypro.payproapp.http.ResponseListener;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,13 +15,19 @@ import org.json.JSONObject;
 
 public class User {
 
-    public static void register(Context context, JSONObject parameters, final ResponseListener<JSONObject> listener) throws JSONException {
+    public static void register(final Context context, JSONObject parameters, final ResponseListener<JSONObject> listener) throws JSONException {
         PayProRequest.post(context, "register/", parameters, new ResponseListener<JSONObject>(){
 
             @Override
             public void getResult(JSONObject object) throws JSONException {
                 if (object.has("user"))
                 {
+                    JSONObject userJSON = object.getJSONObject("user");
+
+                    app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
+
+                    new SaveUserAsyncTask(context).execute(userEntity);
+
                     JSONObject responseJSON = new JSONObject();
                     responseJSON.put("status", true);
                     listener.getResult(responseJSON);
@@ -68,6 +77,9 @@ public class User {
                     listener.getResult(responseJSON);
                 } else {
                     JSONObject errorResponse = new JSONObject();
+                    if(object.has("error_msg")){
+                        errorResponse.put("error_msg", object.getString("error_msg"));
+                    }
                     errorResponse.put("status", false);
                     listener.getResult(errorResponse);
                 }
@@ -75,7 +87,7 @@ public class User {
         });
     }
 
-    public static void login(Context context, JSONObject parameters, final ResponseListener<JSONObject> listener) throws JSONException
+    public static void login(final Context context, JSONObject parameters, final ResponseListener<JSONObject> listener) throws JSONException
     {
         PayProRequest.post(context, "login_check", parameters, new ResponseListener<JSONObject>() {
             @Override
@@ -83,13 +95,20 @@ public class User {
                 try {
                     if (object.has("user"))
                     {
-                        String user = object.getString("user");
+                        JSONObject userJSON = object.getJSONObject("user");
+
+                        app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
+
+                        new SaveUserAsyncTask(context).execute(userEntity);
 
                         JSONObject responseJSON = new JSONObject();
                         responseJSON.put("status", true);
                         listener.getResult(responseJSON);
                     } else {
                         JSONObject errorResponse = new JSONObject();
+                        if(object.has("error_msg")){
+                            errorResponse.put("error_msg", object.getString("error_msg"));
+                        }
                         errorResponse.put("status", false);
                         listener.getResult(errorResponse);
                     }

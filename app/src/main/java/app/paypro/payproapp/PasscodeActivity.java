@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.http.ResponseListener;
 import app.paypro.payproapp.user.User;
+import app.paypro.payproapp.utils.PPSnackbar;
 
 /**
  * Created by rogerbaiget on 13/11/17.
@@ -32,22 +33,25 @@ import app.paypro.payproapp.user.User;
 
 public class PasscodeActivity extends AppCompatActivity{
 
-    public EditText editText;
-    public ImageView firstImageView;
-    public ImageView secondImageView;
-    public ImageView thirdImageView;
-    public ImageView fourImageView;
-    public ImageView fiveImageView;
-    public ImageView sixImageView;
-    public String passcode_state;
-    public String username;
-    public String sms_code;
-    public String first_passcode = "";
+    private EditText editText;
+    private ImageView firstImageView;
+    private ImageView secondImageView;
+    private ImageView thirdImageView;
+    private ImageView fourImageView;
+    private ImageView fiveImageView;
+    private ImageView sixImageView;
+    private ProgressBar progressBar;
+    private String passcode_state;
+    private String username;
+    private String sms_code;
+    private String first_passcode = "";
+    private LinearLayout mainView;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_passcode);
 
+        progressBar = findViewById(R.id.progress_bar);
         editText= findViewById(R.id.editText);
         firstImageView= findViewById(R.id.circle1);
         secondImageView= findViewById(R.id.circle2);
@@ -55,6 +59,7 @@ public class PasscodeActivity extends AppCompatActivity{
         fourImageView= findViewById(R.id.circle4);
         fiveImageView= findViewById(R.id.circle5);
         sixImageView= findViewById(R.id.circle6);
+        mainView = findViewById(R.id.main_view);
 
         editText.requestFocus();
 
@@ -181,7 +186,7 @@ public class PasscodeActivity extends AppCompatActivity{
                     fourImageView.setImageResource(R.drawable.solid_circle);
                     fiveImageView.setImageResource(R.drawable.solid_circle);
                     sixImageView.setImageResource(R.drawable.solid_circle);
-                    final ProgressBar progressBar = findViewById(R.id.progress_bar);
+
                     switch (passcode_state){
                         case "create":
                             Intent createIntent = new Intent(PasscodeActivity.this, PasscodeActivity.class);
@@ -200,25 +205,25 @@ public class PasscodeActivity extends AppCompatActivity{
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
+                            disableView();
                             try {
-                                progressBar.setVisibility(LinearLayout.VISIBLE);
                                 User.login(getApplicationContext(), parameters, new ResponseListener<JSONObject>(){
                                     @Override
                                     public void getResult(JSONObject object) {
                                         try {
                                             if(object.getBoolean("status")){
-                                                progressBar.setVisibility(LinearLayout.GONE);
-                                                Global.setUsername(username);
+                                                enableView();
                                                 Intent intentLogin = new Intent(PasscodeActivity.this, TabActivity.class);
                                                 startActivity(intentLogin);
                                                 finish();
+                                            }else if (!object.getBoolean("status") && object.has("error_msg")){
+                                                enableView();
+                                                PPSnackbar.getSnackbar(mainView,object.getString("error_msg")).show();
                                             }else{
-                                                progressBar.setVisibility(LinearLayout.GONE);
+                                                enableView();
                                                 shake();
                                                 editText.setText("");
                                             }
-
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -258,7 +263,6 @@ public class PasscodeActivity extends AppCompatActivity{
                                     public void getResult(JSONObject object) throws JSONException {
                                         try {
                                             if (object.getString("status").equals("true")) {
-                                                Global.setUsername(username);
                                                 Intent intentComfirm = new Intent(PasscodeActivity.this, TabActivity.class);
                                                 startActivity(intentComfirm);
                                                 finish();
@@ -291,4 +295,14 @@ public class PasscodeActivity extends AppCompatActivity{
         }
 
     };
+
+    public void disableView(){
+        progressBar.setVisibility(LinearLayout.VISIBLE);
+        editText.setEnabled(false);
+    }
+
+    public void enableView(){
+        progressBar.setVisibility(LinearLayout.GONE);
+        editText.setEnabled(false);
+    }
 }

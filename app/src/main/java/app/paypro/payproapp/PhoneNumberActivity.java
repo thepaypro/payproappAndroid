@@ -2,7 +2,10 @@ package app.paypro.payproapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
@@ -29,6 +32,7 @@ import org.json.JSONObject;
 
 import app.paypro.payproapp.http.ResponseListener;
 import app.paypro.payproapp.user.User;
+import app.paypro.payproapp.utils.PPSnackbar;
 
 
 /**
@@ -41,11 +45,22 @@ public class PhoneNumberActivity extends AppCompatActivity {
     private String callingCodes;
     private String phone_number = "";
     private TextInputEditText editText;
+    private LinearLayout countryPrefixView;
+
+    private ConstraintLayout mainView;
+    private LinearLayout progressBarLayout;
+    private LinearLayout nextTextLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_number);
+
+        mainView = findViewById(R.id.main_view);
+        nextTextLayout = findViewById(R.id.toolbar_next_layout);
+        progressBarLayout = findViewById(R.id.toolbar_progress_bar_layout);
+        countryPrefixView = findViewById(R.id.countryPrefixView);
 
         editText= findViewById(R.id.editText);
         editText.requestFocus();
@@ -59,8 +74,6 @@ public class PhoneNumberActivity extends AppCompatActivity {
         android.support.v7.widget.Toolbar toolbar= findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-
-//        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -77,24 +90,17 @@ public class PhoneNumberActivity extends AppCompatActivity {
             editText.setText(phone_number);
         }
 
-
-        LinearLayout toolbarLayout =  findViewById(R.id.toolbar_layout);
-
         if(editText.getText().toString().length() > 0){
-            toolbarLayout.setVisibility(LinearLayout.VISIBLE);
+            nextTextLayout.setVisibility(LinearLayout.VISIBLE);
         }else{
-            toolbarLayout.setVisibility(LinearLayout.INVISIBLE);
+            nextTextLayout.setVisibility(LinearLayout.INVISIBLE);
         }
 
     }
 
-    public void launchSmsCodeActivity(View v){
+    public void launchSmsCodeActivity(final View v){
         final String phoneNumber = "+"+callingCodes+editText.getText().toString();
-        final TextView nextText = findViewById(R.id.next_text);
-        final ProgressBar progressBar = findViewById(R.id.progress_bar);
-        nextText.setVisibility(LinearLayout.INVISIBLE);
-        progressBar.setVisibility(LinearLayout.VISIBLE);
-
+        disableView();
         try {
             User.mobileVerificationCode(this, phoneNumber, new ResponseListener<JSONObject>() {
                 @Override
@@ -106,36 +112,20 @@ public class PhoneNumberActivity extends AppCompatActivity {
                             intentLogin.putExtra("passcode_state", "login");
                             startActivity(intentLogin);
                             finish();
-                            nextText.setVisibility(LinearLayout.VISIBLE);
-                            progressBar.setVisibility(LinearLayout.GONE);
+                            enableView();
                         } else if (object.getString("status").equals("true") && object.getString("isUser").equals("false")){
                             Intent intentSms = new Intent(PhoneNumberActivity.this, SmsCodeActivity.class);
                             intentSms.putExtra("username", phoneNumber);
                             startActivity(intentSms);
                             finish();
-                            nextText.setVisibility(LinearLayout.VISIBLE);
-                            progressBar.setVisibility(LinearLayout.GONE);
-                        }else{
+                            enableView();
+                        }else if (!object.getBoolean("status") && object.has("error_msg")){
+                            enableView();
+                            PPSnackbar.getSnackbar(mainView,object.getString("error_msg")).show();
+                        }else {
                             TextInputLayout til = (TextInputLayout) findViewById(R.id.text_input_layout);
                             til.setError("Invalid phone number");
-                            nextText.setVisibility(LinearLayout.VISIBLE);
-                            progressBar.setVisibility(LinearLayout.GONE);
-                            /*AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-                            builder.setMessage(R.string.dialog_message_invalid_phone_number)
-                                    .setTitle(R.string.dialog_title_invalid_phone_number)
-                                    .setPositiveButton(R.string.fire, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            // FIRE ZE MISSILES!
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            // User cancelled the dialog
-                                        }
-                                    });
-
-                            // 3. Get the AlertDialog from create()
-                            AlertDialog dialog = builder.create();*/
+                            enableView();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -145,6 +135,20 @@ public class PhoneNumberActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void disableView(){
+        nextTextLayout.setVisibility(LinearLayout.GONE);
+        progressBarLayout.setVisibility(LinearLayout.VISIBLE);
+        countryPrefixView.setEnabled(false);
+        editText.setEnabled(false);
+    }
+
+    public void enableView(){
+        nextTextLayout.setVisibility(LinearLayout.VISIBLE);
+        progressBarLayout.setVisibility(LinearLayout.GONE);
+        countryPrefixView.setEnabled(true);
+        editText.setEnabled(true);
     }
 
     public void launchListActivity(View v) {
@@ -158,13 +162,10 @@ public class PhoneNumberActivity extends AppCompatActivity {
 
         public void afterTextChanged(Editable s) {
             EditText editText= findViewById(R.id.editText);
-            LinearLayout toolbarLayout = findViewById(R.id.toolbar_layout);
             if(editText.getText().toString().length() > 0){
-//                getSupportActionBar().setDisplayShowTitleEnabled(false);
-                toolbarLayout.setVisibility(LinearLayout.VISIBLE);
+                nextTextLayout.setVisibility(LinearLayout.VISIBLE);
             }else{
-                toolbarLayout.setVisibility(LinearLayout.INVISIBLE);
-//                getSupportActionBar().setDisplayShowTitleEnabled(true);
+                nextTextLayout.setVisibility(LinearLayout.INVISIBLE);
             }
         }
 

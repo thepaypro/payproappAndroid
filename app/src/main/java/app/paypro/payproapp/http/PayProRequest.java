@@ -76,6 +76,15 @@ public class PayProRequest {
                                     }
                                     break;
                             }
+                        }if(response == null){
+                            try {
+                                JSONObject errorResponse = new JSONObject();
+                                errorResponse.put("status", false);
+                                errorResponse.put("error_msg", "connection_error");
+                                listener.getResult(errorResponse);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }){

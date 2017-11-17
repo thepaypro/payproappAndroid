@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_gray">
@@ -22,7 +22,7 @@
         app:layout_constraintBottom_toTopOf="@+id/content">
 
         <LinearLayout
-            android:id="@+id/toolbar_layout"
+            android:id="@+id/toolbar_next_layout"
             android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
             android:clickable="true"
@@ -39,11 +39,22 @@
                 android:text="@string/confirmation_code_actionbar"
                 android:textColor="@android:color/white" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/toolbar_progress_bar_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:padding="15dp"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
             <ProgressBar
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:indeterminateDrawable="@drawable/custom_progress_loader"
                 android:indeterminate="true"/>
 

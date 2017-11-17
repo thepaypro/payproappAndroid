@@ -3,6 +3,7 @@ package app.paypro.payproapp.account;
 import android.content.Context;
 import android.util.Log;
 
+import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.http.PayProRequest;
 import app.paypro.payproapp.http.ResponseListener;
 
@@ -23,6 +24,7 @@ public class Account {
                 Log.i("accountinfo", object.toString());
                 if (object.has("info"))
                 {
+//                    Global.setBitcoinBalance(object.getJSONObject("info").getString("bitcoinBalance"));
                     JSONObject responseJSON = new JSONObject();
                     responseJSON.put("status", true);
                     responseJSON.put("info", object.getString("info"));

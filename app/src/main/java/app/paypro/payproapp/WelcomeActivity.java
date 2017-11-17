@@ -18,6 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v4.content.ContextCompat;
 
+import java.util.concurrent.ExecutionException;
+
+import app.paypro.payproapp.asynctask.db.user.GetUserAsyncTask;
+import app.paypro.payproapp.db.entity.User;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     private static Context mContext;
@@ -36,12 +41,25 @@ public class WelcomeActivity extends AppCompatActivity {
 
         mContext = getApplicationContext();
 
+        try {
+            User[] users = new GetUserAsyncTask(mContext).execute().get();
+            if(users.length == 1) {
+                Intent intentLogin = new Intent(WelcomeActivity.this, PasscodeActivity.class);
+                intentLogin.putExtra("username", users[0].getUsername());
+                intentLogin.putExtra("passcode_state", "login");
+                startActivity(intentLogin);
+                finish();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
-
-
 
         setContentView(R.layout.activity_welcome);
 
