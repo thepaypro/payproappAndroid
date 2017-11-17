@@ -26,7 +26,7 @@ public class Account {
     private String address;
 
     @ColumnInfo(name = "balance")
-    private String balance;
+    private int balance;
 
     @ColumnInfo(name = "last_synced_transaction_id")
     private String last_synced_transaction_id;
@@ -54,12 +54,12 @@ public class Account {
         this.address = addressValue;
     }
 
-    public String getBalance()
+    public int getBalance()
     {
         return balance;
     }
 
-    public void setBalance(String balanceValue)
+    public void setBalance(int balanceValue)
     {
         this.balance = balanceValue;
     }
