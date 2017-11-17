@@ -17,9 +17,6 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface UserDao {
 
-    @Query("SELECT * FROM user where uid like :id")
-    User findById(int id);
-
     @Query("SELECT * FROM user")
     User[] findAll();
 

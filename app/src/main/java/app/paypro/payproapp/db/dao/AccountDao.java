@@ -7,6 +7,8 @@ import android.arch.persistence.room.Update;
 
 import app.paypro.payproapp.db.entity.Account;
 
+import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+
 /**
  * Created by rogerbaiget on 16/11/17.
  */
@@ -15,9 +17,9 @@ import app.paypro.payproapp.db.entity.Account;
 public interface AccountDao {
 
     @Query("SELECT * FROM account where uid like :id")
-    Account findById(int id);
+    Account findAll(int id);
 
-    @Insert
+    @Insert(onConflict = REPLACE)
     void insert(Account account);
 
     @Update

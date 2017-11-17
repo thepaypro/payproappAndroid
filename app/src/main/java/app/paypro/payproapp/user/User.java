@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import app.paypro.payproapp.asynctask.db.user.SaveAccountAsyncTask;
 import app.paypro.payproapp.asynctask.db.user.SaveUserAsyncTask;
+import app.paypro.payproapp.db.entity.Account;
 import app.paypro.payproapp.http.PayProRequest;
 import app.paypro.payproapp.http.ResponseListener;
 
@@ -99,7 +101,18 @@ public class User {
 
                         app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
 
+                        if(!userJSON.isNull("nickname")){
+                            userEntity.setNickname(userJSON.getString("nickname"));
+                        }
+
+                        if(!userJSON.isNull("bitcoinAccount")){
+                            JSONObject accountJSON = userJSON.getJSONObject("bitcoinAccount");
+                            Account accountEntity= new Account(accountJSON.getInt("id"),accountJSON.getString("address"));
+                            new SaveAccountAsyncTask(context).execute(accountEntity);
+                        }
+
                         new SaveUserAsyncTask(context).execute(userEntity);
+
 
                         JSONObject responseJSON = new JSONObject();
                         responseJSON.put("status", true);

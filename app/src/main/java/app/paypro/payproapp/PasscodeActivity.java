@@ -303,6 +303,7 @@ public class PasscodeActivity extends AppCompatActivity{
 
     public void enableView(){
         progressBar.setVisibility(LinearLayout.GONE);
-        editText.setEnabled(false);
+        editText.setEnabled(true);
+        editText.requestFocus();
     }
 }

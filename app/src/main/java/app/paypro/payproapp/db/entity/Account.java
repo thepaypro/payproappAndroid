@@ -14,6 +14,11 @@ import java.util.List;
 @Entity
 public class Account {
 
+    public Account(int uid, String address){
+        this.uid = uid;
+        this.address = address;
+    }
+
     @PrimaryKey(autoGenerate = false)
     private int uid;
 
