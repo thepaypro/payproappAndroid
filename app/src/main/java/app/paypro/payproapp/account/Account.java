@@ -3,7 +3,7 @@ package app.paypro.payproapp.account;
 import android.content.Context;
 import android.util.Log;
 
-import app.paypro.payproapp.asynctask.db.user.GetUserAccountAsyncTask;
+import app.paypro.payproapp.asynctask.db.user.GetAccountAsyncTask;
 import app.paypro.payproapp.asynctask.db.user.SaveTransactionsAsyncTask;
 import app.paypro.payproapp.asynctask.db.user.UpdateAccountAsyncTask;
 import app.paypro.payproapp.db.entity.Transaction;
@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -38,32 +39,32 @@ public class Account {
                     JSONObject infoJSON = object.getJSONObject("info");
 
                     try {
-                        app.paypro.payproapp.db.entity.Account accountEntity  = new GetUserAccountAsyncTask(context).execute().get()[0];
+                        app.paypro.payproapp.db.entity.Account accountEntity = new GetAccountAsyncTask(context).execute().get()[0];
                         accountEntity.setBalance(infoJSON.getInt("bitcoinBalance"));
                         new UpdateAccountAsyncTask(context).execute(accountEntity);
 
-                        if(!infoJSON.isNull("bitcoinTransactions")){
+                        if (!infoJSON.isNull("bitcoinTransactions")) {
                             JSONArray bitcoinTransactions = infoJSON.getJSONArray("bitcoinTransactions");
                             List<Transaction> transactionsList = null;
 
-                            for (int i = 0, size = bitcoinTransactions.length(); i < size; i++)
-                            {
-                                Boolean payer = !bitcoinTransactions[i].isNull("payer");
+                            for (int i = 0, size = bitcoinTransactions.length(); i < size; i++) {
+                                Boolean payer = !((JSONObject) bitcoinTransactions.get(i)).isNull("payer");
 
                                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss.SSSSSS,", Locale.ENGLISH);
-                                Date date = format.parse(bitcoinTransactions[i].getJSONObject("createdAt").getString("date"));
+                                Date date = format.parse(((JSONObject) bitcoinTransactions.get(i)).getJSONObject("createdAt").getString("date"));
 
-                                Transaction transaction = new Transaction(bitcoinTransactions[i].getInt("id"),payer,bitcoinTransactions[i].getInt("amount"),date);
+                                Transaction transaction = new Transaction(((JSONObject) bitcoinTransactions.get(i)).getInt("id"), payer, ((JSONObject) bitcoinTransactions.get(i)).getInt("amount"), date);
                                 transactionsList.add(transaction);
                             }
                             Transaction[] transactionsArray = new Transaction[transactionsList.size()];
                             transactionsArray = transactionsList.toArray(transactionsArray);
                             new SaveTransactionsAsyncTask(context).execute(transactionsArray);
                         }
-
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
 

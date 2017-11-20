@@ -20,8 +20,8 @@ public interface UserDao {
     @Query("SELECT * FROM user")
     User[] findAll();
 
-    @Query("SELECT * FROM account WHERE account_id = account.uid")
-    Account[] findUserAccount();
+//    @Query("SELECT * FROM account WHERE user.account_id = account.uid")
+//    Account[] findUserAccount();
 
     @Insert(onConflict = REPLACE)
     void insert(User user);

@@ -3,6 +3,7 @@ package app.paypro.payproapp.db;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import app.paypro.payproapp.db.dao.AccountDao;
@@ -17,6 +18,7 @@ import app.paypro.payproapp.db.entity.User;
  */
 
 @Database(entities = {Account.class, User.class, Transaction.class}, version = 1)
+@TypeConverters({DateTypeConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;

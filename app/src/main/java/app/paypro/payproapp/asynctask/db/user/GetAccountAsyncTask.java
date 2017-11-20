@@ -12,14 +12,14 @@ import app.paypro.payproapp.db.entity.Account;
  * Created by rogerbaiget on 17/11/17.
  */
 
-public class GetUserAccountAsyncTask extends AsyncTask<Void, Void, Account[]> {
+public class GetAccountAsyncTask extends AsyncTask<Void, Void, Account[]> {
     Context context;
-    public GetUserAccountAsyncTask(Context context) {
+    public GetAccountAsyncTask(Context context) {
         this.context = context;
     }
 
     protected Account[] doInBackground(Void... voids) {
 
-        return AppDatabase.getAppDatabase(context).userDao().findUserAccount();
+        return AppDatabase.getAppDatabase(context).accountDao().findAll();
     }
 }

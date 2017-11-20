@@ -16,8 +16,8 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface AccountDao {
 
-    @Query("SELECT * FROM account where uid like :id")
-    Account findAll(int id);
+    @Query("SELECT * FROM account")
+    Account[] findAll();
 
     @Insert(onConflict = REPLACE)
     void insert(Account account);
