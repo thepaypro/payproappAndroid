@@ -50,10 +50,12 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/qr_code_clickable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:clickable="true">
 
 
             <TextView

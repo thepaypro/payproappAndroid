@@ -42,9 +42,13 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".TabActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        android:name=".TabActivity"
+        android:theme="@style/AppTheme.NoActionBar">
+         </activity>
+        <activity
+            android:name=".ShowQRActivity">
         </activity>
+
     </application>
 
 </manifest>

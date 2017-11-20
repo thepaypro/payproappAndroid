@@ -1,10 +1,13 @@
 package app.paypro.payproapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.concurrent.ExecutionException;
@@ -19,6 +22,7 @@ import app.paypro.payproapp.db.entity.Account;
 public class AccountInfoFragment extends Fragment {
 
     public TextView addressTextView;
+    public Account account;
 
     public static AccountInfoFragment newInstance() {
         AccountInfoFragment fragment = new AccountInfoFragment();
@@ -42,8 +46,22 @@ public class AccountInfoFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        LinearLayout qrCodeClickable = getView().findViewById(R.id.qr_code_clickable);
+
+        qrCodeClickable.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intentLogin = new Intent(getActivity(), ShowQRActivity.class);
+                intentLogin.putExtra("qr_URI", "bitcoin:" + account.getAddress());
+                startActivity(intentLogin);
+            }
+
+        });
+
+
         try {
-            Account account = new GetAccountAsyncTask(getContext()).execute().get()[0];
+            account = new GetAccountAsyncTask(getContext()).execute().get()[0];
             addressTextView = getView().findViewById(R.id.address_text);
             addressTextView.setText(account.getAddress());
         } catch (InterruptedException e) {
