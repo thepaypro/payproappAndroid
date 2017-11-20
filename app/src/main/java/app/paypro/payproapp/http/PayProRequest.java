@@ -141,6 +141,7 @@ public class PayProRequest {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
                         Log.i("eeeeerrrrrroooorrrr get", "errorrrr");
                         NetworkResponse response = error.networkResponse;
                         if(response != null && response.data != null) {
