@@ -7,9 +7,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.android.support.BottomNavigationViewHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import app.paypro.payproapp.account.Account;
+import app.paypro.payproapp.http.ResponseListener;
 
 
 public class TabActivity extends AppCompatActivity {
@@ -49,20 +56,32 @@ public class TabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
 
+        try {
+            Account.info(getApplicationContext(), new ResponseListener<JSONObject>() {
+                @Override
+                public void getResult(JSONObject object) throws JSONException {
+                    try {
+                        if (object.getString("status").equals("true")) {
+                            Log.i("ACCOUNT-INFO", object.getString("info"));
+                        } else {
+                            Log.i("ACCOUNT-INFO", "nadaaaaa");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            Log.i("aaaavbvbvbbb", "aaaaaaaa");
+            e.printStackTrace();
+        }
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         BottomNavigationViewHelper.disableShiftMode(navigation);
 
         navigation.setSelectedItemId(R.id.navigation_account);
-
-//        Menu menu = navigation.getMenu();
-//        mOnNavigationItemSelectedListener.onNavigationItemSelected(menu.findItem(R.id.navigation_account));
-
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.frame_layout, AccountFragment.newInstance());
-//        transaction.commit();
-//        navigation.setSelectedItemId(R.id.navigation_account);
     }
 
 }

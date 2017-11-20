@@ -29,25 +29,6 @@ public class AccountFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try {
-            Account.info(getContext(), new ResponseListener<JSONObject>() {
-                @Override
-                public void getResult(JSONObject object) throws JSONException {
-                    try {
-                        if (object.getString("status").equals("true")) {
-                            Log.i("ACCOUNT-INFO", object.getString("info"));
-                        } else {
-                            Log.i("ACCOUNT-INFO", "nadaaaaa");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } catch (JSONException e) {
-            Log.i("aaaavbvbvbbb", "aaaaaaaa");
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -62,7 +43,7 @@ public class AccountFragment extends Fragment {
 
         ViewPager viewPager = (ViewPager) getView().findViewById(R.id.viewpager);
 
-        AccountFragmentPagerAdapter adapter = new AccountFragmentPagerAdapter(getContext(), getFragmentManager());
+        AccountFragmentPagerAdapter adapter = new AccountFragmentPagerAdapter(getContext(), getChildFragmentManager());
 
         viewPager.setAdapter(adapter);
 
