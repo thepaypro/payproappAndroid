@@ -195,7 +195,7 @@ public class PayProRequest {
             }
         };
 
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(100000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 

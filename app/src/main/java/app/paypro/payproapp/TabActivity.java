@@ -57,7 +57,7 @@ public class TabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tab);
 
         try {
-            Account.info(getApplicationContext(), new ResponseListener<JSONObject>() {
+            Account.info(this, new ResponseListener<JSONObject>() {
                 @Override
                 public void getResult(JSONObject object) throws JSONException {
                     try {

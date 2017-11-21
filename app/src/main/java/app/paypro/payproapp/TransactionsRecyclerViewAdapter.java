@@ -6,7 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import app.paypro.payproapp.db.entity.Transaction;
 
@@ -31,7 +35,13 @@ public class TransactionsRecyclerViewAdapter  extends RecyclerView.Adapter<Trans
     public void onBindViewHolder(TransactionsRecyclerViewAdapter.ViewHolder holder, int position) {
         Transaction transaction = transactionsList.get(position);
 
-        String amount = String.valueOf(transaction.getAmount());
+        NumberFormat format = NumberFormat.getInstance(Locale.UK);
+//        Locale.Builder b = new Locale.Builder();
+//        b.setRegion("XB");
+//        Locale xb = b.build();
+//        format.setCurrency(Currency.getInstance(xb));
+        String amount = format.format(transaction.getAmount());
+        amount = "μ\u20BF " + amount;
         String title = "";
         if(transaction.getPayer()){
             amount = "-"+amount;
@@ -40,12 +50,13 @@ public class TransactionsRecyclerViewAdapter  extends RecyclerView.Adapter<Trans
             title = "Transfer in ";
         }
 
+        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(transaction.getDate());
 
         holder.titleTextView.setText(title);
         holder.addressTextView.setText(transaction.getAddressTo());
         holder.amountTextView.setText(amount);
         holder.subtitleTextView.setText(transaction.getSubject());
-        holder.dateTextView.setText(transaction.getDate().toString());
+        holder.dateTextView.setText(date);
         holder.itemView.setTag(transaction);
 
     }
@@ -73,7 +84,7 @@ public class TransactionsRecyclerViewAdapter  extends RecyclerView.Adapter<Trans
             addressTextView = (TextView) view.findViewById(R.id.address_text);
             amountTextView = (TextView) view.findViewById(R.id.amount_text);
             subtitleTextView = (TextView) view.findViewById(R.id.subtitle_text);
-            subtitleTextView = (TextView) view.findViewById(R.id.date_text);
+            dateTextView = (TextView) view.findViewById(R.id.date_text);
         }
     }
 }

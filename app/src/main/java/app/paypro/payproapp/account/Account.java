@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -44,16 +45,26 @@ public class Account {
                         new UpdateAccountAsyncTask(context).execute(accountEntity);
 
                         if (!infoJSON.isNull("bitcoinTransactions")) {
-                            JSONArray bitcoinTransactions = infoJSON.getJSONArray("bitcoinTransactions");
-                            List<Transaction> transactionsList = null;
+                            JSONArray bitcoinTransactions = infoJSON.getJSONObject("bitcoinTransactions").getJSONArray("content");
+                            List<Transaction> transactionsList = new ArrayList<Transaction>();
 
                             for (int i = 0, size = bitcoinTransactions.length(); i < size; i++) {
                                 Boolean payer = !((JSONObject) bitcoinTransactions.get(i)).isNull("payer");
 
-                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss.SSSSSS,", Locale.ENGLISH);
-                                Date date = format.parse(((JSONObject) bitcoinTransactions.get(i)).getJSONObject("createdAt").getString("date"));
+                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss.SSSSSS");
+                                String transactionDate = ((JSONObject) bitcoinTransactions.get(i)).getJSONObject("createdAt").getString("date");
+                                Date date = format.parse(transactionDate);
 
                                 Transaction transaction = new Transaction(((JSONObject) bitcoinTransactions.get(i)).getInt("id"), payer, ((JSONObject) bitcoinTransactions.get(i)).getInt("amount"), date);
+
+                                if(!((JSONObject) bitcoinTransactions.get(i)).isNull("subject")){
+                                    transaction.setSubject(((JSONObject) bitcoinTransactions.get(i)).getString("subject"));
+                                }
+                                if(!((JSONObject) bitcoinTransactions.get(i)).isNull("addressTo")){
+                                    transaction.setAddressTo(((JSONObject) bitcoinTransactions.get(i)).getString("addressTo"));
+                                }
+
+
                                 transactionsList.add(transaction);
                             }
                             Transaction[] transactionsArray = new Transaction[transactionsList.size()];
