@@ -1,16 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/PayPro_Background"
     tools:context=".SettingsFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Fragment 1"
-        android:textSize="30sp"/>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="30dp">
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/PayPro_Line"
+            android:minHeight="0.5dp" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:background="@android:color/background_light"
+            android:minHeight="76dp">
+
+            <ImageView
+                android:id="@+id/avatarImage"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:height="76dp"
+                android:gravity="center_vertical|right"
+                android:text="John Aplessed" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/PayPro_Line"
+            android:minHeight="0.5dp" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/PayPro_Line"
+            android:minHeight="0.5dp"
+            android:layout_marginTop="30dp"/>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:background="@android:color/background_light"
+            android:minHeight="44dp">
+
+            <ImageView
+                android:id="@+id/passcodeImage"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="7.5dp"
+                android:cropToPadding="false"
+                android:src="@mipmap/settings_passcode" />
+
+            <TextView
+                android:id="@+id/passcodeText"
+                android:layout_width="match_parent"
+                android:height="44dp"
+                android:gravity="center_vertical|left"
+                android:text="Passcode" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/PayPro_Line"
+            android:minHeight="0.5dp" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/PayPro_Line"
+            android:minHeight="0.5dp"
+            android:layout_marginTop="30dp"/>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:background="@android:color/background_light"
+            android:minHeight="44dp">
+
+            <ImageView
+                android:id="@+id/tellImage"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="7.5dp"
+                android:cropToPadding="false"
+                android:src="@mipmap/settings_tell_a_friend" />
+
+            <TextView
+                android:id="@+id/tellText"
+                android:layout_width="match_parent"
+                android:height="44dp"
+                android:gravity="center_vertical|left"
+                android:text="Tell a friend" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/PayPro_Line"
+            android:minHeight="0.5dp" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:background="@android:color/background_light"
+            android:minHeight="44dp">
+
+            <ImageView
+                android:id="@+id/infoImage"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="7.5dp"
+                android:cropToPadding="false"
+                android:src="@mipmap/settings_info" />
+
+            <TextView
+                android:id="@+id/infoText"
+                android:layout_width="match_parent"
+                android:height="44dp"
+                android:gravity="center_vertical|left"
+                android:text="Info" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/PayPro_Line"
+            android:minHeight="0.5dp" />
+
+    </TableLayout>
 </RelativeLayout>

@@ -3,27 +3,27 @@
 
     <item
         android:id="@+id/navigation_support"
-        android:icon="@drawable/ic_chat_bubble_outline_black_24dp"
+        android:icon="@mipmap/tab_support"
         android:title="@string/title_support" />
 
     <item
         android:id="@+id/navigation_scan"
-        android:icon="@drawable/ic_qrcode"
+        android:icon="@mipmap/tab_scan"
         android:title="@string/title_scan" />
 
     <item
         android:id="@+id/navigation_send"
-        android:icon="@drawable/ic_share_black_24dp"
+        android:icon="@mipmap/tab_send"
         android:title="@string/title_send" />
 
     <item
         android:id="@+id/navigation_account"
-        android:icon="@drawable/ic_credit_card_black_24dp"
+        android:icon="@mipmap/tab_account"
         android:title="@string/title_account" />
 
     <item
         android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_settings_black_24dp"
+        android:icon="@mipmap/tab_settings"
         android:title="@string/title_settings" />
 
 </menu>

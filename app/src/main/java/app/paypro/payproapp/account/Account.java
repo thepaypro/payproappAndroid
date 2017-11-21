@@ -56,6 +56,7 @@ public class Account {
                                 Transaction transaction = new Transaction(((JSONObject) bitcoinTransactions.get(i)).getInt("id"), payer, ((JSONObject) bitcoinTransactions.get(i)).getInt("amount"), date);
                                 transactionsList.add(transaction);
                             }
+
                             Transaction[] transactionsArray = new Transaction[transactionsList.size()];
                             transactionsArray = transactionsList.toArray(transactionsArray);
                             new SaveTransactionsAsyncTask(context).execute(transactionsArray);
