@@ -23,6 +23,7 @@
   <color name="dot_light_slider">#7271FF</color>
   <color name="PayPro_Line">#c8c7cc</color>
     <color name="PayPro_Background">#efeff4</color>
+  <color name="PayPro_Blue">#7271ff</color>
 
 
 </resources>

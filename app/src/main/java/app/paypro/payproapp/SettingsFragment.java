@@ -1,13 +1,14 @@
 package app.paypro.payproapp;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +58,15 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick( View v ) {
                 Log.i("eeeeee", "0000000000");
+
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                ProfileView myfragment = new ProfileView();
+
+                fragmentTransaction.replace(R.id.frame_layout, myfragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         } );
 
