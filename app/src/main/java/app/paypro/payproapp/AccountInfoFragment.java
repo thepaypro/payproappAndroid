@@ -3,6 +3,7 @@ package app.paypro.payproapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,9 +53,12 @@ public class AccountInfoFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                Intent intentLogin = new Intent(getActivity(), ShowQRActivity.class);
-                intentLogin.putExtra("qr_URI", "bitcoin:" + account.getAddress());
-                startActivity(intentLogin);
+//                Intent intentLogin = new Intent(getActivity(), ShowQRActivity.class);
+//                intentLogin.putExtra("qr_URI", "bitcoin:" + account.getAddress());
+//                startActivity(intentLogin);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_layout, ShowQRCodeFragment.newInstance());
+                transaction.commit();
             }
 
         });

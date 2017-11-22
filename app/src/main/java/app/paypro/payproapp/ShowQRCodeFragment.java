@@ -3,9 +3,11 @@ package app.paypro.payproapp;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -18,24 +20,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by rogerbaiget on 20/11/17.
+ * Created by rogerbaiget on 22/11/17.
  */
 
-public class ShowQRActivity extends AppCompatActivity {
+public class ShowQRCodeFragment extends Fragment {
 
+    public static ShowQRCodeFragment newInstance() {
+        ShowQRCodeFragment fragment = new ShowQRCodeFragment();
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_qr);
+    }
 
-        ImageView qrImageView = (ImageView) findViewById(R.id.qr_code);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            qrImageView.setImageBitmap(generateQRBitMap(extras.getString("qr_URI")));
+        return inflater.inflate(R.layout.fragment_show_qr, container, false);
+    }
 
-        }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ImageView qrImageView = getView().findViewById(R.id.qr_code);
+
+        qrImageView.setImageBitmap(generateQRBitMap("bitcoin"));
     }
 
     private Bitmap generateQRBitMap(final String content) {
