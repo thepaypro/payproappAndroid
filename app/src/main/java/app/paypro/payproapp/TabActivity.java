@@ -66,28 +66,28 @@ public class TabActivity extends AppCompatActivity {
 
         activityMain = findViewById(R.id.activity_main);
 
-        try {
-            Account.info(this, new ResponseListener<JSONObject>() {
-                @Override
-                public void getResult(JSONObject object) throws JSONException {
-                    try {
-                        if (object.getString("status").equals("true")) {
-                            Log.i("ACCOUNT-INFO", object.getString("info"));
-                        } else {
-                            Log.i("ACCOUNT-INFO", "nadaaaaa");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Account.info(this, new ResponseListener<JSONObject>() {
+//                @Override
+//                public void getResult(JSONObject object) throws JSONException {
+//                    try {
+//                        if (object.getString("status").equals("true")) {
+//                            Log.i("ACCOUNT-INFO", object.getString("info"));
+//                        } else {
+//                            Log.i("ACCOUNT-INFO", "nadaaaaa");
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

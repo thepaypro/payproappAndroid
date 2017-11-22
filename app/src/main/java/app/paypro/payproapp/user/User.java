@@ -3,6 +3,7 @@ package app.paypro.payproapp.user;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.util.Log;
 
 import app.paypro.payproapp.PasscodeActivity;
@@ -102,40 +103,63 @@ public class User {
         PayProRequest.post(context, "login_check", parameters, new ResponseListener<JSONObject>() {
             @Override
             public void getResult(JSONObject object) throws JSONException {
-                Boolean firstTimeLogin = true;
                 try {
                     if (object.has("user"))
                     {
-                        if(new GetUserAsyncTask(context).execute().get().length == 1) {
-                            firstTimeLogin = false;
-                        }
-                        JSONObject userJSON = object.getJSONObject("user");
+                        Thread.sleep(20000);
+                        app.paypro.payproapp.account.Account.info(context, new ResponseListener<JSONObject>() {
+                            @Override
+                            public void getResult(JSONObject object) throws JSONException {
+                                Boolean firstTimeLogin = true;
+                                try {
+                                    if (object.getString("status").equals("true")) {
+                                        if(new GetUserAsyncTask(context).execute().get().length == 1) {
+                                            firstTimeLogin = false;
+                                        }
+                                        JSONObject userJSON = object.getJSONObject("user");
 
-                        app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
+                                        app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
 
-                        if(!userJSON.isNull("nickname")){
-                            userEntity.setNickname(userJSON.getString("nickname"));
-                        }
+                                        if(!userJSON.isNull("nickname")){
+                                            userEntity.setNickname(userJSON.getString("nickname"));
+                                        }
 
-                        if(!userJSON.isNull("bitcoinAccount")){
-                            JSONObject accountJSON = userJSON.getJSONObject("bitcoinAccount");
-                            Account accountEntity= new Account(accountJSON.getInt("id"),accountJSON.getString("address"));
-                            if(firstTimeLogin){
-                                new SaveAccountAsyncTask(context).execute(accountEntity);
-                            }else{
-//                                new UpdateAccountAsyncTask(context).execute(accountEntity);
+                                        if(!userJSON.isNull("bitcoinAccount")){
+                                            JSONObject accountJSON = userJSON.getJSONObject("bitcoinAccount");
+                                            Account accountEntity= new Account(accountJSON.getInt("id"),accountJSON.getString("address"));
+                                            if(firstTimeLogin){
+                                                new SaveAccountAsyncTask(context).execute(accountEntity);
+                                            }else{
+//                                              new UpdateAccountAsyncTask(context).execute(accountEntity);
+                                            }
+                                        }
+
+                                        if(firstTimeLogin){
+                                            new SaveUserAsyncTask(context).execute(userEntity);
+                                        }else{
+                                            new UpdateUserAsyncTask(context).execute(userEntity);
+                                        }
+
+                                        JSONObject responseJSON = new JSONObject();
+                                        responseJSON.put("status", true);
+                                        listener.getResult(responseJSON);
+                                    } else {
+                                        JSONObject errorResponse = new JSONObject();
+                                        if(object.has("error_msg")){
+                                            errorResponse.put("error_msg", object.getString("error_msg"));
+                                        }
+                                        errorResponse.put("status", false);
+                                        listener.getResult(errorResponse);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-
-                        if(firstTimeLogin){
-                            new SaveUserAsyncTask(context).execute(userEntity);
-                        }else{
-                            new UpdateUserAsyncTask(context).execute(userEntity);
-                        }
-
-                        JSONObject responseJSON = new JSONObject();
-                        responseJSON.put("status", true);
-                        listener.getResult(responseJSON);
+                        });
                     } else {
                         JSONObject errorResponse = new JSONObject();
                         if(object.has("error_msg")){
