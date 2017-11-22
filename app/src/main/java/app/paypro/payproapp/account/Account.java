@@ -32,23 +32,25 @@ import static app.paypro.payproapp.WelcomeActivity.getContext;
 public class Account {
 
     public static void info(final Context context, final ResponseListener<JSONObject> listener) throws JSONException, ExecutionException, InterruptedException {
-
         String parameters = "";
+
         app.paypro.payproapp.db.entity.Account account = new GetAccountAsyncTask(getContext()).execute().get()[0];
         if(account.getLast_synced_transaction_id() != null){
             parameters = "bitcoinTransactionId="+account.getLast_synced_transaction_id();
         }
+
         PayProRequest.get(context, "accounts_info", parameters, new ResponseListener<JSONObject>() {
             @Override
             public void getResult(JSONObject object) throws JSONException {
-                Log.i("accountinfo", object.toString());
-                if (object.has("info"))
-                {
-                    JSONObject infoJSON = object.getJSONObject("info");
-
+                if (object.has("info")){
                     try {
-                        app.paypro.payproapp.db.entity.Account accountEntity = new GetAccountAsyncTask(context).execute().get()[0];
-                        Integer lastSyncedTransactionId = accountEntity.getLast_synced_transaction_id();
+                        JSONObject infoJSON = object.getJSONObject("info");
+                        Integer lastSyncedTransactionId = null;
+                        app.paypro.payproapp.db.entity.Account account = new GetAccountAsyncTask(getContext()).execute().get()[0];
+                        if(account.getLast_synced_transaction_id() != null){
+                            lastSyncedTransactionId  = account.getLast_synced_transaction_id();
+                        }
+
                         if (!infoJSON.isNull("bitcoinTransactions")) {
                             JSONArray bitcoinTransactions = infoJSON.getJSONObject("bitcoinTransactions").getJSONArray("content");
                             List<Transaction> transactionsList = new ArrayList<Transaction>();
@@ -77,10 +79,9 @@ public class Account {
                                 new SaveTransactionsAsyncTask(context).execute(transactionsArray);
                             }
                         }
-
-                        accountEntity.setBalance(infoJSON.getInt("bitcoinBalance"));
-                        accountEntity.setLast_synced_transaction_id(lastSyncedTransactionId);
-                        new UpdateAccountAsyncTask(context).execute(accountEntity);
+                        account.setBalance(infoJSON.getInt("bitcoinBalance"));
+                        account.setLast_synced_transaction_id(lastSyncedTransactionId);
+                        new UpdateAccountAsyncTask(context).execute(account);
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
