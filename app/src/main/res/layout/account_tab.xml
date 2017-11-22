@@ -34,9 +34,10 @@ tools:context=".AccountFragment">
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:fitsSystemWindows="true"
+                android:gravity="center|center_vertical"
                 android:orientation="vertical"
                 app:layout_collapseMode="pin"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -51,22 +52,14 @@ tools:context=".AccountFragment">
                     android:text="@string/bits"
                     android:textSize="30sp" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/currency_balance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:text="@string/balance_empty"
+                    android:textSize="10sp"/>
 
-
-                    <TextView
-                        android:id="@+id/currency_balance"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/balance_empty"
-                        android:textSize="10sp"/>
-
-                </LinearLayout>
 
             </LinearLayout>
 

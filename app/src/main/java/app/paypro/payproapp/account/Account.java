@@ -47,7 +47,8 @@ public class Account {
                     JSONObject infoJSON = object.getJSONObject("info");
 
                     try {
-                        Integer lastSyncedTransactionId = null;
+                        app.paypro.payproapp.db.entity.Account accountEntity = new GetAccountAsyncTask(context).execute().get()[0];
+                        Integer lastSyncedTransactionId = accountEntity.getLast_synced_transaction_id();
                         if (!infoJSON.isNull("bitcoinTransactions")) {
                             JSONArray bitcoinTransactions = infoJSON.getJSONObject("bitcoinTransactions").getJSONArray("content");
                             List<Transaction> transactionsList = new ArrayList<Transaction>();
@@ -70,12 +71,13 @@ public class Account {
                                 lastSyncedTransactionId = transaction.getUid();
                                 transactionsList.add(transaction);
                             }
-                            Transaction[] transactionsArray = new Transaction[transactionsList.size()];
-                            transactionsArray = transactionsList.toArray(transactionsArray);
-                            new SaveTransactionsAsyncTask(context).execute(transactionsArray);
+                            if(transactionsList.size() > 0){
+                                Transaction[] transactionsArray = new Transaction[transactionsList.size()];
+                                transactionsArray = transactionsList.toArray(transactionsArray);
+                                new SaveTransactionsAsyncTask(context).execute(transactionsArray);
+                            }
                         }
 
-                        app.paypro.payproapp.db.entity.Account accountEntity = new GetAccountAsyncTask(context).execute().get()[0];
                         accountEntity.setBalance(infoJSON.getInt("bitcoinBalance"));
                         accountEntity.setLast_synced_transaction_id(lastSyncedTransactionId);
                         new UpdateAccountAsyncTask(context).execute(accountEntity);

@@ -56,7 +56,6 @@ public class AccountFragment extends Fragment {
         TabLayout tabLayout = (TabLayout) getView().findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-
         try {
             account = new GetAccountAsyncTask(getContext()).execute().get()[0];
             currencyBalance = getView().findViewById(R.id.currency_balance);
