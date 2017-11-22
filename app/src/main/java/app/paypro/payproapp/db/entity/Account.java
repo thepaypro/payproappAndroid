@@ -26,13 +26,10 @@ public class Account {
     private String address;
 
     @ColumnInfo(name = "balance")
-    private int balance;
+    private Integer balance;
 
     @ColumnInfo(name = "last_synced_transaction_id")
     private String last_synced_transaction_id;
-
-//    @Relation(parentColumn = "uid", entityColumn = "account_id", entity = User.class)
-//    public List<User> user;
 
     public int getUid()
     {
@@ -54,12 +51,12 @@ public class Account {
         this.address = addressValue;
     }
 
-    public int getBalance()
+    public Integer getBalance()
     {
         return balance;
     }
 
-    public void setBalance(int balanceValue)
+    public void setBalance(Integer balanceValue)
     {
         this.balance = balanceValue;
     }
