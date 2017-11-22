@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ public class AccountTransactionsFragment extends Fragment {
     private TransactionsViewModel viewModel;
     private TransactionsRecyclerViewAdapter recyclerViewAdapter;
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     public static AccountTransactionsFragment newInstance() {
@@ -42,6 +44,7 @@ public class AccountTransactionsFragment extends Fragment {
         View v = inflater.inflate(R.layout.account_transactions_tab, container, false);
 
         recyclerView = v.findViewById(R.id.transactions_recycleview);
+        swipeRefreshLayout = v.findViewById(R.id.swipe_refresh_layout);
         recyclerViewAdapter = new TransactionsRecyclerViewAdapter(new ArrayList<Transaction>());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -55,6 +58,14 @@ public class AccountTransactionsFragment extends Fragment {
                 recyclerViewAdapter.addItems(transactions);
             }
         });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ((TabActivity)getActivity()).refreshAccountInfo(swipeRefreshLayout);
+            }
+        });
+
 
         return v;
     }
