@@ -3,8 +3,8 @@
   <color name="defaultTextColor">@android:color/black</color>
   <color name="defaultBackgroundColor">@android:color/transparent</color>
 
-  <color name="colorPrimary">#3F51B5</color>
-  <color name="colorPrimaryDark">#303F9F</color>
+  <color name="colorPrimary">#6666FF</color>
+  <color name="colorPrimaryDark">#3D3D7A</color>
   <color name="colorAccent">#565656</color>
 
   <!-- Screens background colors-->

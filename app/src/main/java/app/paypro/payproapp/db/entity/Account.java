@@ -29,7 +29,7 @@ public class Account {
     private Integer balance;
 
     @ColumnInfo(name = "last_synced_transaction_id")
-    private String last_synced_transaction_id;
+    private Integer last_synced_transaction_id;
 
     public int getUid()
     {
@@ -61,12 +61,12 @@ public class Account {
         this.balance = balanceValue;
     }
 
-    public String getLast_synced_transaction_id()
+    public Integer getLast_synced_transaction_id()
     {
         return last_synced_transaction_id;
     }
 
-    public void setLast_synced_transaction_id(String last_synced_transaction_idValue)
+    public void setLast_synced_transaction_id(Integer last_synced_transaction_idValue)
     {
         this.last_synced_transaction_id = last_synced_transaction_idValue;
     }

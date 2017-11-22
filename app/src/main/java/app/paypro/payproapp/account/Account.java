@@ -23,15 +23,22 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
+import static app.paypro.payproapp.WelcomeActivity.getContext;
+
 /**
  * Created by kike on 10/11/17.
  */
 
 public class Account {
 
-    public static void info(final Context context, final ResponseListener<JSONObject> listener) throws JSONException {
+    public static void info(final Context context, final ResponseListener<JSONObject> listener) throws JSONException, ExecutionException, InterruptedException {
 
-        PayProRequest.get(context, "accounts_info", "", new ResponseListener<JSONObject>() {
+        String parameters = "";
+        app.paypro.payproapp.db.entity.Account account = new GetAccountAsyncTask(getContext()).execute().get()[0];
+        if(account.getLast_synced_transaction_id() != null){
+            parameters = "bitcoinTransactionId="+account.getLast_synced_transaction_id();
+        }
+        PayProRequest.get(context, "accounts_info", parameters, new ResponseListener<JSONObject>() {
             @Override
             public void getResult(JSONObject object) throws JSONException {
                 Log.i("accountinfo", object.toString());
@@ -40,10 +47,7 @@ public class Account {
                     JSONObject infoJSON = object.getJSONObject("info");
 
                     try {
-                        app.paypro.payproapp.db.entity.Account accountEntity = new GetAccountAsyncTask(context).execute().get()[0];
-                        accountEntity.setBalance(infoJSON.getInt("bitcoinBalance"));
-                        new UpdateAccountAsyncTask(context).execute(accountEntity);
-
+                        Integer lastSyncedTransactionId = null;
                         if (!infoJSON.isNull("bitcoinTransactions")) {
                             JSONArray bitcoinTransactions = infoJSON.getJSONObject("bitcoinTransactions").getJSONArray("content");
                             List<Transaction> transactionsList = new ArrayList<Transaction>();
@@ -63,14 +67,19 @@ public class Account {
                                 if(!((JSONObject) bitcoinTransactions.get(i)).isNull("addressTo")){
                                     transaction.setAddressTo(((JSONObject) bitcoinTransactions.get(i)).getString("addressTo"));
                                 }
-
-
+                                lastSyncedTransactionId = transaction.getUid();
                                 transactionsList.add(transaction);
                             }
                             Transaction[] transactionsArray = new Transaction[transactionsList.size()];
                             transactionsArray = transactionsList.toArray(transactionsArray);
                             new SaveTransactionsAsyncTask(context).execute(transactionsArray);
                         }
+
+                        app.paypro.payproapp.db.entity.Account accountEntity = new GetAccountAsyncTask(context).execute().get()[0];
+                        accountEntity.setBalance(infoJSON.getInt("bitcoinBalance"));
+                        accountEntity.setLast_synced_transaction_id(lastSyncedTransactionId);
+                        new UpdateAccountAsyncTask(context).execute(accountEntity);
+
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {

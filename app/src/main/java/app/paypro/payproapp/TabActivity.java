@@ -15,6 +15,8 @@ import com.android.support.BottomNavigationViewHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.ExecutionException;
+
 import app.paypro.payproapp.account.Account;
 import app.paypro.payproapp.asynctask.db.user.GetAccountAsyncTask;
 import app.paypro.payproapp.http.ResponseListener;
@@ -73,7 +75,10 @@ public class TabActivity extends AppCompatActivity {
                 }
             });
         } catch (JSONException e) {
-            Log.i("aaaavbvbvbbb", "aaaaaaaa");
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
 

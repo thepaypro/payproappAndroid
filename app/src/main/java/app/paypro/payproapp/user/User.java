@@ -123,7 +123,7 @@ public class User {
                             if(firstTimeLogin){
                                 new SaveAccountAsyncTask(context).execute(accountEntity);
                             }else{
-                                new UpdateAccountAsyncTask(context).execute(accountEntity);
+//                                new UpdateAccountAsyncTask(context).execute(accountEntity);
                             }
                         }
 
