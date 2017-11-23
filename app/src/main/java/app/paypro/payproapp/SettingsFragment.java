@@ -72,14 +72,14 @@ public class SettingsFragment extends Fragment {
         rowProfile.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
                 ProfileView myfragment = new ProfileView();
 
-                fragmentTransaction.replace(R.id.frame_layout, myfragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                transaction.add(R.id.frame_layout, myfragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         } );
 
