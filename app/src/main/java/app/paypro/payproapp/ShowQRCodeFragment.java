@@ -25,6 +25,8 @@ import java.util.Map;
 
 public class ShowQRCodeFragment extends Fragment {
 
+    String addr;
+
     public static ShowQRCodeFragment newInstance() {
         ShowQRCodeFragment fragment = new ShowQRCodeFragment();
         return fragment;
@@ -33,6 +35,11 @@ public class ShowQRCodeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            this.addr  = bundle.getString("addr");
+        }
     }
 
     @Override
@@ -47,7 +54,7 @@ public class ShowQRCodeFragment extends Fragment {
 
         ImageView qrImageView = getView().findViewById(R.id.qr_code);
 
-        qrImageView.setImageBitmap(generateQRBitMap("bitcoin"));
+        qrImageView.setImageBitmap(generateQRBitMap("bitcoin:"+addr));
     }
 
     private Bitmap generateQRBitMap(final String content) {
