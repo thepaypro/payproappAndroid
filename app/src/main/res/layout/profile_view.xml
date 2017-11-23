@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/avatarProfileView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -86,7 +86,7 @@
                 android:background="@color/dot_dark_slider">
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/nicknameProfileView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"

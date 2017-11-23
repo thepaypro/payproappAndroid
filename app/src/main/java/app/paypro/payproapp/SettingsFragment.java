@@ -15,10 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TableRow;
+import android.widget.TextView;
+
+import java.util.concurrent.ExecutionException;
+
+import app.paypro.payproapp.asynctask.db.user.GetUserAsyncTask;
 
 public class SettingsFragment extends Fragment {
-
-    private ImageView avatarImage;
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
@@ -43,6 +46,8 @@ public class SettingsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        ImageView avatarImage;
+
         avatarImage = getView().findViewById(R.id.avatarImage);
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
@@ -52,13 +57,21 @@ public class SettingsFragment extends Fragment {
 
         avatarImage.setImageDrawable(roundedBitmapDrawable);
 
+        try {
+            app.paypro.payproapp.db.entity.User userEntity = new GetUserAsyncTask(getContext()).execute().get()[0];
+            TextView nicknameSettings = getView().findViewById(R.id.nicknameSettings);
+            nicknameSettings.setText(userEntity.getNickname().toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         TableRow rowProfile;
         rowProfile = getView().findViewById(R.id.rowProfile);
         rowProfile.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
-                Log.i("eeeeee", "0000000000");
-
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
