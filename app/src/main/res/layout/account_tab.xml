@@ -40,6 +40,7 @@ tools:context=".AccountFragment">
             android:layout_gravity="top"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginBottom="110dp"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:layout_collapseMode="pin"/>
 
