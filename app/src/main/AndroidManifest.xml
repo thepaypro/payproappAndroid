@@ -46,11 +46,6 @@
             android:name=".TabActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-            android:name=".ShowQRActivity"
-            android:parentActivityName=".TabActivity">
-        </activity>
-
     </application>
 
 </manifest>

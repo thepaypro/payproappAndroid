@@ -13,8 +13,11 @@
   <color name="bg_gray">#EBEBF1</color>
   <color name="bg_gray2">#FAFAFA</color>
 
-  <!--Other colors-->
-  <color name="pp_purple">#7271FF</color>
+  <!--PP colors-->
+  <color name="pp_dark_purple">#3D3D7A</color>
+  <color name="pp_light_purple">#6666FF</color>
+  <color name="pp_pink">#FFCCFF</color>
+  <color name="pp_green">#57FFB3</color>
 
   <!-- dots inactive colors -->
   <color name="dot_dark_slider">#ffffff</color>

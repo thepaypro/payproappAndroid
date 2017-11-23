@@ -116,14 +116,14 @@
                     android:layout_weight="1"
                     android:gravity="start"
                     android:text="+44"
-                    android:textColor="@color/pp_purple" />
+                    android:textColor="@color/pp_light_purple" />
 
                 <ImageView
                     android:id="@+id/findOnPageNextImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="7dp"
-                    android:tint="@color/pp_purple"
+                    android:tint="@color/pp_light_purple"
                     app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
 
             </LinearLayout>
