@@ -62,14 +62,12 @@ public class ProfileEdit extends Fragment {
                         public void getResult(JSONObject object) throws JSONException {
                             try {
                                 if(object.getBoolean("status")){
-                                    FragmentManager fragmentManager = getFragmentManager();
-                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
                                     ProfileView myfragment = new ProfileView();
 
-                                    fragmentTransaction.replace(R.id.frame_layout, myfragment);
-                                    fragmentTransaction.addToBackStack(null);
-                                    fragmentTransaction.commit();
+                                    FragmentManager fragmentManager = getFragmentManager();
+                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                    transaction.replace(R.id.frame_layout, myfragment);
+                                    transaction.commit();
                                 }else if (!object.getBoolean("status") && object.has("error_msg")){
                                     PPSnackbar.getSnackbar(view,object.getString("error_msg")).show();
                                 }else{
