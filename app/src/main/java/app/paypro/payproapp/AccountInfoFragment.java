@@ -20,10 +20,10 @@ import app.paypro.payproapp.db.entity.Account;
  * Created by rogerbaiget on 15/11/17.
  */
 
-public class AccountInfoFragment extends Fragment {
+public class AccountInfoFragment extends Fragment implements AccountFragmentsInterface{
 
     public TextView addressTextView;
-    public Account account;
+//    public Account account;
 
     public static AccountInfoFragment newInstance() {
         AccountInfoFragment fragment = new AccountInfoFragment();
@@ -33,8 +33,6 @@ public class AccountInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -63,16 +61,19 @@ public class AccountInfoFragment extends Fragment {
 
         });
 
-
         try {
-            account = new GetAccountAsyncTask(getContext()).execute().get()[0];
-            addressTextView = getView().findViewById(R.id.address_text);
-            addressTextView.setText(account.getAddress());
+            this.onRefreshInfo(new GetAccountAsyncTask(getContext()).execute().get()[0]);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
     }
 
+    @Override
+    public void onRefreshInfo(Account account) {
+        addressTextView = getView().findViewById(R.id.address_text);
+        addressTextView.setText(account.getAddress());
+    }
 }

@@ -28,6 +28,7 @@ import app.paypro.payproapp.utils.PPSnackbar;
 public class TabActivity extends AppCompatActivity {
 
     RelativeLayout activityMain;
+    Fragment navigationAccount;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -47,6 +48,7 @@ public class TabActivity extends AppCompatActivity {
                     break;
                 case R.id.navigation_account:
                     selectedFragment = AccountFragment.newInstance();
+                    navigationAccount = selectedFragment;
                     break;
                 case R.id.navigation_settings:
                     selectedFragment = SettingsFragment.newInstance();
@@ -66,35 +68,13 @@ public class TabActivity extends AppCompatActivity {
 
         activityMain = findViewById(R.id.activity_main);
 
-//        try {
-//            Account.info(this, new ResponseListener<JSONObject>() {
-//                @Override
-//                public void getResult(JSONObject object) throws JSONException {
-//                    try {
-//                        if (object.getString("status").equals("true")) {
-//                            Log.i("ACCOUNT-INFO", object.getString("info"));
-//                        } else {
-//                            Log.i("ACCOUNT-INFO", "nadaaaaa");
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         BottomNavigationViewHelper.disableShiftMode(navigation);
 
         navigation.setSelectedItemId(R.id.navigation_account);
+
     }
 
     public void refreshAccountInfo(final SwipeRefreshLayout swipeRefreshLayout){
@@ -105,12 +85,17 @@ public class TabActivity extends AppCompatActivity {
                     swipeRefreshLayout.setRefreshing(false);
                     try {
                         if (object.getString("status").equals("true")) {
+                            ((AccountFragment) navigationAccount).onRefreshInfo(new GetAccountAsyncTask(getApplicationContext()).execute().get()[0]);
                         }else if (!object.getBoolean("status") && object.has("error_msg")){
                             PPSnackbar.getSnackbar(activityMain,object.getString("error_msg")).show();
                         } else {
                             PPSnackbar.getSnackbar(activityMain,"").show();
                         }
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
                         e.printStackTrace();
                     }
                 }

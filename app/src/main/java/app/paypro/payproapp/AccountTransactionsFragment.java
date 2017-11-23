@@ -15,13 +15,14 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.paypro.payproapp.db.entity.Account;
 import app.paypro.payproapp.db.entity.Transaction;
 
 /**
  * Created by rogerbaiget on 15/11/17.
  */
 
-public class AccountTransactionsFragment extends Fragment {
+public class AccountTransactionsFragment extends Fragment{
 
     private TransactionsViewModel viewModel;
     private TransactionsRecyclerViewAdapter recyclerViewAdapter;
@@ -69,4 +70,5 @@ public class AccountTransactionsFragment extends Fragment {
 
         return v;
     }
+
 }
