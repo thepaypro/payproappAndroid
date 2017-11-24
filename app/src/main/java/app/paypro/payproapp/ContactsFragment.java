@@ -15,7 +15,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -31,14 +35,12 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 public class ContactsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private static final int REQUEST_READ_CONTACTS = 101;
-    private static final int CONTACT_LOADER_ID = 78;
 
     ArrayList<Contact> contacts = new ArrayList<Contact>();
 
     ListView mContactsList;
     RelativeLayout mainView;
 
-    private SimpleCursorAdapter mCursorAdapter;
     private ContactsAdapter contactsAdapter;
 
     @SuppressLint("InlinedApi")
@@ -59,6 +61,7 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -76,6 +79,34 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
 
         mayRequestContacts();
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.search_menu, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        search(searchView);
+
+    }
+
+    private void search(SearchView searchView) {
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                contactsAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
     }
 
     @Override

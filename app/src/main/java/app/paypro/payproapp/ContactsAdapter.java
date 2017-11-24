@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +17,10 @@ import java.util.ArrayList;
  * Created by rogerbaiget on 24/11/17.
  */
 
-public class ContactsAdapter extends ArrayAdapter<Contact> {
+public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable {
+
+    private ArrayList<Contact>  data;
+    private ArrayList<Contact> filtered_data;
 
     private class ViewHolder {
         private TextView name;
@@ -25,6 +30,13 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
 
     public ContactsAdapter(Context context, int textViewResourceId, ArrayList<Contact> items) {
         super(context, textViewResourceId, items);
+        data = new ArrayList<Contact>(items);
+        filtered_data = items;
+    }
+
+    @Override
+    public int getCount() {
+        return filtered_data.size();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -54,5 +66,39 @@ public class ContactsAdapter extends ArrayAdapter<Contact> {
         }
 
         return convertView;
+    }
+
+    @Override
+    public Filter getFilter() {
+
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+
+                String charString = charSequence.toString();
+
+
+
+                    ArrayList<Contact> filteredList = new ArrayList<>();
+
+                    for (Contact dataObject : data) {
+
+                        if (dataObject.getName().toLowerCase().startsWith(charString) || dataObject.getNumber().toLowerCase().contains(charString)) {
+                            filteredList.add(dataObject);
+                        }
+                    }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filtered_data.clear();
+                filtered_data.addAll((ArrayList<Contact>) filterResults.values);
+                notifyDataSetChanged();
+            }
+        };
     }
 }
