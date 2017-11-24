@@ -1,7 +1,12 @@
 package app.paypro.payproapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +16,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -56,11 +62,18 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
 
         Contact item = getItem(position);
         if (item!= null) {
-            if(item.getImageURi() == null){
-                viewHolder.photo.setImageDrawable(getContext().getResources().getDrawable(R.drawable.default_profile));
-            }else{
-                viewHolder.photo.setImageURI(Uri.parse(item.getImageURi()));
+            Bitmap bitmapImage = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_profile);
+            if(item.getImageURi() != null){
+                try {
+                    bitmapImage = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.parse(item.getImageURi()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getContext().getResources(), bitmapImage);
+            roundedBitmapDrawable.setCircular(true);
+            viewHolder.photo.setImageDrawable(roundedBitmapDrawable);
+
             viewHolder.name.setText(item.getName());
             viewHolder.number.setText(item.getNumber());
         }
