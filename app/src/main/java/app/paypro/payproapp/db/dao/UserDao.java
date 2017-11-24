@@ -4,8 +4,6 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-
-import app.paypro.payproapp.db.entity.Account;
 import app.paypro.payproapp.db.entity.User;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;

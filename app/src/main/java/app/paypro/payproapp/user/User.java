@@ -137,4 +137,46 @@ public class User {
             }
         });
     }
+
+    public static void updateInfo(final Context context, JSONObject parameters, final ResponseListener<JSONObject> listener) throws JSONException
+    {
+        PayProRequest.put(context, "users/profile/0", parameters, new ResponseListener<JSONObject>() {
+            @Override
+            public void getResult(JSONObject object) throws JSONException {
+                try {
+                    if (object.has("user"))
+                    {
+                        JSONObject userJSON = object.getJSONObject("user");
+
+                        app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
+
+                        if(!userJSON.isNull("nickname")){
+                            userEntity.setNickname(userJSON.getString("nickname"));
+                            new SaveUserAsyncTask(context).execute(userEntity);
+                        }
+
+                        JSONObject responseJSON = new JSONObject();
+                        responseJSON.put("status", true);
+                        listener.getResult(responseJSON);
+                    } else {
+                        JSONObject errorResponse = new JSONObject();
+
+                        if(object.has("errorMessage")){
+                            errorResponse.put("error_msg", object.getString("errorMessage"));
+                        }
+
+                        errorResponse.put("status", false);
+                        listener.getResult(errorResponse);
+                    }
+                } catch (JSONException e) {
+                    Log.e("User.updateInfo", String.valueOf(e));
+
+                    JSONObject errorResponse = new JSONObject();
+                    errorResponse.put("status", false);
+                    errorResponse.put("error_msg", e.getMessage());
+                    listener.getResult(errorResponse);
+                }
+            }
+        });
+    }
 }
