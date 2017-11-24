@@ -3,6 +3,7 @@ package app.paypro.payproapp;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,9 +13,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,47 +22,24 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
+
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 
-public class ContactsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
+public class ContactsFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private static final int REQUEST_READ_CONTACTS = 101;
     private static final int CONTACT_LOADER_ID = 78;
 
-    /*
-     * Defines an array that contains column names to move from
-     * the Cursor to the ListView.
-     */
-    @SuppressLint("InlinedApi")
-    private final static String[] FROM_COLUMNS = {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
-                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY :  ContactsContract.Contacts.DISPLAY_NAME,
-            ContactsContract.Contacts.PHOTO_URI
-    };
-    /*
-     * Defines an array that contains resource ids for the layout views
-     * that get the Cursor column contents. The id is pre-defined in
-     * the Android framework, so it is prefaced with "android.R.id"
-     */
-    private final static int[] TO_IDS = {
-            R.id.contact_name,
-            R.id.contact_photo
-    };
-    // Define global mutable variables
-    // Define a ListView object
+    ArrayList<Contact> contacts = new ArrayList<Contact>();
+
     ListView mContactsList;
     RelativeLayout mainView;
-    // Define variables for the contact the user selects
-    // The contact's _ID value
-//    long mContactId;
-//    // The contact's LOOKUP_KEY
-//    String mContactKey;
-//    // A content URI for the selected contact
-//    Uri mContactUri;
-    // An adapter that binds the result Cursor to the ListView
+
     private SimpleCursorAdapter mCursorAdapter;
+    private ContactsAdapter contactsAdapter;
 
     @SuppressLint("InlinedApi")
     private static final String[] PROJECTION =
@@ -71,27 +47,9 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
                     ContactsContract.Contacts._ID,
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
                             ContactsContract.Contacts.DISPLAY_NAME_PRIMARY : ContactsContract.Contacts.DISPLAY_NAME,
-                    ContactsContract.Contacts.PHOTO_URI
-
+                    ContactsContract.Contacts.PHOTO_URI,
+                    ContactsContract.Contacts.HAS_PHONE_NUMBER
             };
-
-//    // The column index for the _ID column
-//    private static final int CONTACT_ID_INDEX = 0;
-//    // The column index for the LOOKUP_KEY column
-//    private static final int LOOKUP_KEY_INDEX = 1;
-
-    // Defines the text expression
-//    @SuppressLint("InlinedApi")
-//    private static final String SELECTION =
-//            Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
-//                    ContactsContract.Contacts.DISPLAY_NAME_PRIMARY + " LIKE ?" :
-//                    ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?";
-//    // Defines a variable for the search string
-//    private String mSearchString;
-//    // Defines the array to hold values that replace the ?
-//    private String[] mSelectionArgs = { mSearchString };
-
-
 
     public static ContactsFragment newInstance() {
         ContactsFragment fragment = new ContactsFragment();
@@ -113,43 +71,11 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Gets the ListView from the View list of the parent activity
         mContactsList =(ListView) getActivity().findViewById(R.id.contacts_list);
         mainView = getActivity().findViewById(R.id.main_view);
 
         mayRequestContacts();
 
-    }
-
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        /*
-         * Makes search string into pattern and
-         * stores it in the selection array
-         */
-//        mSelectionArgs[0] = "%" + mSearchString + "%";
-        // Starts the query
-        return new CursorLoader(
-                getActivity(),
-                ContactsContract.Contacts.CONTENT_URI,
-                PROJECTION,
-                null,
-                null,
-                null
-        );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Put the result Cursor in the adapter for the ListView
-        mCursorAdapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // Delete the reference to the existing Cursor
-        mCursorAdapter.swapCursor(null);
     }
 
     @Override
@@ -195,21 +121,64 @@ public class ContactsFragment extends Fragment implements LoaderManager.LoaderCa
 
     public void loadContacts(){
 
-        // Gets a CursorAdapter
-        mCursorAdapter = new SimpleCursorAdapter(
-                getActivity(),
-                R.layout.contacts_list_item,
+        Uri allContacts = ContactsContract.Contacts.CONTENT_URI;
+
+        //declare our cursor
+        Cursor c;
+
+        CursorLoader cursorLoader = new CursorLoader(
+                getContext(),
+                allContacts,
+                PROJECTION,
                 null,
-                FROM_COLUMNS, TO_IDS,
-                0);
-        // Sets the adapter for the ListView
-        mContactsList.setAdapter(mCursorAdapter);
+                null ,
+                null);
+        c = cursorLoader.loadInBackground();
 
-        // Set the item click listener to be the current fragment.
-//                mContactsList.setOnItemClickListener(this);
 
-        // Initializes the loader
-        getLoaderManager().initLoader(CONTACT_LOADER_ID, null, this);
+        saveContacts(c);
+
+        contactsAdapter = new ContactsAdapter(
+                getContext(), R.layout.contacts_list_item, contacts);
+
+        mContactsList.setAdapter(contactsAdapter);
+
+    }
+
+    private void saveContacts(Cursor c) {
+        ContentResolver cr = getActivity().getContentResolver();
+        //---display the contact id and name and phone number----
+        if (c.moveToFirst()) {
+            do {
+                //---get the contact id and name
+                String contactID = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+                String contactDisplayName = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+                String contactDisplayPhone = "";
+
+                //---get phone number---
+                int hasPhone = c.getInt(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                if (hasPhone == 1) {
+                    Cursor phoneCursor = getActivity().getContentResolver().query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " +
+                                    contactID, null, null);
+                    while (phoneCursor.moveToNext()) {
+                        contactDisplayPhone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    }
+                    phoneCursor.close();
+
+                }
+
+                //---get image number---
+                String contactImageUri = c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+
+
+                contacts.add(new Contact(contactID, contactDisplayName, contactImageUri, contactDisplayPhone));
+
+            } while (c.moveToNext());
+        }
     }
 
 
