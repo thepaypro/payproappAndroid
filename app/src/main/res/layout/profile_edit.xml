@@ -26,7 +26,8 @@
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/done"
         android:textColor="@color/dot_dark_slider"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -13,6 +13,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -56,6 +57,20 @@ public class ProfileView extends Fragment {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
+        ImageButton backButton = getView().findViewById(R.id.backButtonToolbar);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SettingsFragment myfragment = new SettingsFragment();
+
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+                transaction.replace(R.id.frame_layout, myfragment);
+                transaction.commit();
+            }
+        });
 
         TableRow rowProfile;
         rowProfile = getView().findViewById(R.id.rowNickname);
