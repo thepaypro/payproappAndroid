@@ -198,40 +198,40 @@ public class PasscodeActivity extends AppCompatActivity{
                             finish();
                             break;
                         case "login":
-                            JSONObject parameters = new JSONObject();
-                            try {
-                                parameters.put("_username",username);
-                                parameters.put("_password",editTextString);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            disableView();
-                            try {
-                                User.login(getApplicationContext(), parameters, new ResponseListener<JSONObject>(){
-                                    @Override
-                                    public void getResult(JSONObject object) {
-                                        try {
-                                            if(object.getBoolean("status")){
+//                            JSONObject parameters = new JSONObject();
+//                            try {
+//                                parameters.put("_username",username);
+//                                parameters.put("_password",editTextString);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                            disableView();
+//                            try {
+//                                User.login(getApplicationContext(), parameters, new ResponseListener<JSONObject>(){
+//                                    @Override
+//                                    public void getResult(JSONObject object) {
+//                                        try {
+//                                            if(object.getBoolean("status")){
                                                 enableView();
                                                 Intent intentLogin = new Intent(PasscodeActivity.this, TabActivity.class);
                                                 startActivity(intentLogin);
                                                 finish();
-                                            }else if (!object.getBoolean("status") && object.has("error_msg")){
-                                                enableView();
-                                                PPSnackbar.getSnackbar(mainView,object.getString("error_msg")).show();
-                                            }else{
-                                                enableView();
-                                                shake();
-                                                editText.setText("");
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+//                                            }else if (!object.getBoolean("status") && object.has("error_msg")){
+//                                                enableView();
+//                                                PPSnackbar.getSnackbar(mainView,object.getString("error_msg")).show();
+//                                            }else{
+//                                                enableView();
+//                                                shake();
+//                                                editText.setText("");
+//                                            }
+//                                        } catch (JSONException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//                                });
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
                             break;
                         case "old":
 
