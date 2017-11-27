@@ -3,6 +3,10 @@ package app.paypro.payproapp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -74,6 +78,17 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
             roundedBitmapDrawable.setCircular(true);
             viewHolder.photo.setImageDrawable(roundedBitmapDrawable);
 
+
+//            BitmapShader shader;
+//            shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+//
+//            Paint paint = new Paint();
+//            paint.setAntiAlias(true);
+//            paint.setShader(shader);
+//
+//            RectF rect = new RectF(0.0f, 0.0f, width, height);
+
+
             viewHolder.name.setText(item.getName());
             viewHolder.number.setText(item.getNumber());
         }
@@ -96,7 +111,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
 
                     for (Contact dataObject : data) {
 
-                        if (dataObject.getName().toLowerCase().startsWith(charString) || dataObject.getNumber().toLowerCase().contains(charString)) {
+                        if (dataObject.getName().toLowerCase().contains(charString) || dataObject.getNumber().toLowerCase().contains(charString)) {
                             filteredList.add(dataObject);
                         }
                     }

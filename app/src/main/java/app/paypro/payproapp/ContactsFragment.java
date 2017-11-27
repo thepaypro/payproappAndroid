@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.CursorLoader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,10 +22,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+
+import app.paypro.payproapp.contacts.Contacts;
+import app.paypro.payproapp.http.ResponseListener;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
@@ -38,8 +49,9 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
 
     ArrayList<Contact> contacts = new ArrayList<Contact>();
 
-    ListView mContactsList;
-    RelativeLayout mainView;
+    private ListView mContactsList;
+    private RelativeLayout mainView;
+    private ProgressBar progressBar;
 
     private ContactsAdapter contactsAdapter;
 
@@ -76,7 +88,9 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
 
         mContactsList =(ListView) getActivity().findViewById(R.id.contacts_list);
         mainView = getActivity().findViewById(R.id.main_view);
+        progressBar = getActivity().findViewById(R.id.progress_bar);
 
+        disableView();
         mayRequestContacts();
 
     }
@@ -124,8 +138,8 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mainView, "", Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
+            Snackbar.make(mainView, "Permission to access contacts", Snackbar.LENGTH_INDEFINITE)
+                            .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
                         public void onClick(View v) {
@@ -145,6 +159,7 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted , Access contacts here or do whatever you need.
                 loadContacts();
+                enableView();
 
             }
         }
@@ -170,7 +185,7 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
         saveContacts(c);
 
         contactsAdapter = new ContactsAdapter(
-                getContext(), R.layout.contacts_list_item, contacts);
+                getContext(), R.layout.contacts_list_item, sortList(contacts));
 
         mContactsList.setAdapter(contactsAdapter);
 
@@ -178,6 +193,7 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
 
     private void saveContacts(Cursor c) {
         ContentResolver cr = getActivity().getContentResolver();
+        final ArrayList<String> allContactsNumbers = new ArrayList<>();
         //---display the contact id and name and phone number----
         if (c.moveToFirst()) {
             do {
@@ -185,9 +201,12 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
                 String contactID = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
                 String contactDisplayName = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-                String contactDisplayPhone = "";
+
+                //---get image number---
+                String contactImageUri = c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
 
                 //---get phone number---
+                ArrayList<String> contactNumbers = new ArrayList<>();
                 int hasPhone = c.getInt(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
                 if (hasPhone == 1) {
                     Cursor phoneCursor = getActivity().getContentResolver().query(
@@ -196,20 +215,71 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " +
                                     contactID, null, null);
                     while (phoneCursor.moveToNext()) {
-                        contactDisplayPhone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String contactPhone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        contactNumbers.add(contactPhone);
+                        allContactsNumbers.add(contactPhone);
                     }
                     phoneCursor.close();
 
                 }
 
-                //---get image number---
-                String contactImageUri = c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+                if(contactNumbers.size() > 0){
+                    contacts.add(new Contact(contactID, contactDisplayName, contactImageUri, contactNumbers));
+                }
 
-
-                contacts.add(new Contact(contactID, contactDisplayName, contactImageUri, contactDisplayPhone));
 
             } while (c.moveToNext());
+            try {
+                JSONObject parameters = new JSONObject(String.valueOf(allContactsNumbers));
+                Contacts.checkContacts(getContext(),parameters,new ResponseListener<JSONObject>(){
+                    @Override
+                    public void getResult(JSONObject object) throws JSONException {
+                        if(object.has("conacts")){
+                            JSONObject checkContactsResponse = object.getJSONObject("contacts");
+                            for(int i = 0; i< contacts.size(); i++){
+                                ArrayList<String> contactNumbers = contacts.get(i).getNumbers();
+                                for(int j = 0; j<contactNumbers.size(); j++){
+                                        Iterator iterator = checkContactsResponse.keys();
+                                        while(iterator.hasNext()){
+                                            String key = (String)iterator.next();
+                                            if (key.equals(contactNumbers.get(j))){
+                                                JSONObject responseNumberObject = checkContactsResponse.getJSONObject(key);
+                                                Boolean isUser = responseNumberObject.getBoolean("isUser");
+                                                contacts.get(i).setIsUser(isUser);
+                                                if(isUser){
+                                                    contacts.get(i).setBackFullName(responseNumberObject.getString("fullName"));
+                                                }
+                                            }
+                                        }
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
+
+    }
+
+    ArrayList<Contact> sortList(ArrayList<Contact> list) {
+        Collections.sort(list, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact contact1, Contact contact2) {
+                return contact1.getName().compareTo(contact2.getName());
+            }
+        });
+        return list;
+    }
+
+    public void disableView(){
+        progressBar.setVisibility(LinearLayout.VISIBLE);
+    }
+
+    public void enableView(){
+        progressBar.setVisibility(LinearLayout.GONE);
     }
 
 

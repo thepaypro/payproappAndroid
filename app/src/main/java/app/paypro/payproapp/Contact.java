@@ -1,5 +1,7 @@
 package app.paypro.payproapp;
 
+import java.util.ArrayList;
+
 /**
  * Created by rogerbaiget on 24/11/17.
  */
@@ -8,8 +10,34 @@ public class Contact{
 
     private String imageURi = "";
     private String name = "";
+    private String backFullName = "";
     private String id = "";
-    private String number = "";
+    private Boolean isUser = false;
+    private ArrayList<String> numbers;
+
+    public String getBackFullName() {
+        return backFullName;
+    }
+
+    public void setBackFullName(String backFullName) {
+        this.backFullName = backFullName;
+    }
+
+    public ArrayList<String> getNumbers() {
+        return numbers;
+    }
+
+    public void setNumbers(ArrayList<String> numbers) {
+        this.numbers = numbers;
+    }
+
+    public Boolean getIsUser() {
+        return isUser;
+    }
+
+    public void setIsUser(Boolean user) {
+        isUser = user;
+    }
 
     public String getImageURi() {
         return imageURi;
@@ -35,19 +63,17 @@ public class Contact{
         this.id = id;
     }
 
-    public String getNumber() {
-        return number;
-    }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
 
-    public Contact(String id, String name, String imageURi, String number){
+
+
+    public Contact(String id, String name, String imageURi, ArrayList<String> numbers){
 
         this.id = id;
         this.name = name;
         this.imageURi = imageURi;
-        this.number = number;
+        this.numbers = numbers;
     }
+
+
 }
