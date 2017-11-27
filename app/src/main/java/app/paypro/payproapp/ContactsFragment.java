@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import app.paypro.payproapp.contacts.Contacts;
@@ -159,8 +160,6 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted , Access contacts here or do whatever you need.
                 loadContacts();
-                enableView();
-
             }
         }
     }
@@ -184,16 +183,11 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
 
         saveContacts(c);
 
-        contactsAdapter = new ContactsAdapter(
-                getContext(), R.layout.contacts_list_item, sortList(contacts));
-
-        mContactsList.setAdapter(contactsAdapter);
-
     }
 
     private void saveContacts(Cursor c) {
         ContentResolver cr = getActivity().getContentResolver();
-        final ArrayList<String> allContactsNumbers = new ArrayList<>();
+        final HashMap<String,String> allContactsNumbers = new HashMap<>();
         //---display the contact id and name and phone number----
         if (c.moveToFirst()) {
             do {
@@ -217,7 +211,8 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
                     while (phoneCursor.moveToNext()) {
                         String contactPhone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         contactNumbers.add(contactPhone);
-                        allContactsNumbers.add(contactPhone);
+                        contactPhone = phoneFormat(contactPhone);
+                        allContactsNumbers.put(String.valueOf(allContactsNumbers.size()+1),contactPhone);
                     }
                     phoneCursor.close();
 
@@ -230,11 +225,11 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
 
             } while (c.moveToNext());
             try {
-                JSONObject parameters = new JSONObject(String.valueOf(allContactsNumbers));
+                JSONObject parameters = new JSONObject(allContactsNumbers);
                 Contacts.checkContacts(getContext(),parameters,new ResponseListener<JSONObject>(){
                     @Override
                     public void getResult(JSONObject object) throws JSONException {
-                        if(object.has("conacts")){
+                        if(object.has("contacts")){
                             JSONObject checkContactsResponse = object.getJSONObject("contacts");
                             for(int i = 0; i< contacts.size(); i++){
                                 ArrayList<String> contactNumbers = contacts.get(i).getNumbers();
@@ -242,7 +237,7 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
                                         Iterator iterator = checkContactsResponse.keys();
                                         while(iterator.hasNext()){
                                             String key = (String)iterator.next();
-                                            if (key.equals(contactNumbers.get(j))){
+                                            if (key.equals(phoneFormat(contactNumbers.get(j)))){
                                                 JSONObject responseNumberObject = checkContactsResponse.getJSONObject(key);
                                                 Boolean isUser = responseNumberObject.getBoolean("isUser");
                                                 contacts.get(i).setIsUser(isUser);
@@ -254,6 +249,11 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
                                 }
                             }
                         }
+                        contactsAdapter = new ContactsAdapter(
+                                getContext(), R.layout.contacts_list_item, sortList(contacts));
+
+                        mContactsList.setAdapter(contactsAdapter);
+                        enableView();
                     }
                 });
             } catch (JSONException e) {
@@ -276,10 +276,16 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
 
     public void disableView(){
         progressBar.setVisibility(LinearLayout.VISIBLE);
+        mContactsList.setVisibility(View.GONE);
     }
 
     public void enableView(){
         progressBar.setVisibility(LinearLayout.GONE);
+        mContactsList.setVisibility(View.VISIBLE);
+    }
+
+    public String phoneFormat(String phone){
+        return phone.replace("-","").replace(" ","").replace("(","").replace(")","");
     }
 
 

@@ -36,6 +36,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
         private TextView name;
         private ImageView photo;
         private TextView number;
+        private ImageView ppLogo;
     }
 
     public ContactsAdapter(Context context, int textViewResourceId, ArrayList<Contact> items) {
@@ -58,6 +59,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
             viewHolder.name =  convertView.findViewById(R.id.contact_name);
             viewHolder.photo = convertView.findViewById(R.id.contact_photo);
             viewHolder.number = convertView.findViewById(R.id.contact_number);
+            viewHolder.ppLogo = convertView.findViewById(R.id.pp_logo);
 
             convertView.setTag(viewHolder);
         } else {
@@ -78,6 +80,17 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
             roundedBitmapDrawable.setCircular(true);
             viewHolder.photo.setImageDrawable(roundedBitmapDrawable);
 
+            Bitmap bitmapLogo = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.logo_alone);
+            roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getContext().getResources(), bitmapLogo);
+            roundedBitmapDrawable.setCircular(true);
+            viewHolder.ppLogo.setImageDrawable(roundedBitmapDrawable);
+
+            if (item.getIsUser()) {
+                viewHolder.ppLogo.setVisibility(View.VISIBLE);
+            }else{
+                viewHolder.ppLogo.setVisibility(View.GONE);
+            }
+
 
 //            BitmapShader shader;
 //            shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
@@ -90,7 +103,8 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
 
 
             viewHolder.name.setText(item.getName());
-            viewHolder.number.setText(item.getNumber());
+            viewHolder.number.setText(item.getNumbers().get(0));
+
         }
 
         return convertView;
@@ -111,7 +125,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
 
                     for (Contact dataObject : data) {
 
-                        if (dataObject.getName().toLowerCase().contains(charString) || dataObject.getNumber().toLowerCase().contains(charString)) {
+                        if (dataObject.getName().toLowerCase().contains(charString) || dataObject.getNumbers().get(0).toLowerCase().contains(charString)) {
                             filteredList.add(dataObject);
                         }
                     }

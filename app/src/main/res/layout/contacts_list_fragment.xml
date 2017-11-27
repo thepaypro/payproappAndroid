@@ -19,8 +19,8 @@
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:indeterminateDrawable="@drawable/custom_progress_loader"
+            android:visibility="visible"
+            android:indeterminateDrawable="@drawable/custom_progress_loader_black"
             android:indeterminate="true"/>
 
     </LinearLayout>
@@ -28,6 +28,7 @@
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/contacts_list"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent" />
 
 </RelativeLayout>

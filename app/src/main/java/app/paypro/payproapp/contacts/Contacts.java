@@ -22,8 +22,7 @@ public class Contacts {
             @Override
             public void getResult(JSONObject object) throws JSONException {
                 if(object.has("contacts")){
-                    JSONArray contacts = object.getJSONArray("contacts");
-
+                    JSONObject contacts = object.getJSONObject("contacts");
                     JSONObject responseJSON = new JSONObject();
                     responseJSON.put("status", true);
                     responseJSON.put("contacts", contacts);
