@@ -76,4 +76,10 @@
   <string name="done">Done</string>
   <string name="nickname">Nickname</string>
   <string name="edit">Edit</string>
+
+
+  <string name="low_storage_error">The phone storage is low</string>
+
+  <string name="permission_camera_rationale">Access to the camera is needed for qr detection</string>
+  <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
 </resources>
