@@ -65,9 +65,14 @@
   <string name="transactions_tab_title">Transactions</string>
 
   <string name="bits">Bits</string>
-  <string name="bits_unit">μ₿</string>
+  <string name="balance_empty">μ₿ -.--</string>
 
   <string name="bitcoin_account_header">BITCOIN ACCOUNT</string>
+
+  <string name="qrcode_label">QR Code: </string>
+  <string name="address_label">Address: </string>
+
+
   <string name="latest_transactions_header">LATEST TRANSACTIONS</string>
   <string name="passcode">Passcode</string>
   <string name="tell_a_friend">Tell a friend</string>

@@ -25,7 +25,7 @@ public class PPSnackbar {
                 return snackbar;
             default:
                 snackbar = Snackbar
-                        .make(view, "ERROR", Snackbar.LENGTH_LONG);
+                        .make(view, "Ups! Sorry, something went wrong", Snackbar.LENGTH_LONG);
                 snackbar.setActionTextColor(Color.RED);
                 return snackbar;
         }
