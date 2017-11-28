@@ -74,6 +74,11 @@
 
 
   <string name="latest_transactions_header">LATEST TRANSACTIONS</string>
-
-
+  <string name="passcode">Passcode</string>
+  <string name="tell_a_friend">Tell a friend</string>
+  <string name="info">Info</string>
+  <string name="todo">TODO</string>
+  <string name="done">Done</string>
+  <string name="nickname">Nickname</string>
+  <string name="edit">Edit</string>
 </resources>

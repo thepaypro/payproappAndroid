@@ -73,6 +73,7 @@ public class Account {
                                 lastSyncedTransactionId = transaction.getUid();
                                 transactionsList.add(transaction);
                             }
+                          
                             if(transactionsList.size() > 0){
                                 Transaction[] transactionsArray = new Transaction[transactionsList.size()];
                                 transactionsArray = transactionsList.toArray(transactionsArray);

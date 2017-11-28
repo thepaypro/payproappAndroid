@@ -201,8 +201,84 @@ public class PayProRequest {
         MySingleton.getInstance(context).addToRequestQueue(jsObjRequest);
     }
 
-    public static void put()
+    public static void put(Context context, String endpointURL, JSONObject parameters, final ResponseListener<JSONObject> listener)
     {
+        String url = String.format("%s%s", absoluteURL, endpointURL);
 
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.PUT, url, parameters,
+                        new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    if (response.has("token"))
+                                    {
+                                        Global.setToken(response.getString("token"));
+                                    }
+
+                                    listener.getResult(response);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        NetworkResponse response = error.networkResponse;
+                        if(response != null && response.data != null) {
+                            switch (response.statusCode) {
+                                case 400:
+                                    try {
+                                        JSONObject errorResponse = new JSONObject(new String(response.data));
+                                        errorResponse.put("status", false);
+                                        listener.getResult(errorResponse);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+
+                                default:
+                                    try {
+                                        JSONObject errorResponse = new JSONObject();
+                                        errorResponse.put("status", false);
+                                        listener.getResult(errorResponse);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                            }
+                        }else{
+                            try {
+                                JSONObject errorResponse = new JSONObject();
+                                errorResponse.put("status", false);
+                                errorResponse.put("error_msg", "connection_error");
+                                listener.getResult(errorResponse);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/json");
+
+                if (!Global.getToken().isEmpty())
+                {
+                    params.put("Authorization", "Bearer "+Global.getToken());
+                }
+
+                return params;
+            }
+        };
+
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        MySingleton.getInstance(context).addToRequestQueue(jsObjRequest);
     }
 }

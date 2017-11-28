@@ -1,16 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/PayPro_Background"
     tools:context=".SettingsFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Fragment 1"
-        android:textSize="30sp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/PayPro_Background"
+        android:overScrollMode="always"
+        android:scrollbarAlwaysDrawVerticalTrack="false">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/PayPro_Line"
+                android:minHeight="0.5dp" />
+
+            <TableRow
+                android:id="@+id/rowProfile"
+                android:layout_width="match_parent"
+                android:background="@android:color/background_light"
+                android:minHeight="76dp">
+
+                <ImageView
+                    android:id="@+id/avatarImage"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/todo" />
+
+                <TextView
+                    android:id="@+id/nicknameSettings"
+                    android:height="76dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/nickname" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/avatarArrow"
+                        android:layout_width="8dp"
+                        android:layout_height="13dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:contentDescription="@string/todo"
+                        android:src="@mipmap/arrow_right" />
+                </RelativeLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/PayPro_Line"
+                android:minHeight="0.5dp" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:background="@color/PayPro_Line"
+                android:minHeight="0.5dp" />
+
+            <TableRow
+                android:id="@+id/rowPasscode"
+                android:layout_width="match_parent"
+                android:background="@android:color/background_light"
+                android:minHeight="44dp">
+
+                <ImageView
+                    android:id="@+id/passcodeImage"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:layout_marginTop="7.5dp"
+                    android:contentDescription="@string/todo"
+                    android:cropToPadding="false"
+                    android:src="@mipmap/settings_passcode" />
+
+                <TextView
+                    android:id="@+id/passcodeText"
+                    android:layout_width="match_parent"
+                    android:height="44dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/passcode" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/passcodeArrow"
+                        android:layout_width="8dp"
+                        android:layout_height="13dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:contentDescription="@string/todo"
+                        android:src="@mipmap/arrow_right" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/PayPro_Line"
+                android:minHeight="0.5dp" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:background="@color/PayPro_Line"
+                android:minHeight="0.5dp" />
+
+            <TableRow
+                android:id="@+id/rowTell"
+                android:layout_width="match_parent"
+                android:background="@android:color/background_light"
+                android:minHeight="44dp">
+
+                <ImageView
+                    android:id="@+id/tellImage"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:layout_marginTop="7.5dp"
+                    android:contentDescription="@string/todo"
+                    android:cropToPadding="false"
+                    android:src="@mipmap/settings_tell_a_friend" />
+
+                <TextView
+                    android:id="@+id/tellText"
+                    android:layout_width="match_parent"
+                    android:height="44dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/tell_a_friend" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/tellArrow"
+                        android:layout_width="8dp"
+                        android:layout_height="13dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:contentDescription="@string/todo"
+                        android:src="@mipmap/arrow_right" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/PayPro_Line"
+                android:minHeight="0.5dp" />
+
+            <TableRow
+                android:id="@+id/rowInfo"
+                android:layout_width="match_parent"
+                android:background="@android:color/background_light"
+                android:minHeight="44dp">
+
+                <ImageView
+                    android:id="@+id/infoImage"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:layout_marginTop="7.5dp"
+                    android:contentDescription="@string/todo"
+                    android:cropToPadding="false"
+                    android:src="@mipmap/settings_info" />
+
+                <TextView
+                    android:id="@+id/infoText"
+                    android:layout_width="match_parent"
+                    android:height="44dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/info" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/infoArrow"
+                        android:layout_width="8dp"
+                        android:layout_height="13dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:contentDescription="@string/todo"
+                        android:src="@mipmap/arrow_right" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/PayPro_Line"
+                android:minHeight="0.5dp" />
+
+        </TableLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

@@ -9,7 +9,7 @@
 
   <!-- Screens background colors-->
   <color name="bg_slider">#3D3D7A</color>
-  <color name="bg_basic">#6666FF</color>
+  <color name="bg_basic">#6666ff</color>
   <color name="bg_gray">#EBEBF1</color>
   <color name="bg_gray2">#FAFAFA</color>
 
@@ -18,12 +18,18 @@
   <color name="pp_light_purple">#6666FF</color>
   <color name="pp_pink">#FFCCFF</color>
   <color name="pp_green">#57FFB3</color>
+  
+  <!--Other colors-->
+  <color name="pp_purple">#7271ff</color>
 
   <!-- dots inactive colors -->
   <color name="dot_dark_slider">#ffffff</color>
 
   <!-- dots active colors -->
   <color name="dot_light_slider">#7271FF</color>
+  <color name="PayPro_Line">#c8c7cc</color>
+    <color name="PayPro_Background">#efeff4</color>
+  <color name="PayPro_Blue">#7271ff</color>
 
 
 </resources>
