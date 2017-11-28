@@ -89,6 +89,10 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick( View v ) {
                 Log.i("eeeeee", "11111111111");
+
+                Intent intent = new Intent(getActivity(), PasscodeActivity.class);
+                intent.putExtra("passcode_state", "old");
+                startActivity(intent);
             }
         } );
 

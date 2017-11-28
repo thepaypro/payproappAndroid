@@ -1,47 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bg_basic"
-    android:gravity="center_horizontal">
+    android:background="#7271FF"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:theme="@style/AppTheme.NoActionBar"
-        android:textColor="@android:color/white"
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#7271FF"
         android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:titleTextColor="@android:color/white"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/content">
+        app:titleTextColor="@android:color/white">
 
         <LinearLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
-            android:clickable="true"
-            android:padding="15dp"
             android:layout_gravity="right"
+            android:clickable="true"
             android:gravity="center_vertical"
             android:onClick="launchSmsCodeActivity"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="15dp">
 
             <ProgressBar
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:indeterminate="true"
                 android:indeterminateDrawable="@drawable/custom_progress_loader"
-                android:indeterminate="true"/>
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -49,20 +46,20 @@
 
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_marginTop="90dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
         android:text="@string/enter_passcode_login"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
 
     <TextView
         android:id="@+id/descTextView"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="25dp"
         android:text="@string/enter_passcode_desc_login"
         android:textAlignment="center"
         android:textColor="@android:color/white" />

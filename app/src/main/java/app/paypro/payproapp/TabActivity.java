@@ -3,6 +3,7 @@ package app.paypro.payproapp;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -55,13 +56,24 @@ public class TabActivity extends AppCompatActivity {
 
         navigation.setSelectedItemId(R.id.navigation_account);
 
-//        Menu menu = navigation.getMenu();
-//        mOnNavigationItemSelectedListener.onNavigationItemSelected(menu.findItem(R.id.navigation_account));
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String optionMenuLoad = extras.getString("optionMenuLoad");
+            
+            switch (optionMenuLoad)
+            {
+                case "settings":
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.frame_layout, SettingsFragment.newInstance());
+                    transaction.commit();
 
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.frame_layout, AccountFragment.newInstance());
-//        transaction.commit();
-//        navigation.setSelectedItemId(R.id.navigation_account);
+                    TabLayout tabBar = findViewById(R.id.tabs);
+                    tabBar.getTabAt(R.id.navigation_settings).select();
+//                    TabLayout.Tab tab = tabBar.getTabAt(R.id.navigation_settings);
+//                    tab.select();
+                    break;
+            }
+        }
     }
 
 }

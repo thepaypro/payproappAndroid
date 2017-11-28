@@ -45,6 +45,7 @@ public class PasscodeActivity extends AppCompatActivity{
     private String username;
     private String sms_code;
     private String first_passcode = "";
+    private String old_passcode = "";
     private LinearLayout mainView;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +101,19 @@ public class PasscodeActivity extends AppCompatActivity{
                 case "confirm":
                     first_passcode = extras.getString("first_passcode");
                     sms_code = extras.getString("sms_code");
+                    titleTextView.setText(R.string.enter_passcode_confirm);
+                    descTextView.setText(R.string.enter_passcode_desc_confirm);
+                    toolbar.setTitle(R.string.title_passcode_confirm);
+                    break;
+                case "changePasscodeNew":
+                    old_passcode = extras.getString("old_passcode");
+                    titleTextView.setText(R.string.enter_passcode_new);
+                    descTextView.setText(R.string.enter_passcode_desc_new);
+                    toolbar.setTitle(R.string.title_passcode_new);
+                    break;
+                case "changePasscodeConfirm":
+                    old_passcode = extras.getString("old_passcode");
+                    first_passcode = extras.getString("first_passcode");
                     titleTextView.setText(R.string.enter_passcode_confirm);
                     descTextView.setText(R.string.enter_passcode_desc_confirm);
                     toolbar.setTitle(R.string.title_passcode_confirm);
@@ -234,10 +248,14 @@ public class PasscodeActivity extends AppCompatActivity{
                             }
                             break;
                         case "old":
-
+                            enableView();
+                            Intent intentOld = new Intent(PasscodeActivity.this, PasscodeActivity.class);
+                            intentOld.putExtra("passcode_state", "changePasscodeNew");
+                            intentOld.putExtra("old_passcode", editTextString);
+                            startActivity(intentOld);
+                            finish();
                             break;
                         case "new":
-
                             break;
                         case "confirm":
                             JSONObject registerParameters = new JSONObject();
@@ -264,6 +282,45 @@ public class PasscodeActivity extends AppCompatActivity{
                                         try {
                                             if (object.getString("status").equals("true")) {
                                                 Intent intentComfirm = new Intent(PasscodeActivity.this, TabActivity.class);
+                                                startActivity(intentComfirm);
+                                                finish();
+                                            } else {
+                                                shake();
+                                                editText.setText("");
+                                                InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        case "changePasscodeNew":
+                            enableView();
+                            Intent intentNew = new Intent(PasscodeActivity.this, PasscodeActivity.class);
+                            intentNew.putExtra("passcode_state", "changePasscodeConfirm");
+                            intentNew.putExtra("old_passcode", old_passcode);
+                            intentNew.putExtra("first_passcode", editTextString);
+                            startActivity(intentNew);
+                            finish();
+                            break;
+                        case "changePasscodeConfirm":
+                            try {
+                                JSONObject changePasscodeParameters = new JSONObject();
+                                changePasscodeParameters.put("old_password", old_passcode.toString());
+                                changePasscodeParameters.put("new_password", first_passcode.toString());
+                                changePasscodeParameters.put("confirm_password", editTextString);
+                                User.changePasscode(getApplicationContext(), changePasscodeParameters, new ResponseListener<JSONObject>() {
+                                    @Override
+                                    public void getResult(JSONObject object) throws JSONException {
+                                        try {
+                                            if (object.getBoolean("status")){
+                                                Intent intentComfirm = new Intent(PasscodeActivity.this, TabActivity.class);
+                                                intentComfirm.putExtra("optionMenuLoad", "settings");
                                                 startActivity(intentComfirm);
                                                 finish();
                                             } else {
