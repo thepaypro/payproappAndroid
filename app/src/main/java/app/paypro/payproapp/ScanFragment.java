@@ -17,7 +17,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -45,12 +48,15 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
     private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
 
     private ScaleGestureDetector scaleGestureDetector;
+    private GestureDetector gestureDetector;
 
     // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
 
     // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
+
+    public static final String BarcodeObject = "Barcode";
 
     public static ScanFragment newInstance() {
         ScanFragment fragment = new ScanFragment();
@@ -82,7 +88,8 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
             requestCameraPermission();
         }
 
-        scaleGestureDetector = new ScaleGestureDetector(getActivity(), new ScaleListener());
+//        gestureDetector = new GestureDetector(getActivity(), new CaptureGestureListener());
+//        scaleGestureDetector = new ScaleGestureDetector(getActivity(), new ScaleListener());
     }
 
     /**
@@ -108,22 +115,23 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
         };
 
         mainView.setOnClickListener(listener);
-        Snackbar.make(mGraphicOverlay, R.string.permission_camera_rationale,
+        Snackbar.make(mainView, R.string.permission_camera_rationale,
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(android.R.string.ok, listener)
                 .show();
     }
 
+
     @SuppressLint("InlinedApi")
     private void createCameraSource() {
-        Context context = getActivity().getApplicationContext();
+        Context context = getContext();
 
         // A barcode detector is created to track barcodes.  An associated multi-processor instance
         // is set to receive the barcode detection results, track the barcodes, and maintain
         // graphics for each barcode on screen.  The factory is used by the multi-processor to
         // create a separate tracker instance for each barcode.
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build();
-        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay, getContext());
+        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay, this);
         barcodeDetector.setProcessor(
                 new MultiProcessor.Builder<>(barcodeFactory).build());
 
@@ -153,10 +161,17 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
         // Creates and starts the camera.  Note that this uses a higher resolution in comparison
         // to other detection examples to enable the barcode detector to detect small barcodes
         // at long distances.
-            CameraSource.Builder builder = new CameraSource.Builder(getActivity().getApplicationContext(), barcodeDetector)
-                .setFacing(CameraSource.CAMERA_FACING_FRONT)
+            CameraSource.Builder builder = new CameraSource.Builder(getContext(), barcodeDetector)
+                .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(1600, 1024)
                 .setRequestedFps(15.0f);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            builder = builder.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        }
+
+        mCameraSource = builder
+                .build();
 
     }
 
@@ -248,11 +263,9 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
      */
     private void startCameraSource() throws SecurityException {
         // check that the device has play services available.
-        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
-                getActivity().getApplicationContext());
+        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getContext());
         if (code != ConnectionResult.SUCCESS) {
-            Dialog dlg =
-                    GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), code, RC_HANDLE_GMS);
+            Dialog dlg = GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), code, RC_HANDLE_GMS);
             dlg.show();
         }
 
@@ -264,6 +277,57 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
                 mCameraSource.release();
                 mCameraSource = null;
             }
+        }
+    }
+
+
+    /**
+     * onTap returns the tapped barcode result to the calling Activity.
+     *
+     * @param rawX - the raw position of the tap
+     * @param rawY - the raw position of the tap.
+     * @return true if the activity is ending.
+     */
+    private boolean onTap(float rawX, float rawY) {
+        // Find tap point in preview frame coordinates.
+        int[] location = new int[2];
+        mGraphicOverlay.getLocationOnScreen(location);
+        float x = (rawX - location[0]) / mGraphicOverlay.getWidthScaleFactor();
+        float y = (rawY - location[1]) / mGraphicOverlay.getHeightScaleFactor();
+
+        // Find the barcode whose center is closest to the tapped point.
+        Barcode best = null;
+        float bestDistance = Float.MAX_VALUE;
+        for (BarcodeGraphic graphic : mGraphicOverlay.getGraphics()) {
+            Barcode barcode = graphic.getBarcode();
+            if (barcode.getBoundingBox().contains((int) x, (int) y)) {
+                // Exact hit, no need to keep looking.
+                best = barcode;
+                break;
+            }
+            float dx = x - barcode.getBoundingBox().centerX();
+            float dy = y - barcode.getBoundingBox().centerY();
+            float distance = (dx * dx) + (dy * dy);  // actually squared distance
+            if (distance < bestDistance) {
+                best = barcode;
+                bestDistance = distance;
+            }
+        }
+
+        if (best != null) {
+            Intent data = new Intent();
+            data.putExtra(BarcodeObject, best);
+            getActivity().setResult(CommonStatusCodes.SUCCESS, data);
+            getActivity().finish();
+            return true;
+        }
+        return false;
+    }
+
+    private class CaptureGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            return onTap(e.getRawX(), e.getRawY()) || super.onSingleTapConfirmed(e);
         }
     }
 

@@ -10,8 +10,7 @@
     <app.paypro.payproapp.ui.camera.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"
-        android:layout_height=  "match_parent"
-        android:layout_centerVertical="true" >
+        android:layout_height= "match_parent">
 
         <app.paypro.payproapp.ui.camera.GraphicOverlay
             android:id="@+id/graphicOverlay"

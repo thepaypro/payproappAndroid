@@ -6,6 +6,7 @@ package app.paypro.payproapp;
 
 import android.content.Context;
 import android.support.annotation.UiThread;
+import android.support.v4.app.Fragment;
 
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
@@ -35,11 +36,11 @@ public class BarcodeGraphicTracker extends Tracker<Barcode> {
     }
 
     BarcodeGraphicTracker(GraphicOverlay<BarcodeGraphic> mOverlay, BarcodeGraphic mGraphic,
-                          Context context) {
+                          Fragment mFragment) {
         this.mOverlay = mOverlay;
         this.mGraphic = mGraphic;
-        if (context instanceof BarcodeUpdateListener) {
-            this.mBarcodeUpdateListener = (BarcodeUpdateListener) context;
+        if (mFragment instanceof BarcodeUpdateListener) {
+            this.mBarcodeUpdateListener = (BarcodeUpdateListener) mFragment;
         } else {
             throw new RuntimeException("Hosting activity must implement BarcodeUpdateListener");
         }
