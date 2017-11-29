@@ -13,6 +13,8 @@ public class SendMoney {
     private String address;
     private String message;
     private String label;
+    private Integer userId;
+    private Integer accountId;
 
     public Integer getAmount() {
         return amount;
@@ -44,6 +46,22 @@ public class SendMoney {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
     public Boolean bitcoinURISaveData(String bitcoinUriString){

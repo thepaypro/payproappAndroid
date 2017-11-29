@@ -1,11 +1,7 @@
 package app.paypro.payproapp;
 
-import android.Manifest;
+
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.content.ContentResolver;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,13 +9,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,7 +26,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,7 +42,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 
-public class ContactsFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class ContactsFragment extends Fragment {
 
     private static final int REQUEST_READ_CONTACTS = 101;
 
@@ -101,6 +93,20 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
         mainView = getActivity().findViewById(R.id.main_view);
         progressBar = getActivity().findViewById(R.id.progress_bar);
 
+//        mContactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
+//
+//                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+//                transaction.add(R.id.frame_layout, myfragment);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
+//            }
+//        });
+
         disableView();
         int rc = checkSelfPermission(getContext(), READ_CONTACTS);
         if (rc == PackageManager.PERMISSION_GRANTED) {
@@ -138,20 +144,6 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
                 return true;
             }
         });
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-        SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
-
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.add(R.id.frame_layout, myfragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-
     }
 
     private void requestContactsPermission() {
@@ -206,7 +198,7 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
 
     }
 
-    private void saveContacts(Cursor c) {
+    private void saveContacts(final Cursor c) {
         final HashMap<String,String> allContactsNumbers = new HashMap<>();
         //---display the contact id and name and phone number----
         if(c.getCount() == 0){
@@ -243,7 +235,7 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
                 }
 
                 if(contactNumbers.size() > 0){
-                    contacts.add(new Contact(contactID, contactDisplayName, contactImageUri, contactNumbers));
+                    contacts.add(new Contact(contactDisplayName, contactImageUri, contactNumbers));
                 }
 
 
@@ -264,8 +256,13 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
                                             if (key.equals(phoneFormat(contactNumbers.get(j)))){
                                                 JSONObject responseNumberObject = checkContactsResponse.getJSONObject(key);
                                                 Boolean isUser = responseNumberObject.getBoolean("isUser");
-                                                if(!contacts.get(i).getIsUser()){
-                                                    contacts.get(i).setIsUser(isUser);
+                                                Contact contact = contacts.get(i);
+                                                if(!contact.getIsUser()){
+                                                    contact.setIsUser(isUser);
+                                                    if(contact.getIsUser()){
+                                                        contact.setUserId(responseNumberObject.getInt("userId"));
+                                                        contact.setAccountId(responseNumberObject.getInt("accountId"));
+                                                    }
                                                 }
                                             }
                                         }

@@ -4,14 +4,19 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,6 +27,8 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import app.paypro.payproapp.global.Global;
 
 /**
  * Created by rogerbaiget on 24/11/17.
@@ -52,6 +59,7 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
+        final Contact item = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.contacts_list_item, parent, false);
 
@@ -61,12 +69,42 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
             viewHolder.number = convertView.findViewById(R.id.contact_number);
             viewHolder.ppLogo = convertView.findViewById(R.id.pp_logo);
 
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(item.getIsUser()){
+                        SendMoney sendMoney = Global.resetSendMoney();
+
+                        sendMoney.setUserId(item.getUserId());
+                        sendMoney.setAccountId(item.getAccountId());
+
+                        Global.setSendMoney(sendMoney);
+
+                        SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
+                        FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                        transaction.add(R.id.frame_layout, myfragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }else{
+                        //TODO: Contact invite
+//                        PopupMenu popup = new PopupMenu(getContext(), view);
+//                        MenuInflater inflater = popup.getMenuInflater();
+//                        inflater.inflate(R.menu.contact_click_menu, popup.getMenu());
+//                        popup.show();
+                    }
+
+                }
+            });
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Contact item = getItem(position);
+
         if (item!= null) {
             Bitmap bitmapImage = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_profile);
             if(item.getImageURi() != null){

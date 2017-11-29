@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import app.paypro.payproapp.global.Global;
+
 /**
  * Created by rogerbaiget on 29/11/17.
  */
@@ -32,6 +34,8 @@ public class SendMoneyAmountFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        Integer userid = Global.getSendMoney().getUserId();
     }
 
     public void launchNextFragment(View v){

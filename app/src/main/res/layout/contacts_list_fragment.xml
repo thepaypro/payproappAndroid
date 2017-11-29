@@ -8,12 +8,19 @@
     android:layout_height="match_parent"
     tools:context=".ContactsFragment">
 
+    <ListView
+        android:id="@+id/contacts_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+
     <LinearLayout
-        android:id="@+id/toolbar_layout"
+        android:id="@+id/progress_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:clickable="false">
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -25,19 +32,14 @@
 
     </LinearLayout>
 
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/contacts_list"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent" />
-
     <LinearLayout
         android:id="@+id/empty_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="gone"
-        android:gravity="center">
+        android:gravity="center"
+        android:clickable="false">
 
         <ImageView
             android:id="@+id/empty_contacts_list_image"
@@ -61,7 +63,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="gone"
-        android:gravity="center">
+        android:gravity="center"
+        android:clickable="false">
 
         <ImageView
             android:id="@+id/imageView2"

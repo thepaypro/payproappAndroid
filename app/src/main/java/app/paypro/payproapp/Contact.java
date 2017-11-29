@@ -11,7 +11,8 @@ public class Contact{
     private String imageURi = "";
     private String name = "";
     private String backFullName = "";
-    private String id = "";
+    private Integer userId;
+    private Integer accountId;
     private Boolean isUser = false;
     private ArrayList<String> numbers;
 
@@ -55,21 +56,25 @@ public class Contact{
         this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
 
+    public Contact(String name, String imageURi, ArrayList<String> numbers){
 
-
-
-    public Contact(String id, String name, String imageURi, ArrayList<String> numbers){
-
-        this.id = id;
         this.name = name;
         this.imageURi = imageURi;
         this.numbers = numbers;
