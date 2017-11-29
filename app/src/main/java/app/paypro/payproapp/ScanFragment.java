@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
@@ -40,6 +41,7 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
 
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
+    private LinearLayout permissionDeniedView;
     private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
 
     // intent request code to handle updating play services if needed.
@@ -69,6 +71,7 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mainView = getActivity().findViewById(R.id.main_view);
+        permissionDeniedView = getActivity().findViewById(R.id.permission_denied_view);
 
         mPreview = getActivity().findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) getActivity().findViewById(R.id.graphicOverlay);
@@ -92,23 +95,14 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
 
         final String[] permissions = new String[]{android.Manifest.permission.CAMERA};
 
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),android.Manifest.permission.CAMERA)) {
-            ActivityCompat.requestPermissions(getActivity(), permissions, RC_HANDLE_CAMERA_PERM);
-            return;
-        }
+//        if (!shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
+//            requestPermissions(permissions, RC_HANDLE_CAMERA_PERM);
+//            return;
+//        }
 
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ActivityCompat.requestPermissions(getActivity(), permissions,RC_HANDLE_CAMERA_PERM);
-            }
-        };
 
-        mainView.setOnClickListener(listener);
-        Snackbar.make(mainView, R.string.permission_camera_rationale,
-                Snackbar.LENGTH_INDEFINITE)
-                .setAction(android.R.string.ok, listener)
-                .show();
+        requestPermissions(permissions, RC_HANDLE_CAMERA_PERM);
+
     }
 
 
@@ -231,19 +225,7 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
         Log.e(TAG, "Permission not granted: results len = " + grantResults.length +
                 " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
 
-        //TODO: do something if no permision
-
-//        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog, int id) {
-//                getActivity().finish();
-//            }
-//        };
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setTitle("Multitracker sample")
-//                .setMessage(R.string.no_camera_permission)
-//                .setPositiveButton(android.R.string.ok, listener)
-//                .show();
+        showPermissionDeniedView();
     }
 
     /**
@@ -277,5 +259,10 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
         }else{
             sendMoney = new SendMoney();
         }
+    }
+
+    public void showPermissionDeniedView(){
+        mPreview.setVisibility(View.GONE);
+        permissionDeniedView.setVisibility(View.VISIBLE);
     }
 }

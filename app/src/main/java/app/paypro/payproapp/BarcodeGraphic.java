@@ -25,7 +25,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
     private Paint mRectPaint;
     private volatile Barcode mBarcode;
-    private SendMoney sendMoney
+    private SendMoney sendMoney;
 
     BarcodeGraphic(GraphicOverlay overlay, SendMoney sendMoney) {
         super(overlay);

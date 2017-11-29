@@ -79,7 +79,5 @@
 
 
   <string name="low_storage_error">The phone storage is low</string>
-
-  <string name="permission_camera_rationale">Access to the camera is needed for qr detection</string>
-  <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+  <string name="camera_permission_denied_text">To scan a qr code, allow PayPro to access the camera.</string>
 </resources>
