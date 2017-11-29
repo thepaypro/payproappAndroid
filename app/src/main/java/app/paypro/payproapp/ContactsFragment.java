@@ -100,7 +100,13 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
         progressBar = getActivity().findViewById(R.id.progress_bar);
 
         disableView();
-        requestContactsPermission();
+        int rc = checkSelfPermission(getContext(), READ_CONTACTS);
+        if (rc == PackageManager.PERMISSION_GRANTED) {
+            loadContacts();
+        } else {
+            requestContactsPermission();
+        }
+
 
     }
 
