@@ -44,7 +44,7 @@ public class TabActivity extends AppCompatActivity {
                     selectedFragment = ScanFragment.newInstance();
                     break;
                 case R.id.navigation_send:
-                    selectedFragment = SendFragment.newInstance();
+                    selectedFragment = ContactsFragment.newInstance();
                     break;
                 case R.id.navigation_account:
                     selectedFragment = AccountFragment.newInstance();
