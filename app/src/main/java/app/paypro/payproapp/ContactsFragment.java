@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AlertDialog;
@@ -141,6 +143,15 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+        SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        transaction.add(R.id.frame_layout, myfragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
     }
 
     private void requestContactsPermission() {
@@ -253,9 +264,8 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
                                             if (key.equals(phoneFormat(contactNumbers.get(j)))){
                                                 JSONObject responseNumberObject = checkContactsResponse.getJSONObject(key);
                                                 Boolean isUser = responseNumberObject.getBoolean("isUser");
-                                                contacts.get(i).setIsUser(isUser);
-                                                if(isUser){
-                                                    contacts.get(i).setBackFullName(responseNumberObject.getString("fullName"));
+                                                if(!contacts.get(i).getIsUser()){
+                                                    contacts.get(i).setIsUser(isUser);
                                                 }
                                             }
                                         }

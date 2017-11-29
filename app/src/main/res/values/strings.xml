@@ -89,4 +89,9 @@
   <string name="low_storage_error">The phone storage is low</string>
   <string name="camera_permission_denied_text">To scan a qr code, allow PayPro to access the camera.</string>
 
+  <string name="bits_lowercase">bits</string>
+
+  <string name="amount_placeholder">"000.00</string>
+  <string name="private_msg_placeholder">Private message for beneficiary</string>
+
 </resources>
