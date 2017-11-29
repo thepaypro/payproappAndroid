@@ -82,7 +82,11 @@
   <string name="nickname">Nickname</string>
   <string name="edit">Edit</string>
 
+
   <string name="contacts_permission_denied_text">To send money to your friends, allow PayPro to acces your contacts.</string>
   <string name="empty_contacts_list">Your contacts list is empty</string>
+
+  <string name="low_storage_error">The phone storage is low</string>
+  <string name="camera_permission_denied_text">To scan a qr code, allow PayPro to access the camera.</string>
 
 </resources>
