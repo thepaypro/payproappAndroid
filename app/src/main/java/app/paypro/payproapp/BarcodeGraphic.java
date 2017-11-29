@@ -24,14 +24,15 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
 
     private Paint mRectPaint;
-    private Paint mTextPaint;
     private volatile Barcode mBarcode;
+    private SendMoney sendMoney
 
-    BarcodeGraphic(GraphicOverlay overlay) {
+    BarcodeGraphic(GraphicOverlay overlay, SendMoney sendMoney) {
         super(overlay);
+        this.sendMoney = sendMoney;
 
         mRectPaint = new Paint();
-        mRectPaint.setColor(Color.GREEN);
+        mRectPaint.setColor(Color.YELLOW);
         mRectPaint.setStyle(Paint.Style.STROKE);
         mRectPaint.setStrokeWidth(4.0f);
     }
@@ -65,6 +66,12 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         Barcode barcode = mBarcode;
         if (barcode == null) {
             return;
+        }
+
+        if (sendMoney.getAddress() != null && !sendMoney.getAddress().isEmpty()){
+            mRectPaint.setColor(Color.GREEN);
+        }else{
+            mRectPaint.setColor(Color.RED);
         }
 
         // Draws the bounding box around the barcode.

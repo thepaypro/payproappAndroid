@@ -4,7 +4,6 @@ package app.paypro.payproapp;
  * Created by rogerbaiget on 28/11/17.
  */
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 
 import com.google.android.gms.vision.MultiProcessor;
@@ -20,16 +19,17 @@ import app.paypro.payproapp.ui.camera.GraphicOverlay;
 class BarcodeTrackerFactory implements MultiProcessor.Factory<Barcode> {
     private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
     private Fragment mFragment;
+    private SendMoney sendMoney;
 
-    public BarcodeTrackerFactory(GraphicOverlay<BarcodeGraphic> mGraphicOverlay,
-                                 Fragment mFragment) {
+    public BarcodeTrackerFactory(GraphicOverlay<BarcodeGraphic> mGraphicOverlay, SendMoney sendMoney, Fragment mFragment) {
         this.mGraphicOverlay = mGraphicOverlay;
         this.mFragment = mFragment;
+        this.sendMoney = sendMoney;
     }
 
     @Override
     public Tracker<Barcode> create(Barcode barcode) {
-        BarcodeGraphic graphic = new BarcodeGraphic(mGraphicOverlay);
+        BarcodeGraphic graphic = new BarcodeGraphic(mGraphicOverlay,sendMoney);
         return new BarcodeGraphicTracker(mGraphicOverlay, graphic, mFragment);
     }
 
