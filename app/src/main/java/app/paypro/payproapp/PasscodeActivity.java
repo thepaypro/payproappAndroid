@@ -65,7 +65,7 @@ public class PasscodeActivity extends AppCompatActivity{
         editText.requestFocus();
 
         InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

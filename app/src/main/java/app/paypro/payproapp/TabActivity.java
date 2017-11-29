@@ -38,6 +38,7 @@ public class TabActivity extends AppCompatActivity {
                     break;
             }
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
             transaction.replace(R.id.frame_layout, selectedFragment);
             transaction.commit();
             return true;
@@ -54,8 +55,6 @@ public class TabActivity extends AppCompatActivity {
 
         BottomNavigationViewHelper.disableShiftMode(navigation);
 
-        navigation.setSelectedItemId(R.id.navigation_account);
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String optionMenuLoad = extras.getString("optionMenuLoad");
@@ -64,16 +63,25 @@ public class TabActivity extends AppCompatActivity {
             {
                 case "settings":
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.frame_layout, SettingsFragment.newInstance());
+                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+                    transaction.add(R.id.frame_layout, SettingsFragment.newInstance());
                     transaction.commit();
 
-                    TabLayout tabBar = findViewById(R.id.tabs);
-                    tabBar.getTabAt(R.id.navigation_settings).select();
+//                    TabLayout tabBar = findViewById(R.id.tabs);
+//                    tabBar.getTabAt(R.id.navigation_settings).select();
 //                    TabLayout.Tab tab = tabBar.getTabAt(R.id.navigation_settings);
 //                    tab.select();
+
+                    navigation.setSelectedItemId(R.id.navigation_settings);
                     break;
             }
+        } else {
+            navigation.setSelectedItemId(R.id.navigation_account);
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        return;
+    }
 }
