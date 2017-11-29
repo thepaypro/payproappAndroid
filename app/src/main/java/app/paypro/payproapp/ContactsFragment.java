@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,8 +13,11 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,6 +55,8 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
     ArrayList<Contact> contacts = new ArrayList<Contact>();
 
     private ListView mContactsList;
+    private LinearLayout emptyListView;
+    private LinearLayout permissionDeniedView;
     private RelativeLayout mainView;
     private ProgressBar progressBar;
 
@@ -87,12 +93,14 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mContactsList =(ListView) getActivity().findViewById(R.id.contacts_list);
+        mContactsList = getActivity().findViewById(R.id.contacts_list);
+        emptyListView = getActivity().findViewById(R.id.empty_list_view);
+        permissionDeniedView = getActivity().findViewById(R.id.permission_denied_view);
         mainView = getActivity().findViewById(R.id.main_view);
         progressBar = getActivity().findViewById(R.id.progress_bar);
 
         disableView();
-        mayRequestContacts();
+        requestContactsPermission();
 
     }
 
@@ -129,39 +137,35 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
 
     }
 
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            loadContacts();
-            return true;
-        }
-        if (checkSelfPermission(getContext(),Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            loadContacts();
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mainView, "Permission to access contacts", Snackbar.LENGTH_INDEFINITE)
-                            .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
+    private void requestContactsPermission() {
+
+
+        final String[] permissions = new String[]{READ_CONTACTS};
+
+//        if (!shouldShowRequestPermissionRationale(READ_CONTACTS)) {
+//            requestPermissions(permissions, REQUEST_READ_CONTACTS);
+//            return;
+//        }
+
+        requestPermissions(permissions, REQUEST_READ_CONTACTS);
+
+        return;
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted , Access contacts here or do whatever you need.
-                loadContacts();
-            }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode != REQUEST_READ_CONTACTS) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            return;
         }
+
+        if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission granted , Access contacts here or do whatever you need.
+            loadContacts();
+            return;
+        }
+
+        showPermissionDeniedView();
     }
 
     public void loadContacts(){
@@ -186,9 +190,12 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     private void saveContacts(Cursor c) {
-        ContentResolver cr = getActivity().getContentResolver();
         final HashMap<String,String> allContactsNumbers = new HashMap<>();
         //---display the contact id and name and phone number----
+        if(c.getCount() == 0){
+            showEmptyListView();
+            return;
+        }
         if (c.moveToFirst()) {
             do {
                 //---get the contact id and name
@@ -275,13 +282,32 @@ public class ContactsFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     public void disableView(){
-        progressBar.setVisibility(LinearLayout.VISIBLE);
         mContactsList.setVisibility(View.GONE);
+        emptyListView.setVisibility(View.GONE);
+        permissionDeniedView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     public void enableView(){
-        progressBar.setVisibility(LinearLayout.GONE);
+        progressBar.setVisibility(View.GONE);
+        emptyListView.setVisibility(View.GONE);
+        permissionDeniedView.setVisibility(View.GONE);
         mContactsList.setVisibility(View.VISIBLE);
+    }
+
+    public void showEmptyListView(){
+        progressBar.setVisibility(View.GONE);
+        mContactsList.setVisibility(View.GONE);
+        permissionDeniedView.setVisibility(View.GONE);
+        emptyListView.setVisibility(View.VISIBLE);
+    }
+
+    public void showPermissionDeniedView(){
+        progressBar.setVisibility(View.GONE);
+        mContactsList.setVisibility(View.GONE);
+        emptyListView.setVisibility(View.GONE);
+        permissionDeniedView.setVisibility(View.VISIBLE);
+
     }
 
     public String phoneFormat(String phone){

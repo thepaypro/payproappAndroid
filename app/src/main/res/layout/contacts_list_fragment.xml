@@ -31,4 +31,55 @@
         android:visibility="gone"
         android:layout_height="match_parent" />
 
+    <LinearLayout
+        android:id="@+id/empty_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/empty_contacts_list_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_import_contacts_black_24dp" />
+
+        <TextView
+            android:id="@+id/empty_contacts_list_text"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_contacts_list" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/permission_denied_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_contacts_black_24dp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="60dp"
+            android:paddingLeft="60dp"
+            android:textAlignment="center"
+            android:text="@string/permission_denied_text" />
+
+
+    </LinearLayout>
+
 </RelativeLayout>
