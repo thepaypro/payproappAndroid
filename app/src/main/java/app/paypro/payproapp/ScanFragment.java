@@ -14,16 +14,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -271,50 +268,6 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
                 mCameraSource = null;
             }
         }
-    }
-
-
-    /**
-     * onTap returns the tapped barcode result to the calling Activity.
-     *
-     * @param rawX - the raw position of the tap
-     * @param rawY - the raw position of the tap.
-     * @return true if the activity is ending.
-     */
-    private boolean onTap(float rawX, float rawY) {
-        // Find tap point in preview frame coordinates.
-        int[] location = new int[2];
-        mGraphicOverlay.getLocationOnScreen(location);
-        float x = (rawX - location[0]) / mGraphicOverlay.getWidthScaleFactor();
-        float y = (rawY - location[1]) / mGraphicOverlay.getHeightScaleFactor();
-
-        // Find the barcode whose center is closest to the tapped point.
-        Barcode best = null;
-        float bestDistance = Float.MAX_VALUE;
-        for (BarcodeGraphic graphic : mGraphicOverlay.getGraphics()) {
-            Barcode barcode = graphic.getBarcode();
-            if (barcode.getBoundingBox().contains((int) x, (int) y)) {
-                // Exact hit, no need to keep looking.
-                best = barcode;
-                break;
-            }
-            float dx = x - barcode.getBoundingBox().centerX();
-            float dy = y - barcode.getBoundingBox().centerY();
-            float distance = (dx * dx) + (dy * dy);  // actually squared distance
-            if (distance < bestDistance) {
-                best = barcode;
-                bestDistance = distance;
-            }
-        }
-
-        if (best != null) {
-            Intent data = new Intent();
-            data.putExtra(BarcodeObject, best);
-            getActivity().setResult(CommonStatusCodes.SUCCESS, data);
-            getActivity().finish();
-            return true;
-        }
-        return false;
     }
 
     @Override
