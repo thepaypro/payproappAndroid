@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,7 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import app.paypro.payproapp.contacts.Contacts;
+import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.http.ResponseListener;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -51,8 +53,9 @@ public class ContactsFragment extends Fragment {
     private ListView mContactsList;
     private LinearLayout emptyListView;
     private LinearLayout permissionDeniedView;
-    private RelativeLayout mainView;
+    private FrameLayout mainView;
     private ProgressBar progressBar;
+    private FloatingActionButton fab;
 
     private ContactsAdapter contactsAdapter;
 
@@ -92,20 +95,24 @@ public class ContactsFragment extends Fragment {
         permissionDeniedView = getActivity().findViewById(R.id.permission_denied_view);
         mainView = getActivity().findViewById(R.id.main_view);
         progressBar = getActivity().findViewById(R.id.progress_bar);
+        fab = getActivity().findViewById(R.id.fab);
 
-//        mContactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
-//
-//                FragmentManager fragmentManager = getFragmentManager();
-//                FragmentTransaction transaction = fragmentManager.beginTransaction();
-//                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-//                transaction.add(R.id.frame_layout, myfragment);
-//                transaction.addToBackStack(null);
-//                transaction.commit();
-//            }
-//        });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SendMoney sendMoney = Global.resetSendMoney();
+
+                Global.setSendMoney(sendMoney);
+
+                SendMoneyAddressFragment myfragment = new SendMoneyAddressFragment();
+                FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                transaction.add(R.id.frame_layout, myfragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
         disableView();
         int rc = checkSelfPermission(getContext(), READ_CONTACTS);
@@ -296,6 +303,7 @@ public class ContactsFragment extends Fragment {
 
     public void disableView(){
         mContactsList.setVisibility(View.GONE);
+        fab.setVisibility(View.GONE);
         emptyListView.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -306,11 +314,13 @@ public class ContactsFragment extends Fragment {
         emptyListView.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.GONE);
         mContactsList.setVisibility(View.VISIBLE);
+        fab.setVisibility(View.VISIBLE);
     }
 
     public void showEmptyListView(){
         progressBar.setVisibility(View.GONE);
         mContactsList.setVisibility(View.GONE);
+        fab.setVisibility(View.VISIBLE);
         permissionDeniedView.setVisibility(View.GONE);
         emptyListView.setVisibility(View.VISIBLE);
     }
@@ -318,6 +328,7 @@ public class ContactsFragment extends Fragment {
     public void showPermissionDeniedView(){
         progressBar.setVisibility(View.GONE);
         mContactsList.setVisibility(View.GONE);
+        fab.setVisibility(View.VISIBLE);
         emptyListView.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.VISIBLE);
 

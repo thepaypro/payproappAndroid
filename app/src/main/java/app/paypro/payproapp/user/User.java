@@ -139,27 +139,27 @@ public class User {
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         }
-//                        app.paypro.payproapp.account.Account.info(context, new ResponseListener<JSONObject>() {
-//                            @Override
-//                            public void getResult(JSONObject object) throws JSONException {
-//                                try {
-//                                    if (object.getString("status").equals("true")) {
-//                                        JSONObject responseJSON = new JSONObject();
-//                                        responseJSON.put("status", true);
-//                                        listener.getResult(responseJSON);
-//                                    } else {
-//                                        JSONObject errorResponse = new JSONObject();
-//                                        if(object.has("error_msg")){
-//                                            errorResponse.put("error_msg", object.getString("error_msg"));
-//                                        }
-//                                        errorResponse.put("status", false);
-//                                        listener.getResult(errorResponse);
-//                                    }
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        });
+                        app.paypro.payproapp.account.Account.info(context, new ResponseListener<JSONObject>() {
+                            @Override
+                            public void getResult(JSONObject object) throws JSONException {
+                                try {
+                                    if (object.getString("status").equals("true")) {
+                                        JSONObject responseJSON = new JSONObject();
+                                        responseJSON.put("status", true);
+                                        listener.getResult(responseJSON);
+                                    } else {
+                                        JSONObject errorResponse = new JSONObject();
+                                        if(object.has("error_msg")){
+                                            errorResponse.put("error_msg", object.getString("error_msg"));
+                                        }
+                                        errorResponse.put("status", false);
+                                        listener.getResult(errorResponse);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
                                 JSONObject responseJSON = new JSONObject();
                                         responseJSON.put("status", true);
                                         listener.getResult(responseJSON);
@@ -179,10 +179,10 @@ public class User {
                     errorResponse.put("status", false);
                     errorResponse.put("message", e.getMessage());
                     listener.getResult(errorResponse);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
             }
         });
