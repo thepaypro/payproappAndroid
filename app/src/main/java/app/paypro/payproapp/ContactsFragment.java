@@ -4,11 +4,13 @@ package app.paypro.payproapp;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -53,9 +56,10 @@ public class ContactsFragment extends Fragment {
     private ListView mContactsList;
     private LinearLayout emptyListView;
     private LinearLayout permissionDeniedView;
-    private FrameLayout mainView;
+    private ConstraintLayout mainView;
     private ProgressBar progressBar;
     private FloatingActionButton fab;
+    private SearchView searchView;
 
     private ContactsAdapter contactsAdapter;
 
@@ -71,13 +75,14 @@ public class ContactsFragment extends Fragment {
 
     public static ContactsFragment newInstance() {
         ContactsFragment fragment = new ContactsFragment();
+//        fragment.setHasOptionsMenu(true);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
     }
 
     @Override
@@ -96,6 +101,23 @@ public class ContactsFragment extends Fragment {
         mainView = getActivity().findViewById(R.id.main_view);
         progressBar = getActivity().findViewById(R.id.progress_bar);
         fab = getActivity().findViewById(R.id.fab);
+        searchView = getActivity().findViewById(R.id.search_view);
+
+        ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(Color.WHITE);
+        ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(Color.WHITE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                contactsAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,49 +130,25 @@ public class ContactsFragment extends Fragment {
                 FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.add(R.id.frame_layout, myfragment);
+                transaction.replace(R.id.frame_layout, myfragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
 
-        disableView();
-        int rc = checkSelfPermission(getContext(), READ_CONTACTS);
-        if (rc == PackageManager.PERMISSION_GRANTED) {
-            loadContacts();
-        } else {
-            requestContactsPermission();
+        if(contacts.size() == 0){
+            disableView();
+            int rc = checkSelfPermission(getContext(), READ_CONTACTS);
+            if (rc == PackageManager.PERMISSION_GRANTED) {
+                loadContacts();
+            } else {
+                requestContactsPermission();
+            }
+        }else{
+            enableView();
+            mContactsList.setAdapter(contactsAdapter);
         }
 
-
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        getActivity().getMenuInflater().inflate(R.menu.search_menu, menu);
-
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
-        search(searchView);
-
-    }
-
-    private void search(SearchView searchView) {
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                contactsAdapter.getFilter().filter(newText);
-                return true;
-            }
-        });
     }
 
     private void requestContactsPermission() {

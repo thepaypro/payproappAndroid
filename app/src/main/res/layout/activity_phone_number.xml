@@ -6,60 +6,66 @@
     android:layout_height="match_parent"
     android:background="@color/bg_gray">
 
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:textColor="@android:color/white"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+    <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:titleTextColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/content">
+        android:layout_width="match_parent"
+        android:id="@+id/toolbar">
 
-        <LinearLayout
-            android:id="@+id/toolbar_next_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:clickable="true"
-            android:padding="15dp"
-            android:layout_gravity="right"
-            android:gravity="center_vertical"
-            android:onClick="launchSmsCodeActivity"
-            android:orientation="horizontal">
+        <android.support.v7.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:titleTextColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/content">
 
-            <TextView
-                android:id="@+id/next_text"
+            <LinearLayout
+                android:id="@+id/toolbar_next_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/confirmation_code_actionbar"
-                android:textColor="@android:color/white" />
+                android:layout_height="?attr/actionBarSize"
+                android:clickable="true"
+                android:padding="15dp"
+                android:layout_gravity="right"
+                android:gravity="center_vertical"
+                android:onClick="launchSmsCodeActivity"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/next_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/confirmation_code_actionbar"
+                    android:textColor="@android:color/white" />
 
-        <LinearLayout
-            android:id="@+id/toolbar_progress_bar_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:padding="15dp"
-            android:layout_gravity="right"
-            android:gravity="center_vertical"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            </LinearLayout>
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
+            <LinearLayout
+                android:id="@+id/toolbar_progress_bar_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:indeterminateDrawable="@drawable/custom_progress_loader"
-                android:indeterminate="true"/>
+                android:layout_height="?attr/actionBarSize"
+                android:padding="15dp"
+                android:layout_gravity="right"
+                android:gravity="center_vertical"
+                android:visibility="gone"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminateDrawable="@drawable/custom_progress_loader"
+                    android:indeterminate="true"/>
 
-    </android.support.v7.widget.Toolbar>
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/content"

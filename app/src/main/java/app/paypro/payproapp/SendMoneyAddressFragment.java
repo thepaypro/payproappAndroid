@@ -6,8 +6,10 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,17 +30,24 @@ public class SendMoneyAddressFragment extends Fragment {
 
     public static SendMoneyAddressFragment newInstance() {
         SendMoneyAddressFragment fragment = new SendMoneyAddressFragment();
+//        fragment.setHasOptionsMenu(true);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(false);
+//        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+//        // create ContextThemeWrapper from the original Activity Context with the custom theme
+//        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.AppTheme_NoActionBar);
+//
+//        // clone the inflater using the ContextThemeWrapper
+//        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
 
         return inflater.inflate(R.layout.sendmoney_address_fragment, container, false);
     }
@@ -57,11 +66,11 @@ public class SendMoneyAddressFragment extends Fragment {
                 if(addr.matches("\"^[13][a-km-zA-HJ-NP-Z0-9]{26,33}$\"")){
                     Global.getSendMoney().setAddress(addr);
 
-                    SendMoneyAddressFragment myfragment = new SendMoneyAddressFragment();
+                    SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
                     FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                    transaction.add(R.id.frame_layout, myfragment);
+                    transaction.replace(R.id.frame_layout, myfragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }else{
@@ -70,6 +79,10 @@ public class SendMoneyAddressFragment extends Fragment {
                 }
             }
         });
+
+//        android.support.v7.widget.Toolbar toolbar= getActivity().findViewById(R.id.toolbar);
+
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         addrEditText.requestFocus();
         addrEditText.setFocusable(true);
@@ -80,6 +93,12 @@ public class SendMoneyAddressFragment extends Fragment {
         addrEditText.addTextChangedListener(filterTextWatcher);
 
     }
+
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.empty_menu, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
 
     private TextWatcher filterTextWatcher = new TextWatcher() {
 
