@@ -130,7 +130,7 @@ public class ContactsFragment extends Fragment {
                 FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.replace(R.id.frame_layout, myfragment);
+                transaction.add(R.id.frame_layout, myfragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

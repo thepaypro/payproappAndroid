@@ -97,4 +97,7 @@
   <string name="invite_title">Invite someone to PayPro</string>
   <string name="introduce_address">Introduce Bitcoin Address</string>
 
+  <string name="ready_to_send">READY TO SEND</string>
+  <string name="to">TO</string>
+
 </resources>
