@@ -2,7 +2,6 @@ package app.paypro.payproapp;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -64,10 +63,9 @@ public class ProfileView extends Fragment {
             public void onClick(View view) {
                 SettingsFragment myfragment = new SettingsFragment();
 
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.replace(R.id.frame_layout, myfragment);
+                transaction.add(R.id.frame_layout, myfragment);
                 transaction.commit();
             }
         });

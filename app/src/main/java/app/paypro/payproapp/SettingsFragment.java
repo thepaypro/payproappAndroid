@@ -74,12 +74,12 @@ public class SettingsFragment extends Fragment {
             public void onClick( View v ) {
                 ProfileView myfragment = new ProfileView();
 
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                 transaction.add(R.id.frame_layout, myfragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
             }
         } );
 
@@ -88,7 +88,9 @@ public class SettingsFragment extends Fragment {
         rowPasscode.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
-                Log.i("eeeeee", "11111111111");
+                Intent intent = new Intent(getActivity(), PasscodeActivity.class);
+                intent.putExtra("passcode_state", "old");
+                startActivity(intent);
             }
         } );
 
