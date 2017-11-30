@@ -62,11 +62,6 @@ public class PasscodeActivity extends AppCompatActivity{
         sixImageView= findViewById(R.id.circle6);
         mainView = findViewById(R.id.main_view);
 
-        editText.requestFocus();
-
-        InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             passcode_state = extras.getString("passcode_state");
@@ -122,6 +117,12 @@ public class PasscodeActivity extends AppCompatActivity{
         }
 
         editText.addTextChangedListener(filterTextWatcher);
+
+        editText.requestFocus();
+        editText.setFocusableInTouchMode(true);
+
+        InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
     }
 
     public void shake(){

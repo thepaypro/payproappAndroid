@@ -44,7 +44,8 @@
         <activity
             android:screenOrientation="portrait"
             android:name=".PasscodeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateVisible">
         </activity>
         <activity
             android:screenOrientation="portrait"
