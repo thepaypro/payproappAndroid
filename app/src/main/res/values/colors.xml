@@ -3,8 +3,8 @@
   <color name="defaultTextColor">@android:color/black</color>
   <color name="defaultBackgroundColor">@android:color/transparent</color>
 
-  <color name="colorPrimary">#3f51b5</color>
-  <color name="colorPrimaryDark">#303F9F</color>
+  <color name="colorPrimary">#6666FF</color>
+  <color name="colorPrimaryDark">#3D3D7A</color>
   <color name="colorAccent">#565656</color>
 
   <!-- Screens background colors-->
@@ -13,6 +13,12 @@
   <color name="bg_gray">#EBEBF1</color>
   <color name="bg_gray2">#FAFAFA</color>
 
+  <!--PP colors-->
+  <color name="pp_dark_purple">#3D3D7A</color>
+  <color name="pp_light_purple">#6666FF</color>
+  <color name="pp_pink">#FFCCFF</color>
+  <color name="pp_green">#57FFB3</color>
+  
   <!--Other colors-->
   <color name="pp_purple">#7271ff</color>
 

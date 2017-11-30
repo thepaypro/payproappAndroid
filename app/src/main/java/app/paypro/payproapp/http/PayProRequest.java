@@ -102,7 +102,7 @@ public class PayProRequest {
             }
         };
 
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -141,7 +141,7 @@ public class PayProRequest {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i("eeeeerrrrrroooorrrr get", "errorrrr");
+                        error.printStackTrace();
                         NetworkResponse response = error.networkResponse;
                         if(response != null && response.data != null) {
                             Log.i("get error code", String.valueOf(response.statusCode));
@@ -194,7 +194,7 @@ public class PayProRequest {
             }
         };
 
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(10000000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
