@@ -11,6 +11,7 @@ import android.graphics.RectF;
 
 import com.google.android.gms.vision.barcode.Barcode;
 
+import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.ui.camera.GraphicOverlay;
 
 /**
@@ -20,16 +21,11 @@ import app.paypro.payproapp.ui.camera.GraphicOverlay;
 public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
     private int mId;
-
-
-
     private Paint mRectPaint;
     private volatile Barcode mBarcode;
-    private SendMoney sendMoney;
 
-    BarcodeGraphic(GraphicOverlay overlay, SendMoney sendMoney) {
+    BarcodeGraphic(GraphicOverlay overlay) {
         super(overlay);
-        this.sendMoney = sendMoney;
 
         mRectPaint = new Paint();
         mRectPaint.setColor(Color.YELLOW);
@@ -68,6 +64,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
             return;
         }
 
+        SendMoney sendMoney = Global.getSendMoney();
         if (sendMoney.getAddress() != null && !sendMoney.getAddress().isEmpty()){
             mRectPaint.setColor(Color.GREEN);
         }else{

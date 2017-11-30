@@ -75,7 +75,7 @@ public class SendMoney {
        try {
 
            if(bitcoinUriScheme.length == 2 ){
-               if(bitcoinUriScheme[0] == "bitcoin" && bitcoinUriScheme[1] != null){
+               if(bitcoinUriScheme[0].equals("bitcoin") && bitcoinUriScheme[1] != null){
                    bitcoinUri = bitcoinUriScheme[1];
                }
            }else{
@@ -93,15 +93,15 @@ public class SendMoney {
                for(int i=0;i<bitcoinUriParams.length;i++){
                    String[] param = bitcoinUriParams[i].split("=");
                    if(param.length == 2){
-                       if(param[0] == "amount" || param[0] == "size"){
+                       if(param[0].equals("amount") || param[0].equals("size")){
                            if(param[1].matches("^[0-9]*\\.?[0-9]{0,8}$")){
                                setAmount(Integer.valueOf(param[1]));
                            }else{
                                 return false;
                            }
-                       }else if(param[0] == "label"){
+                       }else if(param[0].equals("label")){
                            setLabel(URLDecoder.decode(param[1], "UTF-8"));
-                       }else if(param[0] == "message"){
+                       }else if(param[0].equals("message")){
                             setMessage(message = URLDecoder.decode(param[1], "UTF-8"));
                        }else{
                            return false;

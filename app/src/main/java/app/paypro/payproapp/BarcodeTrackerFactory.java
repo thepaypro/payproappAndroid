@@ -19,17 +19,15 @@ import app.paypro.payproapp.ui.camera.GraphicOverlay;
 class BarcodeTrackerFactory implements MultiProcessor.Factory<Barcode> {
     private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
     private Fragment mFragment;
-    private SendMoney sendMoney;
 
-    public BarcodeTrackerFactory(GraphicOverlay<BarcodeGraphic> mGraphicOverlay, SendMoney sendMoney, Fragment mFragment) {
+    public BarcodeTrackerFactory(GraphicOverlay<BarcodeGraphic> mGraphicOverlay, Fragment mFragment) {
         this.mGraphicOverlay = mGraphicOverlay;
         this.mFragment = mFragment;
-        this.sendMoney = sendMoney;
     }
 
     @Override
     public Tracker<Barcode> create(Barcode barcode) {
-        BarcodeGraphic graphic = new BarcodeGraphic(mGraphicOverlay,sendMoney);
+        BarcodeGraphic graphic = new BarcodeGraphic(mGraphicOverlay);
         return new BarcodeGraphicTracker(mGraphicOverlay, graphic, mFragment);
     }
 

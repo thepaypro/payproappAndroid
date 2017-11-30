@@ -13,6 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 
+import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.ui.camera.CameraSource;
 import app.paypro.payproapp.ui.camera.CameraSourcePreview;
 import app.paypro.payproapp.ui.camera.GraphicOverlay;
@@ -36,8 +39,6 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
     private static final String TAG = "Barcode-reader";
 
     private RelativeLayout mainView;
-
-    private SendMoney sendMoney = new SendMoney();
 
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
@@ -115,7 +116,7 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
         // graphics for each barcode on screen.  The factory is used by the multi-processor to
         // create a separate tracker instance for each barcode.
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build();
-        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay,sendMoney, this);
+        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay, this);
         barcodeDetector.setProcessor(
                 new MultiProcessor.Builder<>(barcodeFactory).build());
 
@@ -146,8 +147,7 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
         // to other detection examples to enable the barcode detector to detect small barcodes
         // at long distances.
             CameraSource.Builder builder = new CameraSource.Builder(getContext(), barcodeDetector)
-                .setFacing(CameraSource.CAMERA_FACING_BACK)
-                .setRequestedPreviewSize(1600, 1024)
+                .setRequestedPreviewSize(768, 1240)
                 .setRequestedFps(15.0f);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -254,10 +254,17 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
 
     @Override
     public void onBarcodeDetected(Barcode barcode) {
+        SendMoney sendMoney = Global.resetSendMoney();
         if (sendMoney.bitcoinURISaveData(barcode.displayValue)){
-
+            SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
+            FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+            transaction.add(R.id.frame_layout, myfragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }else{
-            sendMoney = new SendMoney();
+            Global.resetSendMoney();
         }
     }
 
