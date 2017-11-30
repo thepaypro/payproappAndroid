@@ -67,11 +67,6 @@ public class TabActivity extends AppCompatActivity {
                     transaction.add(R.id.frame_layout, SettingsFragment.newInstance());
                     transaction.commit();
 
-//                    TabLayout tabBar = findViewById(R.id.tabs);
-//                    tabBar.getTabAt(R.id.navigation_settings).select();
-//                    TabLayout.Tab tab = tabBar.getTabAt(R.id.navigation_settings);
-//                    tab.select();
-
                     navigation.setSelectedItemId(R.id.navigation_settings);
                     break;
             }

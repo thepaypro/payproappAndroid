@@ -3,6 +3,7 @@ package app.paypro.payproapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -137,6 +138,9 @@ public class PasscodeActivity extends AppCompatActivity{
         LinearLayout circlelinearLayout= findViewById(R.id.circlelinearLayout);
         circlelinearLayout.setAnimation(shakeAnim);
         circlelinearLayout.startAnimation(shakeAnim);
+
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(500);
     }
 
     private TextWatcher filterTextWatcher = new TextWatcher() {
