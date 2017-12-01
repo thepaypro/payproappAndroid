@@ -28,6 +28,9 @@ public class User {
     @ColumnInfo(name = "account_id")
     private int account_id;
 
+    @ColumnInfo(name = "avatar")
+    private String avatar;
+
     public int getUid()
     {
         return uid;
@@ -65,6 +68,13 @@ public class User {
     public void setAccount_id(int account_idValue)
     {
         this.account_id = account_idValue;
+    }
+
+    public String getAvatar() { return this.avatar; }
+
+    public void setAvatar(String avatarValue)
+    {
+        this.avatar = avatarValue;
     }
 }
 
