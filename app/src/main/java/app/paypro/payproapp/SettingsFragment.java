@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,11 +18,14 @@ import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.concurrent.ExecutionException;
 
 import app.paypro.payproapp.asynctask.db.user.GetUserAsyncTask;
+import app.paypro.payproapp.utils.CropImage;
 
 public class SettingsFragment extends Fragment {
+    private static final String IMAGE_DIRECTORY = "/PayPro", AVATAR_FILENAME = "payproprofile.jpg";
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
@@ -50,12 +54,20 @@ public class SettingsFragment extends Fragment {
 
         avatarImage = getView().findViewById(R.id.avatarImage);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
+        //Avatar
+        File profile = new File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY+"/"+AVATAR_FILENAME);
 
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCircular(true);
+        Bitmap bitmap;
 
-        avatarImage.setImageDrawable(roundedBitmapDrawable);
+        if (profile.exists()){
+            bitmap = BitmapFactory.decodeFile(String.valueOf(profile.getAbsoluteFile()));
+        } else {
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
+        }
+
+        avatarImage.setImageBitmap(CropImage.transform(bitmap));
 
         try {
             app.paypro.payproapp.db.entity.User userEntity = new GetUserAsyncTask(getContext()).execute().get()[0];

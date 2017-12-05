@@ -1,7 +1,6 @@
 package app.paypro.payproapp.http;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -125,7 +124,6 @@ public class PayProRequest {
                             @Override
                             public void onResponse(JSONObject response) {
 
-                                Log.i("eeeeeeee", response.toString());
                                 try {
                                     if (response.has("token"))
                                     {
@@ -144,7 +142,7 @@ public class PayProRequest {
                         error.printStackTrace();
                         NetworkResponse response = error.networkResponse;
                         if(response != null && response.data != null) {
-                            Log.i("get error code", String.valueOf(response.statusCode));
+
                             switch (response.statusCode) {
                                 case 400:
                                     try {
@@ -182,8 +180,6 @@ public class PayProRequest {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
-
-                Log.i("GET Global Token", Global.getToken());
 
                 if (!Global.getToken().isEmpty())
                 {

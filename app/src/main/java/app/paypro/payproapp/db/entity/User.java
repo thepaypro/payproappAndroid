@@ -29,7 +29,7 @@ public class User {
     private int account_id;
 
     @ColumnInfo(name = "avatar")
-    private String avatar;
+    private String avatar = "";
 
     public int getUid()
     {
