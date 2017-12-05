@@ -145,6 +145,8 @@ public class ProfileView extends Fragment {
                     new String[]{"image/jpeg"}, null);
             fo.close();
 
+            setAvatarImage();
+
             return f.getAbsolutePath();
         } catch (IOException e1) {
             e1.printStackTrace();
