@@ -8,11 +8,11 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/toolbar">
+        android:layout_width="match_parent">
 
         <android.support.v7.widget.Toolbar
             xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolbar"
             android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

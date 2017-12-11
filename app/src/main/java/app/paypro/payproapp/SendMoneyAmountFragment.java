@@ -1,10 +1,14 @@
 package app.paypro.payproapp;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import app.paypro.payproapp.global.Global;
 
@@ -13,6 +17,8 @@ import app.paypro.payproapp.global.Global;
  */
 
 public class SendMoneyAmountFragment extends Fragment {
+
+    private LinearLayout toolbarNextLayout;
 
     public static ContactsFragment newInstance() {
         ContactsFragment fragment = new ContactsFragment();
@@ -34,8 +40,20 @@ public class SendMoneyAmountFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        toolbarNextLayout = getActivity().findViewById(R.id.toolbar_next_layout);
 
-        Integer userid = Global.getSendMoney().getUserId();
+        toolbarNextLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    SendMoneySendFragment myfragment = new SendMoneySendFragment();
+                    FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                    transaction.add(R.id.frame_layout, myfragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+            }
+        });
     }
 
     public void launchNextFragment(View v){

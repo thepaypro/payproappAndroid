@@ -30,24 +30,16 @@ public class SendMoneyAddressFragment extends Fragment {
 
     public static SendMoneyAddressFragment newInstance() {
         SendMoneyAddressFragment fragment = new SendMoneyAddressFragment();
-//        fragment.setHasOptionsMenu(true);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-//        // create ContextThemeWrapper from the original Activity Context with the custom theme
-//        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.AppTheme_NoActionBar);
-//
-//        // clone the inflater using the ContextThemeWrapper
-//        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
 
         return inflater.inflate(R.layout.sendmoney_address_fragment, container, false);
     }
@@ -80,10 +72,6 @@ public class SendMoneyAddressFragment extends Fragment {
             }
         });
 
-//        android.support.v7.widget.Toolbar toolbar= getActivity().findViewById(R.id.toolbar);
-
-//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-
         addrEditText.requestFocus();
         addrEditText.setFocusable(true);
 
@@ -93,12 +81,6 @@ public class SendMoneyAddressFragment extends Fragment {
         addrEditText.addTextChangedListener(filterTextWatcher);
 
     }
-
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.empty_menu, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
 
     private TextWatcher filterTextWatcher = new TextWatcher() {
 

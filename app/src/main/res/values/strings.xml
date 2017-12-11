@@ -100,4 +100,6 @@
   <string name="ready_to_send">READY TO SEND</string>
   <string name="to">TO</string>
 
+  <string name="swipe_to_send">Swipe to send</string>
+
 </resources>
