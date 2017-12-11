@@ -1,25 +1,17 @@
 package app.paypro.payproapp.ui.button.swipe;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,18 +24,11 @@ public class SwipeButton extends RelativeLayout {
     private ConstraintLayout swipeButtonInner;
     private float initialX;
     private int initialOffset = 200;
-    private boolean active;
     private TextView centerText;
     private ViewGroup background;
 
-    private Drawable disabledDrawable;
-    private Drawable enabledDrawable;
 
     private OnStateChangeListener onStateChangeListener;
-    private OnActiveListener onActiveListener;
-
-    private static final int ENABLED = 0;
-    private static final int DISABLED = 1;
 
     private int collapsedWidth;
     private int collapsedHeight;
@@ -74,6 +59,10 @@ public class SwipeButton extends RelativeLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         init(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    public void setEventListener(OnStateChangeListener onStateChangeListener) {
+        this.onStateChangeListener = onStateChangeListener;
     }
 
     public void setText(String text) {
@@ -159,9 +148,6 @@ public class SwipeButton extends RelativeLayout {
             } else {
                 centerText.setTextSize(12);
             }
-
-            disabledDrawable = typedArray.getDrawable(R.styleable.SwipeButton_button_image_disabled);
-            enabledDrawable = typedArray.getDrawable(R.styleable.SwipeButton_button_image_enabled);
             float innerTextLeftPadding = typedArray.getDimension(
                     R.styleable.SwipeButton_inner_text_left_padding, 0);
             float innerTextTopPadding = typedArray.getDimension(
@@ -189,8 +175,6 @@ public class SwipeButton extends RelativeLayout {
                     swipeButton.animate().translationX(-w + initialOffset);
                 }
             });
-
-            active = false;
 
             centerText.setPadding((int) innerTextLeftPadding,
                     (int) innerTextTopPadding,
@@ -228,10 +212,12 @@ public class SwipeButton extends RelativeLayout {
                             swipeButtonInner.setX(start);
                             centerText.setAlpha(1);
                         }
-                        else if (event.getX() > getWidth() * 0.9) {
+                        else if (event.getX() > getWidth() * 0.99) {
                             swipeButtonInner.setX(0);
                             centerText.setAlpha(0);
-                            //DO SOMETHING
+                            if (onStateChangeListener != null) {
+                                onStateChangeListener.onStateChange(true);
+                            }
                         } else {
                             swipeButtonInner.setX(event.getX() - swipeButtonInner.getWidth());
                             centerText.setAlpha(1 - 1.3f * (swipeButtonInner.getX() + swipeButtonInner.getWidth()) / getWidth());

@@ -55,8 +55,4 @@ public class SendMoneyAmountFragment extends Fragment {
             }
         });
     }
-
-    public void launchNextFragment(View v){
-
-    }
 }

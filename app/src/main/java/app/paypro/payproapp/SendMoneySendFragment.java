@@ -1,10 +1,15 @@
 package app.paypro.payproapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import app.paypro.payproapp.ui.button.swipe.OnStateChangeListener;
+import app.paypro.payproapp.ui.button.swipe.SwipeButton;
 
 
 /**
@@ -12,6 +17,8 @@ import android.view.ViewGroup;
  */
 
 public class SendMoneySendFragment extends Fragment {
+
+    SwipeButton swipeButton;
 
     public static SendMoneySendFragment newInstance() {
         SendMoneySendFragment fragment = new SendMoneySendFragment();
@@ -26,13 +33,23 @@ public class SendMoneySendFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.sendmoney_send_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        swipeButton = getActivity().findViewById(R.id.swipe_btn);
+        swipeButton.setEventListener(new OnStateChangeListener() {
+            @Override
+            public void onStateChange(boolean active) {
+                Intent intent = new Intent(getActivity(), SendMoneyConfirmActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+
+        });
 
     }
 }
