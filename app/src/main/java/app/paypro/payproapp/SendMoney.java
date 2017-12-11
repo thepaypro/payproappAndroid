@@ -9,18 +9,18 @@ import java.net.URLDecoder;
 
 public class SendMoney {
 
-    private Integer amount;
+    private Float amount;
     private String address;
     private String message;
     private String label;
     private Integer userId;
     private Integer accountId;
 
-    public Integer getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
@@ -95,7 +95,7 @@ public class SendMoney {
                    if(param.length == 2){
                        if(param[0].equals("amount") || param[0].equals("size")){
                            if(param[1].matches("^[0-9]*\\.?[0-9]{0,8}$")){
-                               setAmount(Integer.valueOf(param[1]));
+                               setAmount(Float.valueOf(param[1]));
                            }else{
                                 return false;
                            }

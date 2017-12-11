@@ -124,8 +124,6 @@ public class ContactsFragment extends Fragment {
             public void onClick(View view) {
                 SendMoney sendMoney = Global.resetSendMoney();
 
-                Global.setSendMoney(sendMoney);
-
                 SendMoneyAddressFragment myfragment = new SendMoneyAddressFragment();
                 FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
