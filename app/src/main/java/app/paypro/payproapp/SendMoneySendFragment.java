@@ -19,6 +19,8 @@ import app.paypro.payproapp.ui.button.swipe.SwipeButton;
 public class SendMoneySendFragment extends Fragment {
 
     SwipeButton swipeButton;
+    Text
+
 
     public static SendMoneySendFragment newInstance() {
         SendMoneySendFragment fragment = new SendMoneySendFragment();

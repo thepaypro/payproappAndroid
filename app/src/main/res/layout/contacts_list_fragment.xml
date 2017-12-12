@@ -114,7 +114,7 @@
                 android:id="@+id/imageView2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_contacts_black_24dp" />
+                app:srcCompat="@drawable/ic_contacts_black_24dp" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -133,11 +133,11 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            android:backgroundTint="@color/pp_purple"
+            app:backgroundTint="@color/pp_purple"
             android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_white_24dp"
+            app:srcCompat="@drawable/ic_add_white_24dp"
             android:tint="@android:color/white"
             android:layout_gravity="bottom|end"
             app:useCompatPadding="true"
