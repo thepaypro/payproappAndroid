@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
 
 import app.paypro.payproapp.global.Global;
@@ -91,15 +92,19 @@ public class SendMoneyAmountFragment extends Fragment {
             public void onClick(View v)
             {
                 SendMoney sendMoney = Global.getSendMoney();
-                sendMoney.setAmount(Float.valueOf(amountInput.getText().toString()));
-                sendMoney.setMessage(privateMsgInput.getText().toString());
-                SendMoneySendFragment myfragment = new SendMoneySendFragment();
-                FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.add(R.id.frame_layout, myfragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                try {
+                    sendMoney.setAmount(amountInput.getText().toString());
+                    sendMoney.setMessage(privateMsgInput.getText().toString());
+                    SendMoneySendFragment myfragment = new SendMoneySendFragment();
+                    FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                    transaction.add(R.id.frame_layout, myfragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

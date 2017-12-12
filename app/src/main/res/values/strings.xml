@@ -104,4 +104,6 @@
 
   <string name="you_rock">You rock!</string>
 
+  <string name="destinatary_not_available">Destinatary name not available</string>
+
 </resources>

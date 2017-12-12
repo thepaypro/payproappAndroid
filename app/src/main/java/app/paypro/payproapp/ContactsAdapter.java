@@ -57,9 +57,9 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
         return filtered_data.size();
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        final Contact item = getItem(position);
+        Contact item = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.contacts_list_item, parent, false);
 
@@ -72,12 +72,13 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Contact contact = getItem(position);
 
-                    if(item.getIsUser()){
+                    if(contact.getIsUser()){
                         SendMoney sendMoney = Global.resetSendMoney();
 
-                        sendMoney.setUserId(item.getUserId());
-                        sendMoney.setAccountId(item.getAccountId());
+                        sendMoney.setUserId(contact.getUserId());
+                        sendMoney.setAccountId(contact.getAccountId());
 
                         Global.setSendMoney(sendMoney);
 

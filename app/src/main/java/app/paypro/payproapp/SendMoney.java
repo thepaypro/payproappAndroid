@@ -1,7 +1,11 @@
 package app.paypro.payproapp;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 
 /**
  * Created by rogerbaiget on 28/11/17.
@@ -9,19 +13,34 @@ import java.net.URLDecoder;
 
 public class SendMoney {
 
-    private Float amount;
+    private BigDecimal amount;
     private String address;
     private String message;
     private String label;
     private Integer userId;
     private Integer accountId;
 
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public void setAmount(String amount) throws ParseException {
+
+        // Create a DecimalFormat that fits your requirements
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+        decimalFormatSymbols.setGroupingSeparator(',');
+        decimalFormatSymbols.setDecimalSeparator('.');
+        String pattern = "#,##0.0#";
+
+        DecimalFormat decimalFormat = new DecimalFormat(pattern, decimalFormatSymbols);
+        decimalFormat.setParseBigDecimal(true);
+
+        this.amount = (BigDecimal) decimalFormat.parse(amount);
+
     }
 
     public String getAddress() {
@@ -95,7 +114,7 @@ public class SendMoney {
                    if(param.length == 2){
                        if(param[0].equals("amount") || param[0].equals("size")){
                            if(param[1].matches("^[0-9]*\\.?[0-9]{0,8}$")){
-                               setAmount(Float.valueOf(param[1]));
+                               setAmount(param[1]);
                            }else{
                                 return false;
                            }
@@ -117,6 +136,9 @@ public class SendMoney {
        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return false;
+       } catch (ParseException e) {
+           e.printStackTrace();
+           return false;
        }
     }
 }
