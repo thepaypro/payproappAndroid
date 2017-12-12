@@ -23,7 +23,8 @@ public class SwipeButton extends RelativeLayout {
 
     private ConstraintLayout swipeButtonInner;
     private float initialX;
-    private int initialOffset = 200;
+    private int mainViewWidth;
+    private int initialOffsetFrac = 8;
     private TextView centerText;
     private ViewGroup background;
 
@@ -171,8 +172,8 @@ public class SwipeButton extends RelativeLayout {
             post(new Runnable() {
                 @Override
                 public void run() {
-                    int w = mainView.getWidth();
-                    swipeButton.animate().translationX(-w + initialOffset);
+                    mainViewWidth = mainView.getWidth();
+                    swipeButton.animate().translationX(-mainViewWidth + mainViewWidth/initialOffsetFrac);
                 }
             });
 
@@ -207,8 +208,8 @@ public class SwipeButton extends RelativeLayout {
                             initialX = swipeButtonInner.getX();
                         }
 
-                        if(event.getX() < initialOffset){
-                            int start = - swipeButtonInner.getWidth() + initialOffset;
+                        if(event.getX() < mainViewWidth/initialOffsetFrac){
+                            int start = - swipeButtonInner.getWidth() + mainViewWidth/initialOffsetFrac;
                             swipeButtonInner.setX(start);
                             centerText.setAlpha(1);
                         }
