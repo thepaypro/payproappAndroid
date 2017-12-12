@@ -38,6 +38,7 @@
             android:id="@+id/ready_to_send_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textIsSelectable="false"
             android:paddingBottom="10dp"
             android:paddingLeft="17dp"
             android:paddingTop="25dp"
@@ -46,7 +47,8 @@
         <TextView
             android:id="@+id/ready_to_send_text"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:textIsSelectable="false"
+            android:layout_height="110dp"
             android:background="@android:color/white"
             android:gravity="center_vertical"
             android:paddingLeft="17dp"
@@ -58,6 +60,7 @@
             android:id="@+id/to_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textIsSelectable="false"
             android:paddingBottom="10dp"
             android:paddingLeft="17dp"
             android:paddingTop="25dp"
@@ -67,7 +70,7 @@
         <LinearLayout
             android:id="@+id/to_text"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:background="@android:color/white"
             android:orientation="vertical"
             android:paddingLeft="17dp"
@@ -77,6 +80,7 @@
 
             <TextView
                 android:id="@+id/to_text_1"
+                android:textIsSelectable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
@@ -84,6 +88,7 @@
 
             <TextView
                 android:id="@+id/to_text_2"
+                android:textIsSelectable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
@@ -91,6 +96,7 @@
 
             <TextView
                 android:id="@+id/to_text_3"
+                android:textIsSelectable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
@@ -98,6 +104,7 @@
 
             <TextView
                 android:id="@+id/to_text_4"
+                android:textIsSelectable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
