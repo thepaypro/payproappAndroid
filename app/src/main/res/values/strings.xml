@@ -94,8 +94,8 @@
   <string name="amount_placeholder">"000.00</string>
   <string name="private_msg_placeholder">Private message for beneficiary</string>
 
-  <string name="invite_title">Invite someone to PayPro</string>
-  <string name="introduce_address">Introduce Bitcoin Address</string>
+  <string name="bitcoin_address">Bitcoin Addr:</string>
+  <string name="hint_bitcoin_address">1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2</string>
 
   <string name="ready_to_send">READY TO SEND</string>
   <string name="to">TO</string>

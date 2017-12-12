@@ -1,6 +1,7 @@
 package app.paypro.payproapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -26,7 +28,7 @@ import app.paypro.payproapp.global.Global;
 public class SendMoneyAddressFragment extends Fragment {
 
     private EditText addrEditText;
-    private LinearLayout toolbarNextLayout;
+    private Button nextButton;
 
     public static SendMoneyAddressFragment newInstance() {
         SendMoneyAddressFragment fragment = new SendMoneyAddressFragment();
@@ -49,9 +51,9 @@ public class SendMoneyAddressFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         addrEditText = getActivity().findViewById(R.id.addr_edit_text);
-        toolbarNextLayout = getActivity().findViewById(R.id.toolbar_next_layout);
+        nextButton = getActivity().findViewById(R.id.next_button);
 
-        toolbarNextLayout.setOnClickListener(new View.OnClickListener() {
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String addr = addrEditText.getText().toString();
@@ -72,11 +74,11 @@ public class SendMoneyAddressFragment extends Fragment {
             }
         });
 
-        addrEditText.requestFocus();
-        addrEditText.setFocusable(true);
+//        addrEditText.requestFocus();
+//        addrEditText.setFocusable(true);
 
-        InputMethodManager imm = (InputMethodManager)   getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//        InputMethodManager imm = (InputMethodManager)   getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         addrEditText.addTextChangedListener(filterTextWatcher);
 
@@ -102,10 +104,12 @@ public class SendMoneyAddressFragment extends Fragment {
     };
 
     public void enableNextButton(){
-        toolbarNextLayout.setVisibility(View.VISIBLE);
+        nextButton.setEnabled(true);
+        nextButton.setTextColor(Color.WHITE);
     }
 
     public void dissableNextButton(){
-        toolbarNextLayout.setVisibility(View.GONE);
+        nextButton.setEnabled(false);
+        nextButton.setTextColor(getActivity().getResources().getColor(R.color.inactive_grey));
     }
 }
