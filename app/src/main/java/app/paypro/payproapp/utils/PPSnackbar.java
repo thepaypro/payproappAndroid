@@ -23,6 +23,11 @@ public class PPSnackbar {
                         .make(view, "No internet connection!", Snackbar.LENGTH_LONG);
                 snackbar.setActionTextColor(Color.RED);
                 return snackbar;
+            case "Insufficient funds":
+                snackbar = Snackbar
+                        .make(view, "Insufficient funds", Snackbar.LENGTH_LONG);
+                snackbar.setActionTextColor(Color.RED);
+                return snackbar;
             default:
                 snackbar = Snackbar
                         .make(view, "Ups! Sorry, something went wrong", Snackbar.LENGTH_LONG);

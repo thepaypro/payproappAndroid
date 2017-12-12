@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -27,6 +28,9 @@ public class SwipeButton extends RelativeLayout {
     private int initialOffsetFrac = 8;
     private TextView centerText;
     private ViewGroup background;
+    private Boolean activated = false;
+    private Boolean active = false;
+    private Boolean enabled = true;
 
 
     private OnStateChangeListener onStateChangeListener;
@@ -207,21 +211,38 @@ public class SwipeButton extends RelativeLayout {
                         if (initialX == 0) {
                             initialX = swipeButtonInner.getX();
                         }
-
                         if(event.getX() < mainViewWidth/initialOffsetFrac){
-                            int start = - swipeButtonInner.getWidth() + mainViewWidth/initialOffsetFrac;
+                            int start = -mainViewWidth + mainViewWidth/initialOffsetFrac;
                             swipeButtonInner.setX(start);
                             centerText.setAlpha(1);
-                        }
-                        else if (event.getX() > getWidth() * 0.99) {
-                            swipeButtonInner.setX(0);
-                            centerText.setAlpha(0);
-                            if (onStateChangeListener != null) {
-                                onStateChangeListener.onStateChange(true);
+                        }else if (event.getX() > getWidth() * 0.99) {
+                            if(!activated){
+                                activated = true;
+                                swipeButtonInner.setX(0);
+                                centerText.setAlpha(0);
+                                if (onStateChangeListener != null) {
+                                    onStateChangeListener.onStateChange(true);
+                                }
+                            }else{
+                                activated = false;
                             }
                         } else {
                             swipeButtonInner.setX(event.getX() - swipeButtonInner.getWidth());
                             centerText.setAlpha(1 - 1.3f * (swipeButtonInner.getX() + swipeButtonInner.getWidth()) / getWidth());
+
+                            if(!active){
+                                active = true;
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(enabled){
+                                            restartSwipeButton();
+                                        }
+                                        active = false;
+                                    }
+                                },3000);
+                            }
+
                         }
 
                         return true;
@@ -230,5 +251,20 @@ public class SwipeButton extends RelativeLayout {
                 return false;
             }
         };
+    }
+
+    public void restartSwipeButton(){
+        int start = -mainViewWidth + mainViewWidth/initialOffsetFrac;
+        swipeButtonInner.animate().translationX(start);
+        centerText.setAlpha(1);
+        activated = false;
+    }
+
+    public void enable(){
+        enabled = true;
+    }
+
+    public void disable(){
+        enabled = false;
     }
 }

@@ -20,6 +20,25 @@ public class SendMoney {
     private Integer userId;
     private Integer accountId;
 
+    private DecimalFormatSymbols decimalFormatSymbols;
+    private DecimalFormat decimalFormat;
+
+    public SendMoney(){
+
+        // Create a DecimalFormat that fits your requirements
+        decimalFormatSymbols = new DecimalFormatSymbols();
+        decimalFormatSymbols.setGroupingSeparator(',');
+        decimalFormatSymbols.setDecimalSeparator('.');
+        String pattern = "#,##0.0#";
+
+        decimalFormat = new DecimalFormat(pattern, decimalFormatSymbols);
+        decimalFormat.setParseBigDecimal(true);
+    }
+
+    public String getFormatAmount() {
+        return decimalFormat.format(amount);
+    }
+
     public BigDecimal getAmount() {
         return amount;
     }
@@ -29,18 +48,7 @@ public class SendMoney {
     }
 
     public void setAmount(String amount) throws ParseException {
-
-        // Create a DecimalFormat that fits your requirements
-        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
-        decimalFormatSymbols.setGroupingSeparator(',');
-        decimalFormatSymbols.setDecimalSeparator('.');
-        String pattern = "#,##0.0#";
-
-        DecimalFormat decimalFormat = new DecimalFormat(pattern, decimalFormatSymbols);
-        decimalFormat.setParseBigDecimal(true);
-
         this.amount = (BigDecimal) decimalFormat.parse(amount);
-
     }
 
     public String getAddress() {

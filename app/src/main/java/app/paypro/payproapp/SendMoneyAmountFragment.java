@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -55,6 +56,13 @@ public class SendMoneyAmountFragment extends Fragment {
         privateMsgInput = getActivity().findViewById(R.id.private_msg_input);
 
         nextButton.setEnabled(false);
+
+        // Hide the virtual keyboard
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getContext().INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
 
         amountInput.addTextChangedListener(new TextWatcher(){
             @Override
