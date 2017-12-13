@@ -18,17 +18,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +37,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import app.paypro.payproapp.contacts.Contacts;
-import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.http.ResponseListener;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -51,7 +47,7 @@ public class ContactsFragment extends Fragment {
 
     private static final int REQUEST_READ_CONTACTS = 101;
 
-    ArrayList<Contact> contacts = new ArrayList<Contact>();
+    ArrayList<Contact> contacts = new ArrayList<>();
 
     private ListView mContactsList;
     private LinearLayout emptyListView;
@@ -60,6 +56,8 @@ public class ContactsFragment extends Fragment {
     private ProgressBar progressBar;
     private FloatingActionButton fab;
     private SearchView searchView;
+    private TextView toolbarTitle;
+    private TextView toolbarSubtitle;
 
     private ContactsAdapter contactsAdapter;
 
@@ -102,9 +100,30 @@ public class ContactsFragment extends Fragment {
         progressBar = getActivity().findViewById(R.id.progress_bar);
         fab = getActivity().findViewById(R.id.fab);
         searchView = getActivity().findViewById(R.id.search_view);
+        toolbarTitle = getActivity().findViewById(R.id.toolbar_title);
+        toolbarSubtitle = getActivity().findViewById(R.id.toolbar_subtitle);
+
 
         ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(Color.WHITE);
         ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(Color.WHITE);
+
+        searchView.setOnSearchClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                toolbarTitle.setVisibility(View.INVISIBLE);
+                toolbarSubtitle.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener(){
+            @Override
+            public boolean onClose() {
+                toolbarTitle.setVisibility(View.VISIBLE);
+                toolbarSubtitle.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -143,10 +162,17 @@ public class ContactsFragment extends Fragment {
             }
         }else{
             enableView();
+            toolbarSubtitle.setText(contacts.size() + " contacts");
             mContactsList.setAdapter(contactsAdapter);
         }
 
     }
+
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.search_menu, menu);
+//        super.onCreateOptionsMenu(menu,inflater);
+//    }
 
     private void requestContactsPermission() {
 
@@ -276,6 +302,7 @@ public class ContactsFragment extends Fragment {
 
                         mContactsList.setAdapter(contactsAdapter);
                         enableView();
+                        toolbarSubtitle.setText(contacts.size() + " contacts");
                     }
                 });
             } catch (JSONException e) {

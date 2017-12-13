@@ -11,10 +11,10 @@
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:id="@+id/toolbar">
+        android:id="@+id/appbar">
 
         <android.support.v7.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolbar"
             android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -23,23 +23,43 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/content">
+            app:layout_constraintBottom_toTopOf="@+id/content"
+            app:titleMarginStart="16dp"
+            app:subtitleTextColor="@android:color/white">
 
-            <RelativeLayout
-                android:id="@+id/not"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <android.support.v7.widget.SearchView
-                android:layout_alignParentRight="true"
-                android:id="@+id/search_view"
-                style="@style/SearchViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose_contact"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp"
+                    app:layout_constraintBottom_toTopOf="@+id/toolbar_subtitle"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </android.support.v7.widget.SearchView>
+                <TextView
+                    android:id="@+id/toolbar_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar_title" />
 
-            </RelativeLayout>
+
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/search_view"
+                    style="@style/SearchViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
 
         </android.support.v7.widget.Toolbar>
 
@@ -50,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/appbar">
 
         <ListView
             android:id="@+id/contacts_list"
@@ -61,8 +81,9 @@
         <LinearLayout
             android:id="@+id/progress_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="35dp"
             android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="horizontal"
             android:clickable="false">
 
@@ -89,7 +110,7 @@
                 android:id="@+id/empty_contacts_list_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_import_contacts_black_24dp" />
+                app:srcCompat="@drawable/ic_import_contacts_black_24dp" />
 
             <TextView
                 android:id="@+id/empty_contacts_list_text"

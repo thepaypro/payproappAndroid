@@ -106,4 +106,7 @@
 
   <string name="destinatary_not_available">Destinatary name not available</string>
 
+
+  <string name="choose_contact">Choose contact</string>
+
 </resources>
