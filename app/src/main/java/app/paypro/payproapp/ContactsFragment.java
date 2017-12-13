@@ -16,8 +16,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -310,11 +312,9 @@ public class ContactsFragment extends Fragment {
                                     ((TabActivity) getActivity()).hideVirtualKeyboard();
                                     transaction.commit();
                                 }else{
-                                    //TODO: Contact invite
-//                                    PopupMenu popup = new PopupMenu(getContext(), view);
-//                                    MenuInflater inflater = popup.getMenuInflater();
-//                                    inflater.inflate(R.menu.contact_click_menu, popup.getMenu());
-//                                    popup.show();
+                                    //Contact Invite
+//                                    SmsManager smsManager = SmsManager.getDefault();
+//                                    smsManager.sendTextMessage(contact.getNumbers().get(0), null, getResources().getString(R.string.sms_msg), null, null);
                                 }
                             }
                         });

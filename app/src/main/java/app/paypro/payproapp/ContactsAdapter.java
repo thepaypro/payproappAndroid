@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -79,12 +80,14 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
             Bitmap bitmapImage = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_profile);
             if(item.getImageURi() != null){
                 try {
-                    bitmapImage = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.parse(item.getImageURi()));
+                    Bitmap bitmapUser = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.parse(item.getImageURi()));
+                    bitmapImage = getResizedBitmap(bitmapUser, 100, 100); //pick you default size
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
             RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getContext().getResources(), bitmapImage);
+            roundedBitmapDrawable.setAntiAlias(true);
             roundedBitmapDrawable.setCircular(true);
             viewHolder.photo.setImageDrawable(roundedBitmapDrawable);
 
@@ -116,6 +119,21 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
         }
 
         return convertView;
+    }
+
+    public static Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth)
+    {
+        int     width           = bm.getWidth();
+        int     height          = bm.getHeight();
+        float   scaleWidth      = ((float) newWidth) / width;
+        float   scaleHeight     = ((float) newHeight) / height;
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
+        return resizedBitmap;
     }
 
     @Override
