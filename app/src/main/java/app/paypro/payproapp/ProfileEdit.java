@@ -1,16 +1,17 @@
 package app.paypro.payproapp;
 
-import android.content.Intent;
+
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -46,13 +47,37 @@ public class ProfileEdit extends Fragment {
             e.printStackTrace();
         }
 
-        Button doneButton;
+        ImageButton backButton = getView().findViewById(R.id.backButtonToolbarProfileEdit);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProfileView myfragment = new ProfileView();
+
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+                transaction.add(R.id.frame_layout, myfragment);
+                transaction.commit();
+            }
+        });
+
+        final Button doneButton;
         doneButton = getView().findViewById(R.id.buttonDoneProfileView);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 try {
-                    TextView nickname = getView().findViewById(R.id.inputNickname);
+                    doneButton.setVisibility(View.INVISIBLE);
+
+                    final ProgressBar progressBar = getView().findViewById(R.id.progressBarProfileView);
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    final TextView nickname = getView().findViewById(R.id.inputNickname);
+                    nickname.setCursorVisible(false);
+
+                    InputMethodManager inputManager = (InputMethodManager) getContext().getSystemService(
+                            getContext().INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(nickname.getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
 
                     JSONObject parameters = new JSONObject();
                     parameters.put("nickname", nickname.getText().toString());
@@ -64,17 +89,24 @@ public class ProfileEdit extends Fragment {
                                 if(object.getBoolean("status")){
                                     ProfileView myfragment = new ProfileView();
 
-                                    FragmentManager fragmentManager = getFragmentManager();
-                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                    transaction.replace(R.id.frame_layout, myfragment);
+                                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                    transaction.setCustomAnimations(R.anim.slide_out, R.anim.slide_in, R.anim.slide_in, R.anim.slide_out);
+                                    transaction.add(R.id.frame_layout, myfragment);
                                     transaction.commit();
+
                                 }else if (!object.getBoolean("status") && object.has("error_msg")){
+                                    doneButton.setVisibility(View.VISIBLE);
+                                    progressBar.setVisibility(View.INVISIBLE);
                                     PPSnackbar.getSnackbar(view,object.getString("error_msg")).show();
                                 }else{
-                                    PPSnackbar.getSnackbar(view,"Error").show();
+                                    doneButton.setVisibility(View.VISIBLE);
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    PPSnackbar.getSnackbar(view,"error_save").show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                doneButton.setVisibility(View.VISIBLE);
+                                progressBar.setVisibility(View.INVISIBLE);
                                 PPSnackbar.getSnackbar(view,"Error").show();
                             }
                         }

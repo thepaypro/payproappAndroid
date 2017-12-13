@@ -1,17 +1,11 @@
 package app.paypro.payproapp.utils;
 
-import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.view.View;
-import android.widget.TextView;
 
 /**
  * Created by rogerbaiget on 17/11/17.
  */
-
-
-
-
 
 public class PPSnackbar {
 
@@ -21,7 +15,10 @@ public class PPSnackbar {
             case "connection_error":
                 snackbar = Snackbar
                         .make(view, "No internet connection!", Snackbar.LENGTH_LONG);
-                snackbar.setActionTextColor(Color.RED);
+                return snackbar;
+            case "error_save":
+                snackbar = Snackbar
+                        .make(view, "Saving error!", Snackbar.LENGTH_LONG);
                 return snackbar;
             case "Insufficient funds":
                 snackbar = Snackbar
@@ -31,7 +28,6 @@ public class PPSnackbar {
             default:
                 snackbar = Snackbar
                         .make(view, "Ups! Sorry, something went wrong", Snackbar.LENGTH_LONG);
-                snackbar.setActionTextColor(Color.RED);
                 return snackbar;
         }
     }

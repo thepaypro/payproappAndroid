@@ -229,4 +229,37 @@ public class User {
             }
         });
     }
+
+    public static void changePasscode(final Context context, JSONObject parameters, final ResponseListener<JSONObject> listener) throws JSONException
+    {
+        PayProRequest.put(context, "users/0", parameters, new ResponseListener<JSONObject>() {
+            @Override
+            public void getResult(JSONObject object) throws JSONException {
+                try {
+                    if (object.has("user"))
+                    {
+                        JSONObject responseJSON = new JSONObject();
+                        responseJSON.put("status", true);
+                        listener.getResult(responseJSON);
+                    } else {
+                        JSONObject errorResponse = new JSONObject();
+
+                        if(object.has("message")){
+                            errorResponse.put("error_msg", object.getString("message"));
+                        }
+
+                        errorResponse.put("status", false);
+                        listener.getResult(errorResponse);
+                    }
+                } catch (JSONException e) {
+                    Log.e("User.changePasscode", String.valueOf(e));
+
+                    JSONObject errorResponse = new JSONObject();
+                    errorResponse.put("status", false);
+                    errorResponse.put("error_msg", e.getMessage());
+                    listener.getResult(errorResponse);
+                }
+            }
+        });
+    }
 }
