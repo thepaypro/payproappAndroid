@@ -23,7 +23,6 @@ public class PPSnackbar {
             case "Insufficient funds":
                 snackbar = Snackbar
                         .make(view, "Insufficient funds", Snackbar.LENGTH_LONG);
-                snackbar.setActionTextColor(Color.RED);
                 return snackbar;
             default:
                 snackbar = Snackbar
