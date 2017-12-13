@@ -47,7 +47,7 @@ public class ContactsFragment extends Fragment {
 
     private static final int REQUEST_READ_CONTACTS = 101;
 
-    ArrayList<Contact> contacts = new ArrayList<>();
+    static ArrayList<Contact> contacts = new ArrayList<>();
 
     private ListView mContactsList;
     private LinearLayout emptyListView;
@@ -59,7 +59,7 @@ public class ContactsFragment extends Fragment {
     private TextView toolbarTitle;
     private TextView toolbarSubtitle;
 
-    private ContactsAdapter contactsAdapter;
+    private static ContactsAdapter contactsAdapter;
 
     @SuppressLint("InlinedApi")
     private static final String[] PROJECTION =
@@ -102,7 +102,6 @@ public class ContactsFragment extends Fragment {
         searchView = getActivity().findViewById(R.id.search_view);
         toolbarTitle = getActivity().findViewById(R.id.toolbar_title);
         toolbarSubtitle = getActivity().findViewById(R.id.toolbar_subtitle);
-
 
         ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(Color.WHITE);
         ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(Color.WHITE);
@@ -152,18 +151,12 @@ public class ContactsFragment extends Fragment {
             }
         });
 
-        if(contacts.size() == 0){
-            disableView();
-            int rc = checkSelfPermission(getContext(), READ_CONTACTS);
-            if (rc == PackageManager.PERMISSION_GRANTED) {
-                loadContacts();
-            } else {
-                requestContactsPermission();
-            }
-        }else{
-            enableView();
-            toolbarSubtitle.setText(contacts.size() + " contacts");
-            mContactsList.setAdapter(contactsAdapter);
+        disableView();
+        int rc = checkSelfPermission(getContext(), READ_CONTACTS);
+        if (rc == PackageManager.PERMISSION_GRANTED) {
+            loadContacts();
+        } else {
+            requestContactsPermission();
         }
 
     }
@@ -228,6 +221,7 @@ public class ContactsFragment extends Fragment {
 
     private void saveContacts(final Cursor c) {
         final HashMap<String,String> allContactsNumbers = new HashMap<>();
+        contacts.clear();
         //---display the contact id and name and phone number----
         if(c.getCount() == 0){
             showEmptyListView();
@@ -297,9 +291,7 @@ public class ContactsFragment extends Fragment {
                                 }
                             }
                         }
-                        contactsAdapter = new ContactsAdapter(
-                                getContext(), R.layout.contacts_list_item, sortList(contacts));
-
+                        contactsAdapter = new ContactsAdapter(getContext(), R.layout.contacts_list_item, sortList(contacts));
                         mContactsList.setAdapter(contactsAdapter);
                         enableView();
                         toolbarSubtitle.setText(contacts.size() + " contacts");

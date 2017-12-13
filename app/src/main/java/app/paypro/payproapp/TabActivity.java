@@ -1,6 +1,5 @@
 package app.paypro.payproapp;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
@@ -36,27 +34,46 @@ public class TabActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = null;
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+            Boolean selectedActualFragment = false;
             switch (item.getItemId()) {
                 case R.id.navigation_support:
+                    if (f instanceof SupportFragment){
+                        selectedActualFragment = true;
+                    }
                     selectedFragment = SupportFragment.newInstance();
                     break;
                 case R.id.navigation_scan:
+                    if (f instanceof ScanFragment){
+                        selectedActualFragment = true;
+                    }
                     selectedFragment = ScanFragment.newInstance();
                     break;
                 case R.id.navigation_send:
+                    if (f instanceof ContactsFragment){
+                        selectedActualFragment = true;
+                    }
                     selectedFragment = ContactsFragment.newInstance();
                     break;
                 case R.id.navigation_account:
+                    if (f instanceof AccountFragment){
+                        selectedActualFragment = true;
+                    }
                     selectedFragment = AccountFragment.newInstance();
                     navigationAccount = selectedFragment;
                     break;
                 case R.id.navigation_settings:
+                    if (f instanceof SettingsFragment){
+                        selectedActualFragment = true;
+                    }
                     selectedFragment = SettingsFragment.newInstance();
                     break;
             }
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frame_layout, selectedFragment);
-            transaction.commit();
+            if(!selectedActualFragment){
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_layout, selectedFragment);
+                transaction.commit();
+            }
             return true;
         }
     };

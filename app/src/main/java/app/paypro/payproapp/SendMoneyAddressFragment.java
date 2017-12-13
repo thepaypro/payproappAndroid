@@ -74,11 +74,11 @@ public class SendMoneyAddressFragment extends Fragment {
             }
         });
 
-//        addrEditText.requestFocus();
-//        addrEditText.setFocusable(true);
+        addrEditText.requestFocus();
+        addrEditText.setFocusable(true);
 
-//        InputMethodManager imm = (InputMethodManager)   getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        InputMethodManager imm = (InputMethodManager)   getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         addrEditText.addTextChangedListener(filterTextWatcher);
 
