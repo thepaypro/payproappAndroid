@@ -17,10 +17,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -37,6 +43,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import app.paypro.payproapp.contacts.Contacts;
+import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.http.ResponseListener;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -47,7 +54,7 @@ public class ContactsFragment extends Fragment {
 
     private static final int REQUEST_READ_CONTACTS = 101;
 
-    static ArrayList<Contact> contacts = new ArrayList<>();
+    ArrayList<Contact> contacts = new ArrayList<>();
 
     private ListView mContactsList;
     private LinearLayout emptyListView;
@@ -55,11 +62,9 @@ public class ContactsFragment extends Fragment {
     private ConstraintLayout mainView;
     private ProgressBar progressBar;
     private FloatingActionButton fab;
-    private SearchView searchView;
-    private TextView toolbarTitle;
-    private TextView toolbarSubtitle;
+    private Toolbar toolbar;
 
-    private static ContactsAdapter contactsAdapter;
+    private ContactsAdapter contactsAdapter;
 
     @SuppressLint("InlinedApi")
     private static final String[] PROJECTION =
@@ -73,14 +78,13 @@ public class ContactsFragment extends Fragment {
 
     public static ContactsFragment newInstance() {
         ContactsFragment fragment = new ContactsFragment();
-//        fragment.setHasOptionsMenu(true);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -99,43 +103,9 @@ public class ContactsFragment extends Fragment {
         mainView = getActivity().findViewById(R.id.main_view);
         progressBar = getActivity().findViewById(R.id.progress_bar);
         fab = getActivity().findViewById(R.id.fab);
-        searchView = getActivity().findViewById(R.id.search_view);
-        toolbarTitle = getActivity().findViewById(R.id.toolbar_title);
-        toolbarSubtitle = getActivity().findViewById(R.id.toolbar_subtitle);
+        toolbar = getActivity().findViewById(R.id.toolbar);
 
-        ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(Color.WHITE);
-        ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(Color.WHITE);
-
-        searchView.setOnSearchClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                toolbarTitle.setVisibility(View.INVISIBLE);
-                toolbarSubtitle.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        searchView.setOnCloseListener(new SearchView.OnCloseListener(){
-            @Override
-            public boolean onClose() {
-                toolbarTitle.setVisibility(View.VISIBLE);
-                toolbarSubtitle.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                contactsAdapter.getFilter().filter(newText);
-                return true;
-            }
-        });
+        ((TabActivity)getActivity()).setSupportActionBar(toolbar);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +115,7 @@ public class ContactsFragment extends Fragment {
                 FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.add(R.id.frame_layout, myfragment);
+                transaction.replace(R.id.frame_layout, myfragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
@@ -161,11 +131,37 @@ public class ContactsFragment extends Fragment {
 
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.search_menu, menu);
-//        super.onCreateOptionsMenu(menu,inflater);
-//    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu,inflater);
+        inflater.inflate(R.menu.search_menu, menu);
+
+        SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(Color.WHITE);
+        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(Color.WHITE);
+        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHighlightColor(Color.WHITE);
+
+        ImageView searchCloseIcon = (ImageView)search.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        searchCloseIcon.setImageResource(R.drawable.ic_close_white_24dp);
+
+        ImageView searchIcon = (ImageView)search.findViewById(android.support.v7.appcompat.R.id.search_button);
+        searchIcon.setImageResource(R.drawable.ic_search_white_24dp);
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                contactsAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
+    }
 
     private void requestContactsPermission() {
 
@@ -293,8 +289,38 @@ public class ContactsFragment extends Fragment {
                         }
                         contactsAdapter = new ContactsAdapter(getContext(), R.layout.contacts_list_item, sortList(contacts));
                         mContactsList.setAdapter(contactsAdapter);
+                        mContactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                Contact contact = (Contact) adapterView.getItemAtPosition(i);
+                                if(contact.getIsUser()){
+                                    SendMoney sendMoney = Global.resetSendMoney();
+
+                                    sendMoney.setUserId(contact.getUserId());
+                                    sendMoney.setAccountId(contact.getAccountId());
+
+                                    Global.setSendMoney(sendMoney);
+
+                                    SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
+                                    FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
+                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                                    transaction.replace(R.id.frame_layout, myfragment);
+                                    transaction.addToBackStack(null);
+                                    ((TabActivity) getActivity()).hideVirtualKeyboard();
+                                    transaction.commit();
+                                }else{
+                                    //TODO: Contact invite
+//                                    PopupMenu popup = new PopupMenu(getContext(), view);
+//                                    MenuInflater inflater = popup.getMenuInflater();
+//                                    inflater.inflate(R.menu.contact_click_menu, popup.getMenu());
+//                                    popup.show();
+                                }
+                            }
+                        });
                         enableView();
-                        toolbarSubtitle.setText(contacts.size() + " contacts");
+                        toolbar.setSubtitle(contacts.size() + " contacts");
+//                        toolbarSubtitle.setText(contacts.size() + " contacts");
                     }
                 });
             } catch (JSONException e) {

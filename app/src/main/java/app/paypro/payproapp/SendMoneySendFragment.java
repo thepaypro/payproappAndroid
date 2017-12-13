@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,14 +34,15 @@ import app.paypro.payproapp.utils.PPSnackbar;
 
 public class SendMoneySendFragment extends Fragment {
 
-    ConstraintLayout mainView;
-    SwipeButton swipeButton;
-    TextView readyToSendText;
-    TextView toText1;
-    TextView toText2;
-    TextView toText3;
-    TextView toText4;
-    LinearLayout progressBarLayout;
+    private ConstraintLayout mainView;
+    private SwipeButton swipeButton;
+    private TextView readyToSendText;
+    private TextView toText1;
+    private TextView toText2;
+    private TextView toText3;
+    private TextView toText4;
+    private LinearLayout progressBarLayout;
+    private Toolbar toolbar;
 
 
     public static SendMoneySendFragment newInstance() {
@@ -71,6 +73,17 @@ public class SendMoneySendFragment extends Fragment {
         toText3 = getActivity().findViewById(R.id.to_text_3);
         toText4 = getActivity().findViewById(R.id.to_text_4);
         progressBarLayout = getActivity().findViewById(R.id.activity_indicator);
+        toolbar = getActivity().findViewById(R.id.toolbar);
+
+        ((TabActivity)getActivity()).setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((TabActivity) getActivity()).hideVirtualKeyboard();
+                getActivity().onBackPressed();
+            }
+        });
 
         // Hide the virtual keyboard
         View view = getActivity().getCurrentFocus();

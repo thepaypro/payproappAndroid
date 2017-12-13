@@ -9,16 +9,18 @@
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:id="@+id/toolbar">
+        android:id="@+id/appbar">
 
         <android.support.v7.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolbar"
             android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             android:background="@color/colorPrimary"
             app:titleTextColor="@android:color/white"
+            app:title="@string/amount_title"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">

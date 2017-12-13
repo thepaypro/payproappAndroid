@@ -11,8 +11,10 @@
     android:paddingBottom="10dp"
     android:paddingRight="15dp"
     android:orientation="horizontal"
-    android:clickable="true"
-    android:focusable="true">
+    android:clickable="false"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:descendantFocusability="blocksDescendants" >
 
     <FrameLayout
         android:layout_width="45dp"

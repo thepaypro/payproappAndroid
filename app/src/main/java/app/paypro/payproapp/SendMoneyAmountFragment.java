@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ public class SendMoneyAmountFragment extends Fragment {
     private EditText amountInput;
     private EditText privateMsgInput;
     private Boolean textFormated = false;
+    private Toolbar toolbar;
 
     public static ContactsFragment newInstance() {
         ContactsFragment fragment = new ContactsFragment();
@@ -39,7 +41,6 @@ public class SendMoneyAmountFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(false);
     }
 
     @Override
@@ -54,15 +55,19 @@ public class SendMoneyAmountFragment extends Fragment {
         nextButton = getActivity().findViewById(R.id.next_button);
         amountInput = getActivity().findViewById(R.id.amount_input);
         privateMsgInput = getActivity().findViewById(R.id.private_msg_input);
+        toolbar = getActivity().findViewById(R.id.toolbar);
 
         nextButton.setEnabled(false);
 
-        // Hide the virtual keyboard
-        View view = getActivity().getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getContext().INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
+        ((TabActivity)getActivity()).setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((TabActivity)getActivity()).hideVirtualKeyboard();
+                getActivity().onBackPressed();
+            }
+        });
 
         amountInput.addTextChangedListener(new TextWatcher(){
             @Override
@@ -107,8 +112,9 @@ public class SendMoneyAmountFragment extends Fragment {
                     FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                    transaction.add(R.id.frame_layout, myfragment);
+                    transaction.replace(R.id.frame_layout, myfragment);
                     transaction.addToBackStack(null);
+                    ((TabActivity) getActivity()).hideVirtualKeyboard();
                     transaction.commit();
                 } catch (ParseException e) {
                     e.printStackTrace();

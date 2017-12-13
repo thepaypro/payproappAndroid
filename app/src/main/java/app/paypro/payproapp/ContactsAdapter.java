@@ -69,37 +69,6 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
             viewHolder.number = convertView.findViewById(R.id.contact_number);
             viewHolder.ppLogo = convertView.findViewById(R.id.pp_logo);
 
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Contact contact = getItem(position);
-
-                    if(contact.getIsUser()){
-                        SendMoney sendMoney = Global.resetSendMoney();
-
-                        sendMoney.setUserId(contact.getUserId());
-                        sendMoney.setAccountId(contact.getAccountId());
-
-                        Global.setSendMoney(sendMoney);
-
-                        SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
-                        FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
-                        FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                        transaction.add(R.id.frame_layout, myfragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
-                    }else{
-                        //TODO: Contact invite
-//                        PopupMenu popup = new PopupMenu(getContext(), view);
-//                        MenuInflater inflater = popup.getMenuInflater();
-//                        inflater.inflate(R.menu.contact_click_menu, popup.getMenu());
-//                        popup.show();
-                    }
-
-                }
-            });
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

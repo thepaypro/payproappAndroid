@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextThemeWrapper;
@@ -29,6 +30,7 @@ public class SendMoneyAddressFragment extends Fragment {
 
     private EditText addrEditText;
     private Button nextButton;
+    private Toolbar toolbar;
 
     public static SendMoneyAddressFragment newInstance() {
         SendMoneyAddressFragment fragment = new SendMoneyAddressFragment();
@@ -52,6 +54,17 @@ public class SendMoneyAddressFragment extends Fragment {
 
         addrEditText = getActivity().findViewById(R.id.addr_edit_text);
         nextButton = getActivity().findViewById(R.id.next_button);
+        toolbar = getActivity().findViewById(R.id.toolbar);
+
+        ((TabActivity)getActivity()).setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((TabActivity) getActivity()).hideVirtualKeyboard();
+                getActivity().onBackPressed();
+            }
+        });
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +77,7 @@ public class SendMoneyAddressFragment extends Fragment {
                     FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                    transaction.add(R.id.frame_layout, myfragment);
+                    transaction.replace(R.id.frame_layout, myfragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }else{

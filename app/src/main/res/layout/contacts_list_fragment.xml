@@ -11,6 +11,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:theme="@style/AppTheme.ActionBar"
         android:id="@+id/appbar">
 
         <android.support.v7.widget.Toolbar
@@ -24,42 +25,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/content"
+            app:title="@string/choose_contact"
+            app:subtitle=""
             app:titleMarginStart="16dp"
             app:subtitleTextColor="@android:color/white">
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <!--<android.support.constraint.ConstraintLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
 
-                <TextView
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/choose_contact"
-                    android:textColor="@android:color/white"
-                    android:textSize="22sp"
-                    app:layout_constraintBottom_toTopOf="@+id/toolbar_subtitle"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!--<TextView-->
+                    <!--android:id="@+id/toolbar_title"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/choose_contact"-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:textSize="22sp"-->
+                    <!--app:layout_constraintBottom_toTopOf="@+id/toolbar_subtitle"-->
+                    <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/toolbar_subtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/toolbar_title" />
+                <!--<TextView-->
+                    <!--android:id="@+id/toolbar_subtitle"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text=""-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:textSize="13sp"-->
+                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--app:layout_constraintTop_toBottomOf="@+id/toolbar_title" />-->
 
 
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/search_view"
-                    style="@style/SearchViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                <!--<android.support.v7.widget.SearchView-->
+                    <!--android:id="@+id/search_view"-->
+                    <!--style="@style/SearchViewStyle"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent" />-->
 
-            </android.support.constraint.ConstraintLayout>
+            <!--</android.support.constraint.ConstraintLayout>-->
 
         </android.support.v7.widget.Toolbar>
 
