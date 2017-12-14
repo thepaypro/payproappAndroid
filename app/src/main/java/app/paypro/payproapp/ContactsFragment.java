@@ -2,6 +2,7 @@ package app.paypro.payproapp;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -313,6 +314,14 @@ public class ContactsFragment extends Fragment {
                                     transaction.commit();
                                 }else{
                                     //Contact Invite
+                                    Intent sendIntent = new Intent();
+                                    sendIntent.setAction(Intent.ACTION_SEND);
+                                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
+                                    sendIntent.setType("text/plain");
+                                    startActivity(sendIntent);
+
+
+
 //                                    SmsManager smsManager = SmsManager.getDefault();
 //                                    smsManager.sendTextMessage(contact.getNumbers().get(0), null, getResources().getString(R.string.sms_msg), null, null);
                                 }
