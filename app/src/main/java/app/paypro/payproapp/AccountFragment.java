@@ -82,7 +82,7 @@ public class AccountFragment extends Fragment implements AccountFragmentsInterfa
         if(account.getBalance() != null){
             NumberFormat format = NumberFormat.getInstance(Locale.UK);
             String amount = format.format(account.getBalance());
-            amount = "μ\u20BF " + amount;
+//            amount = "μ\u20BF " + amount;
             currencyBalance.setText(amount);
         }else{
             currencyBalance.setText(R.string.balance_empty);

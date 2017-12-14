@@ -63,7 +63,6 @@
                 android:clickable="true"
                 android:focusable="true">
 
-
                 <TextView
                     android:id="@+id/qrcode_label"
                     android:layout_gravity="end"
