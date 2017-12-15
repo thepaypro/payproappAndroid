@@ -1,6 +1,7 @@
 package app.paypro.payproapp;
 
 import android.arch.lifecycle.LifecycleOwner;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -130,5 +131,11 @@ public class TabActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         return;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode,resultCode,data);
     }
 }

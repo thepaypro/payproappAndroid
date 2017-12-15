@@ -1,6 +1,8 @@
 package app.paypro.payproapp;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -51,11 +53,9 @@ public class ProfileEdit extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProfileView myfragment = new ProfileView();
-
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.add(R.id.frame_layout, myfragment);
+                transaction.replace(R.id.frame_layout, new ProfileView());
                 transaction.commit();
             }
         });
@@ -87,11 +87,9 @@ public class ProfileEdit extends Fragment {
                         public void getResult(JSONObject object) throws JSONException {
                             try {
                                 if(object.getBoolean("status")){
-                                    ProfileView myfragment = new ProfileView();
-
                                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                    transaction.setCustomAnimations(R.anim.slide_out, R.anim.slide_in, R.anim.slide_in, R.anim.slide_out);
-                                    transaction.add(R.id.frame_layout, myfragment);
+                                    transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+                                    transaction.replace(R.id.frame_layout, new ProfileView());
                                     transaction.commit();
 
                                 }else if (!object.getBoolean("status") && object.has("error_msg")){

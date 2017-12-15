@@ -26,23 +26,26 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:tint="@color/ic_launcher_background"
+        app:layout_constraintLeft_toLeftOf="@+id/toolbar3"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?attr/actionModeCloseDrawable"
-        tools:layout_editor_absoluteX="0dp" />
+        app:srcCompat="?attr/actionModeCloseDrawable" />
 
     <RelativeLayout
         android:id="@+id/avatarLayout"
         android:layout_width="match_parent"
         android:layout_height="76dp"
         android:layout_marginTop="56dp"
+        android:background="@color/appIco_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/avatarProfileView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:minWidth="44dp"
+            android:minHeight="44dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
@@ -54,7 +57,7 @@
             tools:layout_editor_absoluteY="72dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/editAvatarButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -110,18 +113,19 @@
                 android:id="@+id/rowNickname"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/dot_dark_slider">
+                android:background="@color/appIco_background">
 
                 <TextView
                     android:id="@+id/nicknameProfileView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
                     android:height="44dp"
                     android:contentDescription="@string/nickname"
                     android:gravity="center_vertical"
                     android:text="@string/nickname"
-                    android:textColor="@android:color/black" android:layout_marginStart="15dp" />
+                    android:textColor="@android:color/black" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
