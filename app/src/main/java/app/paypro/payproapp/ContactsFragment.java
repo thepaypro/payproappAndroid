@@ -44,7 +44,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
 
+import app.paypro.payproapp.asynctask.LoadContactsAsyncTask;
+import app.paypro.payproapp.asynctask.SaveContactsAsyncTask;
+import app.paypro.payproapp.asynctask.db.user.SaveAccountAsyncTask;
 import app.paypro.payproapp.contacts.Contacts;
 import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.http.ResponseListener;
@@ -57,7 +61,7 @@ public class ContactsFragment extends Fragment {
 
     private static final int REQUEST_READ_CONTACTS = 101;
 
-    ArrayList<Contact> contacts = new ArrayList<>();
+//    ArrayList<Contact> contacts = new ArrayList<>();
 
     private ListView mContactsList;
     private LinearLayout emptyListView;
@@ -121,6 +125,37 @@ public class ContactsFragment extends Fragment {
                 transaction.replace(R.id.frame_layout, myfragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+            }
+        });
+
+        mContactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Contact contact = (Contact) adapterView.getItemAtPosition(i);
+                if(contact.getIsUser()){
+                    SendMoney sendMoney = Global.resetSendMoney();
+
+                    sendMoney.setUserId(contact.getUserId());
+                    sendMoney.setAccountId(contact.getAccountId());
+
+                    Global.setSendMoney(sendMoney);
+
+                    SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
+                    FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                    transaction.replace(R.id.frame_layout, myfragment);
+                    transaction.addToBackStack(null);
+                    ((TabActivity) getActivity()).hideVirtualKeyboard();
+                    transaction.commit();
+                }else{
+                    //Contact Invite
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
+                    sendIntent.setType("text/plain");
+                    startActivity(sendIntent);
+                }
             }
         });
 
@@ -199,156 +234,122 @@ public class ContactsFragment extends Fragment {
 
     public void loadContacts(){
 
-        Uri allContacts = ContactsContract.Contacts.CONTENT_URI;
+        try {
+            contactsAdapter = new LoadContactsAsyncTask(getContext(),progressBar,mContactsList,emptyListView,toolbar,fab).execute().get();
 
-        //declare our cursor
-        Cursor c;
+//            enableView();
+//            toolbar.setSubtitle(contacts.size() + " contacts");
+//            toolbarSubtitle.setText(contacts.size() + " contacts");
 
-        CursorLoader cursorLoader = new CursorLoader(
-                getContext(),
-                allContacts,
-                PROJECTION,
-                null,
-                null ,
-                null);
-        c = cursorLoader.loadInBackground();
-
-
-        saveContacts(c);
-
-    }
-
-    private void saveContacts(final Cursor c) {
-        final HashMap<String,String> allContactsNumbers = new HashMap<>();
-        contacts.clear();
-        //---display the contact id and name and phone number----
-        if(c.getCount() == 0){
-            showEmptyListView();
-            return;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        if (c.moveToFirst()) {
-            do {
-                //---get the contact id and name
-                String contactID = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
-                String contactDisplayName = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
-
-                //---get image number---
-                String contactImageUri = c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
-
-                //---get phone number---
-                ArrayList<String> contactNumbers = new ArrayList<>();
-                int hasPhone = c.getInt(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                if (hasPhone == 1) {
-                    Cursor phoneCursor = getActivity().getContentResolver().query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " +
-                                    contactID, null, null);
-                    while (phoneCursor.moveToNext()) {
-                        String contactPhone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        contactNumbers.add(contactPhone);
-                        contactPhone = phoneFormat(contactPhone);
-                        allContactsNumbers.put(String.valueOf(allContactsNumbers.size()+1),contactPhone);
-                    }
-                    phoneCursor.close();
-
-                }
-
-                if(contactNumbers.size() > 0){
-                    contacts.add(new Contact(contactDisplayName, contactImageUri, contactNumbers));
-                }
-
-
-            } while (c.moveToNext());
-            try {
-                JSONObject parameters = new JSONObject(allContactsNumbers);
-                Contacts.checkContacts(getContext(),parameters,new ResponseListener<JSONObject>(){
-                    @Override
-                    public void getResult(JSONObject object) throws JSONException {
-                        if(object.has("contacts")){
-                            JSONObject checkContactsResponse = object.getJSONObject("contacts");
-                            for(int i = 0; i< contacts.size(); i++){
-                                ArrayList<String> contactNumbers = contacts.get(i).getNumbers();
-                                for(int j = 0; j<contactNumbers.size(); j++){
-                                        Iterator iterator = checkContactsResponse.keys();
-                                        while(iterator.hasNext()){
-                                            String key = (String)iterator.next();
-                                            if (key.equals(phoneFormat(contactNumbers.get(j)))){
-                                                JSONObject responseNumberObject = checkContactsResponse.getJSONObject(key);
-                                                Boolean isUser = responseNumberObject.getBoolean("isUser");
-                                                Contact contact = contacts.get(i);
-                                                if(!contact.getIsUser()){
-                                                    contact.setIsUser(isUser);
-                                                    if(contact.getIsUser()){
-                                                        contact.setUserId(responseNumberObject.getInt("userId"));
-                                                        contact.setAccountId(responseNumberObject.getInt("accountId"));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                }
-                            }
-                        }
-                        contactsAdapter = new ContactsAdapter(getContext(), R.layout.contacts_list_item, sortList(contacts));
-                        mContactsList.setAdapter(contactsAdapter);
-                        mContactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                Contact contact = (Contact) adapterView.getItemAtPosition(i);
-                                if(contact.getIsUser()){
-                                    SendMoney sendMoney = Global.resetSendMoney();
-
-                                    sendMoney.setUserId(contact.getUserId());
-                                    sendMoney.setAccountId(contact.getAccountId());
-
-                                    Global.setSendMoney(sendMoney);
-
-                                    SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
-                                    FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
-                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                                    transaction.replace(R.id.frame_layout, myfragment);
-                                    transaction.addToBackStack(null);
-                                    ((TabActivity) getActivity()).hideVirtualKeyboard();
-                                    transaction.commit();
-                                }else{
-                                    //Contact Invite
-                                    Intent sendIntent = new Intent();
-                                    sendIntent.setAction(Intent.ACTION_SEND);
-                                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
-                                    sendIntent.setType("text/plain");
-                                    startActivity(sendIntent);
+//        saveContacts(c);
 
 
 
-//                                    SmsManager smsManager = SmsManager.getDefault();
-//                                    smsManager.sendTextMessage(contact.getNumbers().get(0), null, getResources().getString(R.string.sms_msg), null, null);
-                                }
-                            }
-                        });
-                        enableView();
-                        toolbar.setSubtitle(contacts.size() + " contacts");
-//                        toolbarSubtitle.setText(contacts.size() + " contacts");
-                    }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
 
     }
 
-    ArrayList<Contact> sortList(ArrayList<Contact> list) {
-        Collections.sort(list, new Comparator<Contact>() {
-            @Override
-            public int compare(Contact contact1, Contact contact2) {
-                return contact1.getName().compareTo(contact2.getName());
-            }
-        });
-        return list;
-    }
+//    private void saveContacts(final Cursor c) {
+//        final HashMap<String,String> allContactsNumbers = new HashMap<>();
+//        contacts.clear();
+//        //---display the contact id and name and phone number----
+//        if(c.getCount() == 0){
+//            showEmptyListView();
+//            return;
+//        }
+//        if (c.moveToFirst()) {
+//            do {
+//                //---get the contact id and name
+//                String contactID = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+//                String contactDisplayName = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+//
+//
+//                //---get image number---
+//                String contactImageUri = c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+//
+//                //---get phone number---
+//                ArrayList<String> contactNumbers = new ArrayList<>();
+//                int hasPhone = c.getInt(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+//                if (hasPhone == 1) {
+//                    Cursor phoneCursor = getActivity().getContentResolver().query(
+//                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+//                            null,
+//                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " +
+//                                    contactID, null, null);
+//                    while (phoneCursor.moveToNext()) {
+//                        String contactPhone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                        contactNumbers.add(contactPhone);
+//                        contactPhone = phoneFormat(contactPhone);
+//                        allContactsNumbers.put(String.valueOf(allContactsNumbers.size()+1),contactPhone);
+//                    }
+//                    phoneCursor.close();
+//
+//                }
+//
+//                if(contactNumbers.size() > 0){
+//                    contacts.add(new Contact(contactDisplayName, contactImageUri, contactNumbers));
+//                }
+//
+//
+//            } while (c.moveToNext());
+//            try {
+//                JSONObject parameters = new JSONObject(allContactsNumbers);
+//                Contacts.checkContacts(getContext(),parameters,new ResponseListener<JSONObject>(){
+//                    @Override
+//                    public void getResult(JSONObject object) throws JSONException {
+//                        if(object.has("contacts")){
+//                            JSONObject checkContactsResponse = object.getJSONObject("contacts");
+//                            for(int i = 0; i< contacts.size(); i++){
+//                                ArrayList<String> contactNumbers = contacts.get(i).getNumbers();
+//                                for(int j = 0; j<contactNumbers.size(); j++){
+//                                        Iterator iterator = checkContactsResponse.keys();
+//                                        while(iterator.hasNext()){
+//                                            String key = (String)iterator.next();
+//                                            if (key.equals(phoneFormat(contactNumbers.get(j)))){
+//                                                JSONObject responseNumberObject = checkContactsResponse.getJSONObject(key);
+//                                                Boolean isUser = responseNumberObject.getBoolean("isUser");
+//                                                Contact contact = contacts.get(i);
+//                                                if(!contact.getIsUser()){
+//                                                    contact.setIsUser(isUser);
+//                                                    if(contact.getIsUser()){
+//                                                        contact.setUserId(responseNumberObject.getInt("userId"));
+//                                                        contact.setAccountId(responseNumberObject.getInt("accountId"));
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
+//                                }
+//                            }
+//                        }
+//                        contactsAdapter = new ContactsAdapter(getContext(), R.layout.contacts_list_item, sortList(contacts));
+//                        mContactsList.setAdapter(contactsAdapter);
+//
+//                        enableView();
+//                        toolbar.setSubtitle(contacts.size() + " contacts");
+////                        toolbarSubtitle.setText(contacts.size() + " contacts");
+//                    }
+//                });
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//
+//    }
+
+//    ArrayList<Contact> sortList(ArrayList<Contact> list) {
+//        Collections.sort(list, new Comparator<Contact>() {
+//            @Override
+//            public int compare(Contact contact1, Contact contact2) {
+//                return contact1.getName().compareTo(contact2.getName());
+//            }
+//        });
+//        return list;
+//    }
 
     public void disableView(){
         mContactsList.setVisibility(View.GONE);
@@ -358,13 +359,13 @@ public class ContactsFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    public void enableView(){
-        progressBar.setVisibility(View.GONE);
-        emptyListView.setVisibility(View.GONE);
-        permissionDeniedView.setVisibility(View.GONE);
-        mContactsList.setVisibility(View.VISIBLE);
-        fab.setVisibility(View.VISIBLE);
-    }
+//    public void enableView(){
+//        progressBar.setVisibility(View.GONE);
+//        emptyListView.setVisibility(View.GONE);
+//        permissionDeniedView.setVisibility(View.GONE);
+//        mContactsList.setVisibility(View.VISIBLE);
+//        fab.setVisibility(View.VISIBLE);
+//    }
 
     public void showEmptyListView(){
         progressBar.setVisibility(View.GONE);
