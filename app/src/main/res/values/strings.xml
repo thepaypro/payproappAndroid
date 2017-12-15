@@ -81,4 +81,38 @@
   <string name="done">Done</string>
   <string name="nickname">Nickname</string>
   <string name="edit">Edit</string>
+
+
+  <string name="contacts_permission_denied_text">To send money to your friends, allow PayPro to acces your contacts.</string>
+  <string name="empty_contacts_list">Your contacts list is empty</string>
+
+  <string name="low_storage_error">The phone storage is low</string>
+  <string name="camera_permission_denied_text">To scan a qr code, allow PayPro to access the camera.</string>
+
+  <string name="bits_lowercase">bits</string>
+
+  <string name="amount_placeholder">"000.00</string>
+  <string name="private_msg_placeholder">Message for beneficiary</string>
+
+  <string name="bitcoin_address">Addr:</string>
+  <string name="hint_bitcoin_address">1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2</string>
+
+  <string name="ready_to_send">READY TO SEND</string>
+  <string name="to">TO</string>
+
+  <string name="swipe_to_send">Swipe to send</string>
+
+  <string name="you_rock">You rock!</string>
+
+  <string name="destinatary_not_available">Destinatary name not available</string>
+
+
+  <string name="choose_contact">Choose contact</string>
+
+  <string name="amount_title">Amount</string>
+  <string name="send_title">Send</string>
+  <string name="bitcoin_address_title">Bitcoin Address</string>
+
+  <string name="sms_msg">Hi! I am trying to send you money via PayPro but I see you don\'t have an account. Can you download it so you can instantly have the money? It\'s available for iOS and Android :)</string>
+
 </resources>

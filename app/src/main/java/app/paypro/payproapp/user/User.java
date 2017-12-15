@@ -84,7 +84,7 @@ public class User {
                 {
                     JSONObject responseJSON = new JSONObject();
                     responseJSON.put("status", true);
-                    responseJSON.put("isUser", object.has("isUser"));
+                    responseJSON.put("isUser", object.getBoolean("isUser"));
                     listener.getResult(responseJSON);
                 } else {
                     JSONObject errorResponse = new JSONObject();
@@ -111,6 +111,15 @@ public class User {
                             if(new GetUserAsyncTask(context).execute().get().length == 1) {
                                 firstTimeLogin = false;
                             }
+
+//                            app.paypro.payproapp.db.entity.User userEntity2 = null;
+//
+//                            userEntity2 = new GetUserAsyncTask(context).execute().get()[0];
+//
+//                            Log.i("avaaaaaataar222222",userEntity2.getAvatar().toString());
+
+
+
                             JSONObject userJSON = object.getJSONObject("user");
 
                             app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
@@ -128,9 +137,12 @@ public class User {
                             }
 
                             if(firstTimeLogin){
+                                Log.i("33333333","3333333");
+                                userEntity.setAvatar("");
                                 new SaveUserAsyncTask(context).execute(userEntity);
                             }else{
-                                new UpdateUserAsyncTask(context).execute(userEntity);
+                                Log.i("444444444","444444444");
+//                                new UpdateUserAsyncTask(context).execute(userEntity);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -160,6 +172,9 @@ public class User {
                                 }
                             }
                         });
+                                JSONObject responseJSON = new JSONObject();
+                                        responseJSON.put("status", true);
+                                        listener.getResult(responseJSON);
                     } else {
                         JSONObject errorResponse = new JSONObject();
                         if(object.has("error_msg")){
