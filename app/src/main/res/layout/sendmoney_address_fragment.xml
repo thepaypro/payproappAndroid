@@ -80,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:ems="17"
+                    android:maxLength="35"
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:gravity="center"
