@@ -24,7 +24,7 @@ public class SwipeButton extends RelativeLayout {
 
     private ConstraintLayout swipeButtonInner;
     private int mainViewWidth;
-    private int initialOffsetFrac = 8;
+    private int initialOffsetFrac = 5;
     private TextView centerText;
     private ViewGroup background;
     private Boolean activated = false;
@@ -208,7 +208,7 @@ public class SwipeButton extends RelativeLayout {
                     case MotionEvent.ACTION_UP:
                         if(activated){
                             swipeButtonInner.setX(0);
-                            centerText.setAlpha(0);
+//                            centerText.setAlpha(0);
                             if (onStateChangeListener != null) {
                                 onStateChangeListener.onStateChange(true);
                             }
@@ -221,13 +221,13 @@ public class SwipeButton extends RelativeLayout {
                             if(event.getX() < mainViewWidth/initialOffsetFrac){
                                 int start = -mainViewWidth + mainViewWidth/initialOffsetFrac;
                                 swipeButtonInner.setX(start);
-                                centerText.setAlpha(1);
+//                                centerText.setAlpha(1);
                             }else if (event.getX() > getWidth()) {
                                 activated = true;
                             } else {
                                 if(!activated&&!restarted){
                                     swipeButtonInner.setX(event.getX() - swipeButtonInner.getWidth());
-                                    centerText.setAlpha(1 - 1.3f * (swipeButtonInner.getX() + swipeButtonInner.getWidth()) / getWidth());
+//                                    centerText.setAlpha(1 - 1.3f * (swipeButtonInner.getX() + swipeButtonInner.getWidth()) / getWidth());
                                 }else{
                                     activated = false;
                                     restarted = false;
@@ -246,7 +246,7 @@ public class SwipeButton extends RelativeLayout {
     public void restartSwipeButton(){
         int start = -mainViewWidth + mainViewWidth/initialOffsetFrac;
         swipeButtonInner.animate().translationX(start);
-        centerText.setAlpha(1);
+//        centerText.setAlpha(1);
         restarted = true;
     }
 
