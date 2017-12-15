@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "app.paypro.payproapp"
         minSdkVersion 16
         targetSdkVersion 27
@@ -32,5 +33,6 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     compile 'android.arch.persistence.room:runtime:1.0.0'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
+    compile 'com.google.android.gms:play-services-vision:9.4.0+'
     annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'
 }

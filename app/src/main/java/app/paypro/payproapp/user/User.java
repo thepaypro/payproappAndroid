@@ -84,7 +84,7 @@ public class User {
                 {
                     JSONObject responseJSON = new JSONObject();
                     responseJSON.put("status", true);
-                    responseJSON.put("isUser", object.has("isUser"));
+                    responseJSON.put("isUser", object.getBoolean("isUser"));
                     listener.getResult(responseJSON);
                 } else {
                     JSONObject errorResponse = new JSONObject();
@@ -172,6 +172,9 @@ public class User {
                                 }
                             }
                         });
+                                JSONObject responseJSON = new JSONObject();
+                                        responseJSON.put("status", true);
+                                        listener.getResult(responseJSON);
                     } else {
                         JSONObject errorResponse = new JSONObject();
                         if(object.has("error_msg")){
