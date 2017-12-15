@@ -197,6 +197,7 @@ public class SwipeButton extends RelativeLayout {
         setOnTouchListener(getButtonTouchListener());
     }
 
+
     private OnTouchListener getButtonTouchListener() {
         return new OnTouchListener() {
             @Override
@@ -204,6 +205,10 @@ public class SwipeButton extends RelativeLayout {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         return !TouchUtils.isTouchOutsideInitialPosition(event, swipeButtonInner);
+                    case MotionEvent.ACTION_UP:
+                        if(enabled){
+                            restartSwipeButton();
+                        }
                     case MotionEvent.ACTION_MOVE:
                         if(enabled){
                             if(event.getX() < mainViewWidth/initialOffsetFrac){
@@ -222,21 +227,25 @@ public class SwipeButton extends RelativeLayout {
                                     activated = false;
                                 }
                             } else {
-                                swipeButtonInner.setX(event.getX() - swipeButtonInner.getWidth());
-                                centerText.setAlpha(1 - 1.3f * (swipeButtonInner.getX() + swipeButtonInner.getWidth()) / getWidth());
-
-                                if(!active){
-                                    active = true;
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if(enabled){
-                                                restartSwipeButton();
-                                            }
-                                            active = false;
-                                        }
-                                    },3000);
+                                if(activated){
+                                    swipeButtonInner.setX(event.getX() - swipeButtonInner.getWidth());
+                                    centerText.setAlpha(1 - 1.3f * (swipeButtonInner.getX() + swipeButtonInner.getWidth()) / getWidth());
+                                }else{
+                                    activated = true;
                                 }
+//
+//                                if(!active){
+//                                    active = true;
+//                                    new Handler().postDelayed(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            if(enabled){
+//                                                restartSwipeButton();
+//                                            }
+//                                            active = false;
+//                                        }
+//                                    },3000);
+//                                }
 
                             }
                         }
