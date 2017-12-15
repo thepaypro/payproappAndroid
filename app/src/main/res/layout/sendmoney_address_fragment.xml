@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg_gray">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/appbar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:titleTextColor="@android:color/white"
+            app:title="@string/bitcoin_address_title"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/content">
+
+            <Button
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="@string/confirmation_code_actionbar"
+                android:textColor="@color/inactive_grey"
+                android:layout_gravity="right"
+                android:enabled="false"/>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_constraintTop_toBottomOf="@+id/appbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:layout_marginTop="43dp"
+            android:paddingLeft="16dp"
+            android:background="@android:color/white"
+            app:layout_constraintTop_toTopOf="@id/content">
+
+
+            <TextView
+                android:id="@+id/addr_label"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingRight="10dp"
+                android:textColor="@android:color/black"
+                android:text="@string/bitcoin_address" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/addr_input_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingRight="8dp"
+                android:gravity="center_vertical"
+                app:errorEnabled="true"
+                app:layout_constraintStart_toEndOf="@+id/addr_label">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/addr_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:ems="17"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:background="@android:color/transparent" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

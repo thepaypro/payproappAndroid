@@ -18,8 +18,6 @@
   <color name="pp_light_purple">#6666FF</color>
   <color name="pp_pink">#FFCCFF</color>
   <color name="pp_green">#57FFB3</color>
-  
-  <!--Other colors-->
   <color name="pp_purple">#7271ff</color>
 
   <!-- dots inactive colors -->
@@ -27,9 +25,16 @@
 
   <!-- dots active colors -->
   <color name="dot_light_slider">#7271FF</color>
+  
   <color name="PayPro_Line">#c8c7cc</color>
-    <color name="PayPro_Background">#efeff4</color>
+  <color name="PayPro_Background">#efeff4</color>
   <color name="PayPro_Blue">#6666ff</color>
+
+  <color name="pp_sm_gradTop">#70ffe2fd</color>
+  <color name="pp_sm_gradMiddle">#b5987ff7</color>
+
+  <color name="inactive_grey">#a9a9a9</color>
+  <color name="secundary_grey">#747474</color>
 
 
 </resources>

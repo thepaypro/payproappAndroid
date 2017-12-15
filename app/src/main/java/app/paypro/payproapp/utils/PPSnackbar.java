@@ -20,6 +20,10 @@ public class PPSnackbar {
                 snackbar = Snackbar
                         .make(view, "Saving error!", Snackbar.LENGTH_LONG);
                 return snackbar;
+            case "Insufficient funds":
+                snackbar = Snackbar
+                        .make(view, "Insufficient funds", Snackbar.LENGTH_LONG);
+                return snackbar;
             default:
                 snackbar = Snackbar
                         .make(view, "Ups! Sorry, something went wrong", Snackbar.LENGTH_LONG);

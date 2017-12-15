@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ContactsFragment">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:theme="@style/AppTheme.ActionBar"
+        android:id="@+id/appbar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:titleTextColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/content"
+            app:title="@string/choose_contact"
+            app:subtitle=""
+            app:titleMarginStart="16dp"
+            app:subtitleTextColor="@android:color/white">
+
+            <!--<android.support.constraint.ConstraintLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/toolbar_title"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/choose_contact"-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:textSize="22sp"-->
+                    <!--app:layout_constraintBottom_toTopOf="@+id/toolbar_subtitle"-->
+                    <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/toolbar_subtitle"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text=""-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:textSize="13sp"-->
+                    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--app:layout_constraintTop_toBottomOf="@+id/toolbar_title" />-->
+
+
+                <!--<android.support.v7.widget.SearchView-->
+                    <!--android:id="@+id/search_view"-->
+                    <!--style="@style/SearchViewStyle"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent" />-->
+
+            <!--</android.support.constraint.ConstraintLayout>-->
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_constraintTop_toBottomOf="@+id/appbar">
+
+        <ListView
+            android:id="@+id/contacts_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/progress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:clickable="false">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:indeterminateDrawable="@drawable/custom_progress_loader_black"
+                android:indeterminate="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/empty_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:gravity="center"
+            android:clickable="false">
+
+            <ImageView
+                android:id="@+id/empty_contacts_list_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/ic_import_contacts_black_24dp" />
+
+            <TextView
+                android:id="@+id/empty_contacts_list_text"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_contacts_list" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/permission_denied_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:gravity="center"
+            android:clickable="false">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/ic_contacts_black_24dp" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="60dp"
+                android:paddingLeft="60dp"
+                android:textAlignment="center"
+                android:text="@string/contacts_permission_denied_text" />
+
+
+        </LinearLayout>
+
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            app:backgroundTint="@color/pp_purple"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_add_white_24dp"
+            android:tint="@android:color/white"
+            android:layout_gravity="bottom|end"
+            app:useCompatPadding="true"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"/>
+
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>
