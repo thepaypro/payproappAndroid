@@ -1,9 +1,11 @@
 package app.paypro.payproapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -12,9 +14,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,9 +44,10 @@ import app.paypro.payproapp.utils.CropImage;
  */
 
 public class ProfileView extends Fragment {
+    private static final int PERMISSIONS_REQUEST_CAMERA = 1, PERMISSIONS_REQUEST_GALLERY = 2;
     private ImageView avatarImage;
     private static final String IMAGE_DIRECTORY = "/PayPro", AVATAR_FILENAME = "payproprofile.jpg";
-    private int GALLERY = 1, CAMERA = 2, CROP = 3;
+    private int GALLERY = 1, CAMERA = 2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,13 +65,12 @@ public class ProfileView extends Fragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.i("which: ", String.valueOf(which));
                         switch (which) {
                             case 0:
-                                choosePhotoFromGallary();
+                                checkGalleryPermission();
                                 break;
                             case 1:
-                                takePhotoFromCamera();
+                                checkCameraPermission();
                                 break;
                         }
                     }
@@ -74,18 +78,60 @@ public class ProfileView extends Fragment {
         pictureDialog.show();
     }
 
-    public void choosePhotoFromGallary() {
-        Log.i("aaaaaaabbbbbbbb","aaabbbb");
+    private void checkGalleryPermission() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_GALLERY);
+        } else {
+            choosePhotoFromGallery();
+        }
+    }
+
+    public void choosePhotoFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         startActivityForResult(galleryIntent, GALLERY);
     }
 
+    private void checkCameraPermission() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);
+        } else {
+            checkSDPermission();
+        }
+    }
+
+    private void checkSDPermission() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_CAMERA);
+        } else {
+            takePhotoFromCamera();
+        }
+    }
+
     private void takePhotoFromCamera() {
-        Log.i("cccccdddddd","cdccccdddd");
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_CAMERA: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkSDPermission();
+                }
+                return;
+            }
+
+            case PERMISSIONS_REQUEST_GALLERY: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    choosePhotoFromGallery();
+                }
+                return;
+            }
+        }
     }
 
     @Override
