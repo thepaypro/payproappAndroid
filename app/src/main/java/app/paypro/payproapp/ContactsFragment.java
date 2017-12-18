@@ -17,41 +17,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.concurrent.ExecutionException;
-
-import app.paypro.payproapp.asynctask.LoadContactsAsyncTask;
 import app.paypro.payproapp.asynctask.SaveContactsAsyncTask;
-import app.paypro.payproapp.asynctask.db.user.SaveAccountAsyncTask;
-import app.paypro.payproapp.contacts.Contacts;
 import app.paypro.payproapp.global.Global;
-import app.paypro.payproapp.http.ResponseListener;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
@@ -60,8 +42,6 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 public class ContactsFragment extends Fragment {
 
     private static final int REQUEST_READ_CONTACTS = 101;
-
-//    ArrayList<Contact> contacts = new ArrayList<>();
 
     private ListView mContactsList;
     private LinearLayout emptyListView;
@@ -72,6 +52,10 @@ public class ContactsFragment extends Fragment {
     private Toolbar toolbar;
 
     private ContactsAdapter contactsAdapter;
+
+    public void setContactsAdapter(ContactsAdapter contactsAdapter) {
+        this.contactsAdapter = contactsAdapter;
+    }
 
     @SuppressLint("InlinedApi")
     private static final String[] PROJECTION =
@@ -159,14 +143,12 @@ public class ContactsFragment extends Fragment {
             }
         });
 
-        disableView();
         int rc = checkSelfPermission(getContext(), READ_CONTACTS);
         if (rc == PackageManager.PERMISSION_GRANTED) {
             loadContacts();
         } else {
             requestContactsPermission();
         }
-
     }
 
     @Override
@@ -180,10 +162,10 @@ public class ContactsFragment extends Fragment {
         ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(Color.WHITE);
         ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHighlightColor(Color.WHITE);
 
-        ImageView searchCloseIcon = (ImageView)search.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        ImageView searchCloseIcon = search.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
         searchCloseIcon.setImageResource(R.drawable.ic_close_white_24dp);
 
-        ImageView searchIcon = (ImageView)search.findViewById(android.support.v7.appcompat.R.id.search_button);
+        ImageView searchIcon = search.findViewById(android.support.v7.appcompat.R.id.search_button);
         searchIcon.setImageResource(R.drawable.ic_search_white_24dp);
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -206,11 +188,6 @@ public class ContactsFragment extends Fragment {
 
         final String[] permissions = new String[]{READ_CONTACTS};
 
-//        if (!shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            requestPermissions(permissions, REQUEST_READ_CONTACTS);
-//            return;
-//        }
-
         requestPermissions(permissions, REQUEST_READ_CONTACTS);
 
         return;
@@ -232,126 +209,26 @@ public class ContactsFragment extends Fragment {
         showPermissionDeniedView();
     }
 
-    public void loadContacts(){
+    public void loadContacts() {
 
-        try {
-            contactsAdapter = new LoadContactsAsyncTask(getContext(),progressBar,mContactsList,emptyListView,toolbar,fab).execute().get();
+        Uri allContacts = ContactsContract.Contacts.CONTENT_URI;
 
-//            enableView();
-//            toolbar.setSubtitle(contacts.size() + " contacts");
-//            toolbarSubtitle.setText(contacts.size() + " contacts");
+        //declare our cursor
+        Cursor c;
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-//        saveContacts(c);
+        CursorLoader cursorLoader = new CursorLoader(
+                getContext(),
+                allContacts,
+                PROJECTION,
+                null,
+                null,
+                null);
+        c = cursorLoader.loadInBackground();
 
-
-
-
+        new SaveContactsAsyncTask(getContext(), c, this, mContactsList).execute();
     }
 
-//    private void saveContacts(final Cursor c) {
-//        final HashMap<String,String> allContactsNumbers = new HashMap<>();
-//        contacts.clear();
-//        //---display the contact id and name and phone number----
-//        if(c.getCount() == 0){
-//            showEmptyListView();
-//            return;
-//        }
-//        if (c.moveToFirst()) {
-//            do {
-//                //---get the contact id and name
-//                String contactID = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
-//                String contactDisplayName = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-//
-//
-//                //---get image number---
-//                String contactImageUri = c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
-//
-//                //---get phone number---
-//                ArrayList<String> contactNumbers = new ArrayList<>();
-//                int hasPhone = c.getInt(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-//                if (hasPhone == 1) {
-//                    Cursor phoneCursor = getActivity().getContentResolver().query(
-//                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-//                            null,
-//                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " +
-//                                    contactID, null, null);
-//                    while (phoneCursor.moveToNext()) {
-//                        String contactPhone = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                        contactNumbers.add(contactPhone);
-//                        contactPhone = phoneFormat(contactPhone);
-//                        allContactsNumbers.put(String.valueOf(allContactsNumbers.size()+1),contactPhone);
-//                    }
-//                    phoneCursor.close();
-//
-//                }
-//
-//                if(contactNumbers.size() > 0){
-//                    contacts.add(new Contact(contactDisplayName, contactImageUri, contactNumbers));
-//                }
-//
-//
-//            } while (c.moveToNext());
-//            try {
-//                JSONObject parameters = new JSONObject(allContactsNumbers);
-//                Contacts.checkContacts(getContext(),parameters,new ResponseListener<JSONObject>(){
-//                    @Override
-//                    public void getResult(JSONObject object) throws JSONException {
-//                        if(object.has("contacts")){
-//                            JSONObject checkContactsResponse = object.getJSONObject("contacts");
-//                            for(int i = 0; i< contacts.size(); i++){
-//                                ArrayList<String> contactNumbers = contacts.get(i).getNumbers();
-//                                for(int j = 0; j<contactNumbers.size(); j++){
-//                                        Iterator iterator = checkContactsResponse.keys();
-//                                        while(iterator.hasNext()){
-//                                            String key = (String)iterator.next();
-//                                            if (key.equals(phoneFormat(contactNumbers.get(j)))){
-//                                                JSONObject responseNumberObject = checkContactsResponse.getJSONObject(key);
-//                                                Boolean isUser = responseNumberObject.getBoolean("isUser");
-//                                                Contact contact = contacts.get(i);
-//                                                if(!contact.getIsUser()){
-//                                                    contact.setIsUser(isUser);
-//                                                    if(contact.getIsUser()){
-//                                                        contact.setUserId(responseNumberObject.getInt("userId"));
-//                                                        contact.setAccountId(responseNumberObject.getInt("accountId"));
-//                                                    }
-//                                                }
-//                                            }
-//                                        }
-//                                }
-//                            }
-//                        }
-//                        contactsAdapter = new ContactsAdapter(getContext(), R.layout.contacts_list_item, sortList(contacts));
-//                        mContactsList.setAdapter(contactsAdapter);
-//
-//                        enableView();
-//                        toolbar.setSubtitle(contacts.size() + " contacts");
-////                        toolbarSubtitle.setText(contacts.size() + " contacts");
-//                    }
-//                });
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//
-//    }
-
-//    ArrayList<Contact> sortList(ArrayList<Contact> list) {
-//        Collections.sort(list, new Comparator<Contact>() {
-//            @Override
-//            public int compare(Contact contact1, Contact contact2) {
-//                return contact1.getName().compareTo(contact2.getName());
-//            }
-//        });
-//        return list;
-//    }
-
-    public void disableView(){
+    public void showProgressBar(){
         mContactsList.setVisibility(View.GONE);
         fab.setVisibility(View.GONE);
         emptyListView.setVisibility(View.GONE);
@@ -359,13 +236,13 @@ public class ContactsFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-//    public void enableView(){
-//        progressBar.setVisibility(View.GONE);
-//        emptyListView.setVisibility(View.GONE);
-//        permissionDeniedView.setVisibility(View.GONE);
-//        mContactsList.setVisibility(View.VISIBLE);
-//        fab.setVisibility(View.VISIBLE);
-//    }
+    public void hideProgressBar(){
+        progressBar.setVisibility(View.GONE);
+        emptyListView.setVisibility(View.GONE);
+        permissionDeniedView.setVisibility(View.GONE);
+        mContactsList.setVisibility(View.VISIBLE);
+        fab.setVisibility(View.VISIBLE);
+    }
 
     public void showEmptyListView(){
         progressBar.setVisibility(View.GONE);
@@ -384,10 +261,8 @@ public class ContactsFragment extends Fragment {
 
     }
 
-    public String phoneFormat(String phone){
-        return phone.replace("-","").replace(" ","").replace("(","").replace(")","");
+    public void setToolbarSubtitle(int contactsSize){
+        toolbar.setSubtitle(contactsSize + " contacts");
+
     }
-
-
-
 }

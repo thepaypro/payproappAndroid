@@ -4,11 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +17,7 @@ import java.util.Iterator;
 
 import app.paypro.payproapp.Contact;
 import app.paypro.payproapp.ContactsAdapter;
+import app.paypro.payproapp.ContactsFragment;
 import app.paypro.payproapp.R;
 import app.paypro.payproapp.contacts.Contacts;
 import app.paypro.payproapp.http.ResponseListener;
@@ -29,34 +26,30 @@ import app.paypro.payproapp.http.ResponseListener;
  * Created by rogerbaiget on 14/12/17.
  */
 
-public class SaveContactsAsyncTask extends AsyncTask<Void,Void,ContactsAdapter> {
+public class SaveContactsAsyncTask extends AsyncTask<Void,Void,Void> {
 
     private ArrayList<Contact> contacts = new ArrayList<>();
     private Context context;
     private Cursor c;
+    private ContactsFragment contactsFragment;
     private ListView mContactsList;
     private ContactsAdapter contactsAdapter;
-    private ProgressBar progressBar;
-    private Toolbar toolbar;
-    private FloatingActionButton fab;
 
-    public SaveContactsAsyncTask(Context context, Cursor cursor, ListView mContactsList, ProgressBar progressBar, Toolbar toolbar, FloatingActionButton fab){
+    public SaveContactsAsyncTask(Context context, Cursor cursor, ContactsFragment contactsFragment,ListView mContactsList){
         this.context = context;
         this.c = cursor;
+        this.contactsFragment = contactsFragment;
         this.mContactsList = mContactsList;
-        this.progressBar = progressBar;
-        this.toolbar = toolbar;
-        this.fab = fab;
     }
 
     @Override
-    protected ContactsAdapter doInBackground(Void... voids) {
+    protected Void doInBackground(Void... voids) {
             final HashMap<String,String> allContactsNumbers = new HashMap<>();
             contacts.clear();
             //---display the contact id and name and phone number----
             if(c.getCount() == 0){
-//                showEmptyListView();
-                return contactsAdapter;
+                contactsFragment.showEmptyListView();
+                return null;
             }
             if (c.moveToFirst()) {
                 do {
@@ -122,8 +115,14 @@ public class SaveContactsAsyncTask extends AsyncTask<Void,Void,ContactsAdapter> 
                                     }
                                 }
                             }
-                            contactsAdapter = new ContactsAdapter(context, R.layout.contacts_list_item, sortList(contacts));
-                            mContactsList.setAdapter(contactsAdapter);
+                            if(contactsFragment!=null && contactsFragment.getActivity()!=null) {
+                                contactsFragment.hideProgressBar();
+                                contactsFragment.setToolbarSubtitle(contacts.size());
+                                contactsAdapter = new ContactsAdapter(context, R.layout.contacts_list_item, sortList(contacts));
+                                mContactsList.setAdapter(contactsAdapter);
+                                contactsFragment.setContactsAdapter(contactsAdapter);
+                                contactsFragment = null;
+                            }
                         }
                     });
                 } catch (JSONException e) {
@@ -131,8 +130,7 @@ public class SaveContactsAsyncTask extends AsyncTask<Void,Void,ContactsAdapter> 
                 }
 
             }
-
-        return contactsAdapter;
+        return null;
     }
 
     public String phoneFormat(String phone){
@@ -150,10 +148,13 @@ public class SaveContactsAsyncTask extends AsyncTask<Void,Void,ContactsAdapter> 
     }
 
     @Override
-    protected void onPostExecute(ContactsAdapter result){
-        progressBar.setVisibility(View.GONE);
-        mContactsList.setVisibility(View.VISIBLE);
-        fab.setVisibility(View.VISIBLE);
+    protected void onPostExecute(Void result){
+
+    }
+
+    @Override
+    protected void onPreExecute (){
+        contactsFragment.showProgressBar();
     }
 
 
