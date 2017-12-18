@@ -326,23 +326,19 @@ public class ContactsFragment extends Fragment {
                                                 public void onClick(DialogInterface dialog, int id) {
 
                                                     PackageManager pm = getActivity().getPackageManager();
+
+                                                    Intent sendIntent = new Intent();
+                                                    sendIntent.setAction(Intent.ACTION_SEND);
+                                                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
+                                                    sendIntent.setType("text/plain");
                                                     try {
-
-                                                        Intent sendIntent = new Intent();
-                                                        sendIntent.setAction(Intent.ACTION_SEND);
-                                                        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
-                                                        sendIntent.setType("text/plain");
-
-
                                                         PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
                                                         sendIntent.setPackage("com.whatsapp");
-
-                                                        startActivity(sendIntent);
-
                                                     } catch (PackageManager.NameNotFoundException e) {
-                                                        Toast.makeText(getContext(), "WhatsApp not Installed", Toast.LENGTH_SHORT)
-                                                                .show();
+                                                        //
                                                     }
+
+                                                    startActivity(sendIntent);
                                                 }
                                             })
                                             .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
