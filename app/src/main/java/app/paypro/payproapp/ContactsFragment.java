@@ -318,6 +318,7 @@ public class ContactsFragment extends Fragment {
                                     sendIntent.setAction(Intent.ACTION_SEND);
                                     sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
                                     sendIntent.setType("text/plain");
+                                    sendIntent.setPackage("com.whatsapp");
                                     startActivity(sendIntent);
 
 

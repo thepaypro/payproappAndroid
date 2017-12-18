@@ -65,7 +65,7 @@
   <string name="transactions_tab_title">Transactions</string>
 
   <string name="bits">Bits</string>
-  <string name="balance_empty">μ₿ -.--</string>
+  <string name="balance_empty">-.--</string>
 
   <string name="bitcoin_account_header">BITCOIN ACCOUNT</string>
 
@@ -82,6 +82,9 @@
   <string name="nickname">Nickname</string>
   <string name="edit">Edit</string>
 
+  <string name="micro">μ</string>
+
+  <string name="show_qr_title">QR Code</string>
 
   <string name="contacts_permission_denied_text">To send money to your friends, allow PayPro to acces your contacts.</string>
   <string name="empty_contacts_list">Your contacts list is empty</string>

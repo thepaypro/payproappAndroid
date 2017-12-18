@@ -24,12 +24,12 @@ public class SwipeButton extends RelativeLayout {
 
     private ConstraintLayout swipeButtonInner;
     private int mainViewWidth;
-    private int initialOffsetFrac = 8;
+    private int initialOffsetFrac = 5;
     private TextView centerText;
     private ViewGroup background;
     private Boolean activated = false;
-    private Boolean active = false;
     private Boolean enabled = true;
+    private Boolean restarted = false;
 
 
     private OnStateChangeListener onStateChangeListener;
@@ -197,6 +197,7 @@ public class SwipeButton extends RelativeLayout {
         setOnTouchListener(getButtonTouchListener());
     }
 
+
     private OnTouchListener getButtonTouchListener() {
         return new OnTouchListener() {
             @Override
@@ -204,40 +205,33 @@ public class SwipeButton extends RelativeLayout {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         return !TouchUtils.isTouchOutsideInitialPosition(event, swipeButtonInner);
+                    case MotionEvent.ACTION_UP:
+                        if(activated){
+                            swipeButtonInner.setX(0);
+//                            centerText.setAlpha(0);
+                            if (onStateChangeListener != null) {
+                                onStateChangeListener.onStateChange(true);
+                            }
+                        }
+                        else if(enabled){
+                            restartSwipeButton();
+                        }
                     case MotionEvent.ACTION_MOVE:
                         if(enabled){
                             if(event.getX() < mainViewWidth/initialOffsetFrac){
                                 int start = -mainViewWidth + mainViewWidth/initialOffsetFrac;
                                 swipeButtonInner.setX(start);
-                                centerText.setAlpha(1);
-                            }else if (event.getX() > getWidth() * 0.99) {
-                                if(!activated){
-                                    activated = true;
-                                    swipeButtonInner.setX(0);
-                                    centerText.setAlpha(0);
-                                    if (onStateChangeListener != null) {
-                                        onStateChangeListener.onStateChange(true);
-                                    }
+//                                centerText.setAlpha(1);
+                            }else if (event.getX() > getWidth()) {
+                                activated = true;
+                            } else {
+                                if(!activated&&!restarted){
+                                    swipeButtonInner.setX(event.getX() - swipeButtonInner.getWidth());
+//                                    centerText.setAlpha(1 - 1.3f * (swipeButtonInner.getX() + swipeButtonInner.getWidth()) / getWidth());
                                 }else{
                                     activated = false;
+                                    restarted = false;
                                 }
-                            } else {
-                                swipeButtonInner.setX(event.getX() - swipeButtonInner.getWidth());
-                                centerText.setAlpha(1 - 1.3f * (swipeButtonInner.getX() + swipeButtonInner.getWidth()) / getWidth());
-
-                                if(!active){
-                                    active = true;
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if(enabled){
-                                                restartSwipeButton();
-                                            }
-                                            active = false;
-                                        }
-                                    },3000);
-                                }
-
                             }
                         }
 
@@ -252,8 +246,8 @@ public class SwipeButton extends RelativeLayout {
     public void restartSwipeButton(){
         int start = -mainViewWidth + mainViewWidth/initialOffsetFrac;
         swipeButtonInner.animate().translationX(start);
-        centerText.setAlpha(1);
-        activated = false;
+//        centerText.setAlpha(1);
+        restarted = true;
     }
 
     public void enable(){
