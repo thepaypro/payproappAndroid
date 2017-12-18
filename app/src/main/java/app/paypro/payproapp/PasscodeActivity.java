@@ -23,10 +23,11 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.http.ResponseListener;
 import app.paypro.payproapp.user.User;
 import app.paypro.payproapp.utils.PPSnackbar;
+import io.intercom.android.sdk.Intercom;
+import io.intercom.android.sdk.identity.Registration;
 
 /**
  * Created by rogerbaiget on 13/11/17.
@@ -232,6 +233,9 @@ public class PasscodeActivity extends AppCompatActivity{
                                         try {
                                             if(object.getBoolean("status")){
                                                 enableView();
+                                                Intercom.initialize(getApplication(), "android_sdk-33727861a67ba62364b150d95d3d8812f5e3584a", "u32hbwiy");
+                                                Registration registration = Registration.create().withUserId(username);
+                                                Intercom.client().registerIdentifiedUser(registration);
                                                 Intent intentLogin = new Intent(PasscodeActivity.this, TabActivity.class);
                                                 startActivity(intentLogin);
                                                 finish();
