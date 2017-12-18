@@ -2,7 +2,9 @@ package app.paypro.payproapp;
 
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -34,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import org.json.JSONException;
@@ -314,14 +317,36 @@ public class ContactsFragment extends Fragment {
                                     transaction.commit();
                                 }else{
                                     //Contact Invite
-                                    Intent sendIntent = new Intent();
-                                    sendIntent.setAction(Intent.ACTION_SEND);
-                                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
-                                    sendIntent.setType("text/plain");
-                                    sendIntent.setPackage("com.whatsapp");
-                                    startActivity(sendIntent);
 
+                                    // Use the Builder class for convenient dialog construction
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    builder.setMessage(R.string.invite_dialog)
+                                            .setTitle(R.string.invite_dialog_title)
+                                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
 
+                                                    PackageManager pm = getActivity().getPackageManager();
+
+                                                    Intent sendIntent = new Intent();
+                                                    sendIntent.setAction(Intent.ACTION_SEND);
+                                                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
+                                                    sendIntent.setType("text/plain");
+                                                    try {
+                                                        PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+                                                        sendIntent.setPackage("com.whatsapp");
+                                                    } catch (PackageManager.NameNotFoundException e) {
+                                                        //
+                                                    }
+
+                                                    startActivity(sendIntent);
+                                                }
+                                            })
+                                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    // User cancelled the dialog
+                                                }
+                                            })
+                                            .show();
 
 //                                    SmsManager smsManager = SmsManager.getDefault();
 //                                    smsManager.sendTextMessage(contact.getNumbers().get(0), null, getResources().getString(R.string.sms_msg), null, null);
