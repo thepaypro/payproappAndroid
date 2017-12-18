@@ -60,6 +60,7 @@ public class ProfileView extends Fragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Log.i("which: ", String.valueOf(which));
                         switch (which) {
                             case 0:
                                 choosePhotoFromGallary();
@@ -74,6 +75,7 @@ public class ProfileView extends Fragment {
     }
 
     public void choosePhotoFromGallary() {
+        Log.i("aaaaaaabbbbbbbb","aaabbbb");
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
@@ -81,6 +83,7 @@ public class ProfileView extends Fragment {
     }
 
     private void takePhotoFromCamera() {
+        Log.i("cccccdddddd","cdccccdddd");
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA);
     }
@@ -92,8 +95,6 @@ public class ProfileView extends Fragment {
         if (resultCode == Activity.RESULT_CANCELED) {
             return;
         }
-
-        Log.i("requestCode", String.valueOf(requestCode));
 
         if (requestCode == GALLERY) {
             if (data != null) {
@@ -212,8 +213,8 @@ public class ProfileView extends Fragment {
 
         Bitmap bitmap;
 
-        if (profile.exists()){
-            bitmap = BitmapFactory.decodeFile(String.valueOf(profile.getAbsoluteFile()));
+        if (profile.exists() && profile.canRead()){
+            bitmap = BitmapFactory.decodeFile(profile.getPath());
         } else {
             bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
         }

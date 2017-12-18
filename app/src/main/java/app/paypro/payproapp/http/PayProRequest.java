@@ -23,8 +23,8 @@ import java.util.Map;
 
 public class PayProRequest {
 
-//    private static String absoluteURL = "http://api.payproapp.net/";
-    private static String absoluteURL = "http://192.168.1.202/";
+    private static String absoluteURL = "http://api.payproapp.net/";
+//    private static String absoluteURL = "http://192.168.1.202/";
 
 
     public static void post(Context context, String endpointURL, JSONObject parameters, final ResponseListener<JSONObject> listener)

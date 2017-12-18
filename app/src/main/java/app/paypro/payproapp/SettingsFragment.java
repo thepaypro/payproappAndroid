@@ -58,8 +58,8 @@ public class SettingsFragment extends Fragment {
 
         Bitmap bitmap;
 
-        if (profile.exists()){
-            bitmap = BitmapFactory.decodeFile(String.valueOf(profile.getAbsoluteFile()));
+        if (profile.exists() && profile.canRead()){
+            bitmap = BitmapFactory.decodeFile(profile.getPath());
         } else {
             bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
         }
