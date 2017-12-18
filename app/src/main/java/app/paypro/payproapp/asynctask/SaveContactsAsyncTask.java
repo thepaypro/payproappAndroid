@@ -49,6 +49,7 @@ public class SaveContactsAsyncTask extends AsyncTask<Void,Void,Void> {
             //---display the contact id and name and phone number----
             if(c.getCount() == 0){
                 contactsFragment.showEmptyListView();
+                contactsFragment.setToolbarSubtitle(0);
                 return null;
             }
             if (c.moveToFirst()) {
