@@ -26,12 +26,15 @@ import app.paypro.payproapp.account.Account;
 import app.paypro.payproapp.asynctask.db.user.GetAccountAsyncTask;
 import app.paypro.payproapp.http.ResponseListener;
 import app.paypro.payproapp.utils.PPSnackbar;
+import io.intercom.android.sdk.Intercom;
 
 
 public class TabActivity extends AppCompatActivity {
 
     RelativeLayout activityMain;
     Fragment navigationAccount;
+    BottomNavigationView navigation;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -43,11 +46,8 @@ public class TabActivity extends AppCompatActivity {
             Boolean selectedActualFragment = false;
             switch (item.getItemId()) {
                 case R.id.navigation_support:
-                    if (f instanceof SupportFragment){
-                        selectedActualFragment = true;
-                    }
-                    selectedFragment = SupportFragment.newInstance();
-                    break;
+                    Intercom.client().displayMessenger();
+                    return false;
                 case R.id.navigation_scan:
                     if (f instanceof ScanFragment){
                         selectedActualFragment = true;
@@ -92,7 +92,7 @@ public class TabActivity extends AppCompatActivity {
 
         activityMain = findViewById(R.id.activity_main);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         BottomNavigationViewHelper.disableShiftMode(navigation);
