@@ -206,8 +206,11 @@ public class ContactsFragment extends Fragment {
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                contactsAdapter.getFilter().filter(newText);
-                return true;
+                if(contactsAdapter != null){
+                    contactsAdapter.getFilter().filter(newText);
+                    return true;
+                }
+                return false;
             }
         });
 
