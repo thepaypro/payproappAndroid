@@ -58,8 +58,8 @@ public class SettingsFragment extends Fragment {
 
         Bitmap bitmap;
 
-        if (profile.exists()){
-            bitmap = BitmapFactory.decodeFile(String.valueOf(profile.getAbsoluteFile()));
+        if (profile.exists() && profile.canRead()){
+            bitmap = BitmapFactory.decodeFile(profile.getPath());
         } else {
             bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
         }
@@ -69,7 +69,13 @@ public class SettingsFragment extends Fragment {
         try {
             app.paypro.payproapp.db.entity.User userEntity = new GetUserAsyncTask(getContext()).execute().get()[0];
             TextView nicknameSettings = getView().findViewById(R.id.nicknameSettings);
-            nicknameSettings.setText(userEntity.getNickname().toString());
+
+            if (userEntity.getNickname().toString().isEmpty()){
+                nicknameSettings.setText("Nickname");
+            } else {
+                nicknameSettings.setText(userEntity.getNickname().toString());
+            }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

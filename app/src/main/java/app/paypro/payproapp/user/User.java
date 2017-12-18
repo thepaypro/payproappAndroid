@@ -112,20 +112,14 @@ public class User {
                                 firstTimeLogin = false;
                             }
 
-//                            app.paypro.payproapp.db.entity.User userEntity2 = null;
-//
-//                            userEntity2 = new GetUserAsyncTask(context).execute().get()[0];
-//
-//                            Log.i("avaaaaaataar222222",userEntity2.getAvatar().toString());
-
-
-
                             JSONObject userJSON = object.getJSONObject("user");
 
                             app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
 
                             if(!userJSON.isNull("nickname")){
                                 userEntity.setNickname(userJSON.getString("nickname"));
+                            } else {
+                                userEntity.setNickname("");
                             }
 
                             if(!userJSON.isNull("bitcoinAccount")){
@@ -137,12 +131,10 @@ public class User {
                             }
 
                             if(firstTimeLogin){
-                                Log.i("33333333","3333333");
                                 userEntity.setAvatar("");
                                 new SaveUserAsyncTask(context).execute(userEntity);
                             }else{
-                                Log.i("444444444","444444444");
-//                                new UpdateUserAsyncTask(context).execute(userEntity);
+                                new UpdateUserAsyncTask(context).execute(userEntity);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

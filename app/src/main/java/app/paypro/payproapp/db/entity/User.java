@@ -3,6 +3,7 @@ package app.paypro.payproapp.db.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.util.Log;
 
 /**
  * Created by rogerbaiget on 16/11/17.
@@ -50,10 +51,7 @@ public class User {
         this.username = usernameValue;
     }
 
-    public String getNickname()
-    {
-        return nickname;
-    }
+    public String getNickname() { return nickname; }
 
     public void setNickname(String nicknameValue)
     {
