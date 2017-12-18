@@ -7,5 +7,5 @@ import app.paypro.payproapp.db.entity.Account;
  */
 
 public interface AccountFragmentsInterface {
-    public void onRefreshInfo(Account account);
+    void onRefreshInfo(Account account);
 }

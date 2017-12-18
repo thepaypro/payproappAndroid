@@ -76,6 +76,7 @@ public class TabActivity extends AppCompatActivity {
             }
             if(!selectedActualFragment){
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
                 transaction.replace(R.id.frame_layout, selectedFragment);
                 hideVirtualKeyboard();
                 transaction.commit();

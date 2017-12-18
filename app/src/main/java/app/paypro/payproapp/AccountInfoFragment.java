@@ -59,7 +59,11 @@ public class AccountInfoFragment extends Fragment implements AccountFragmentsInt
                 ShowQRCodeFragment qrCodeFragment = ShowQRCodeFragment.newInstance();
                 qrCodeFragment.setArguments(arguments);
 
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, qrCodeFragment).commit();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+                transaction.replace(R.id.frame_layout, qrCodeFragment);
+//                transaction.addToBackStack(null);
+                transaction.commit();
             }
 
         });
