@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +15,14 @@ import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.concurrent.ExecutionException;
 
 import app.paypro.payproapp.asynctask.db.user.GetUserAsyncTask;
+import app.paypro.payproapp.utils.CropImage;
 
 public class SettingsFragment extends Fragment {
+    private static final String IMAGE_DIRECTORY = "/PayPro", AVATAR_FILENAME = "payproprofile.jpg";
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
@@ -50,17 +51,31 @@ public class SettingsFragment extends Fragment {
 
         avatarImage = getView().findViewById(R.id.avatarImage);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
+        //Avatar
+        File profile = new File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY+"/"+AVATAR_FILENAME);
 
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCircular(true);
+        Bitmap bitmap;
 
-        avatarImage.setImageDrawable(roundedBitmapDrawable);
+        if (profile.exists() && profile.canRead()){
+            bitmap = BitmapFactory.decodeFile(profile.getPath());
+        } else {
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
+        }
+
+        avatarImage.setImageBitmap(CropImage.transform(bitmap));
 
         try {
             app.paypro.payproapp.db.entity.User userEntity = new GetUserAsyncTask(getContext()).execute().get()[0];
             TextView nicknameSettings = getView().findViewById(R.id.nicknameSettings);
-            nicknameSettings.setText(userEntity.getNickname().toString());
+
+            if (userEntity.getNickname().toString().isEmpty()){
+                nicknameSettings.setText("Nickname");
+            } else {
+                nicknameSettings.setText(userEntity.getNickname().toString());
+            }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -72,12 +87,9 @@ public class SettingsFragment extends Fragment {
         rowProfile.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
-                ProfileView myfragment = new ProfileView();
-
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
-                transaction.add(R.id.frame_layout, myfragment);
-                transaction.addToBackStack(null);
+                transaction.replace(R.id.frame_layout, new ProfileView());
                 transaction.commit();
 
             }

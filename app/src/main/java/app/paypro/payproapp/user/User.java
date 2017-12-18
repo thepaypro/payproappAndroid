@@ -111,12 +111,15 @@ public class User {
                             if(new GetUserAsyncTask(context).execute().get().length == 1) {
                                 firstTimeLogin = false;
                             }
+
                             JSONObject userJSON = object.getJSONObject("user");
 
                             app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
 
                             if(!userJSON.isNull("nickname")){
                                 userEntity.setNickname(userJSON.getString("nickname"));
+                            } else {
+                                userEntity.setNickname("");
                             }
 
                             if(!userJSON.isNull("bitcoinAccount")){
@@ -128,6 +131,7 @@ public class User {
                             }
 
                             if(firstTimeLogin){
+                                userEntity.setAvatar("");
                                 new SaveUserAsyncTask(context).execute(userEntity);
                             }else{
                                 new UpdateUserAsyncTask(context).execute(userEntity);

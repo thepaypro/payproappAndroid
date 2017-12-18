@@ -2,7 +2,9 @@ package app.paypro.payproapp;
 
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -17,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -31,6 +34,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import android.widget.TextView;
+import android.widget.Toast;
 
 import app.paypro.payproapp.asynctask.SaveContactsAsyncTask;
 import app.paypro.payproapp.global.Global;
@@ -134,11 +139,36 @@ public class ContactsFragment extends Fragment {
                     transaction.commit();
                 }else{
                     //Contact Invite
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
-                    sendIntent.setType("text/plain");
-                    startActivity(sendIntent);
+
+                    // Use the Builder class for convenient dialog construction
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage(R.string.invite_dialog)
+                            .setTitle(R.string.invite_dialog_title)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    PackageManager pm = getActivity().getPackageManager();
+
+                                    Intent sendIntent = new Intent();
+                                    sendIntent.setAction(Intent.ACTION_SEND);
+                                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
+                                    sendIntent.setType("text/plain");
+                                    try {
+                                        PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+                                        sendIntent.setPackage("com.whatsapp");
+                                    } catch (PackageManager.NameNotFoundException e) {
+                                        //
+                                    }
+
+                                    startActivity(sendIntent);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // User cancelled the dialog
+                                }
+                            })
+                            .show();
                 }
             }
         });
@@ -226,7 +256,9 @@ public class ContactsFragment extends Fragment {
         c = cursorLoader.loadInBackground();
 
         new SaveContactsAsyncTask(getContext(), c, this, mContactsList).execute();
+
     }
+
 
     public void showProgressBar(){
         mContactsList.setVisibility(View.GONE);

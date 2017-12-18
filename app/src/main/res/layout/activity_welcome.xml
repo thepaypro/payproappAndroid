@@ -19,7 +19,7 @@
 
     <Button
         android:id="@+id/button"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@style/continue_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/continue_button"

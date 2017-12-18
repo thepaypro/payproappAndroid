@@ -41,7 +41,7 @@ public class TransactionsRecyclerViewAdapter  extends RecyclerView.Adapter<Trans
 //        Locale xb = b.build();
 //        format.setCurrency(Currency.getInstance(xb));
         String amount = format.format(transaction.getAmount());
-        amount = "μ\u20BF " + amount;
+//        amount = "μ\u20BF " + amount;
         String title = "";
         if(transaction.getPayer()){
             amount = "-"+amount;

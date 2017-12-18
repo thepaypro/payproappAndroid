@@ -19,6 +19,9 @@
   <color name="pp_pink">#FFCCFF</color>
   <color name="pp_green">#57FFB3</color>
   <color name="pp_purple">#7271ff</color>
+  <color name="pp_pink_alpha">#e6ffccff</color>
+  <color name="pp_purple_alpha">#e67271ff</color>
+
 
   <!-- dots inactive colors -->
   <color name="dot_dark_slider">#ffffff</color>

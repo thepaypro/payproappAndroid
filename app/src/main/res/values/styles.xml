@@ -22,6 +22,25 @@
         <item name="android:windowBackground">@color/PayPro_Blue</item>
     </style>
 
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+      
+    <style name="continue_button" parent="@android:style/Widget.Button">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:width">250dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@color/pp_green</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
 
     <!--<style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">-->
         <!--<item name="searchIcon">@drawable/ic_search_white_24dp</item>-->
