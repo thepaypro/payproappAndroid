@@ -63,11 +63,6 @@ public class PhoneNumberActivity extends AppCompatActivity {
         countryPrefixView = findViewById(R.id.countryPrefixView);
 
         editText= findViewById(R.id.editText);
-        editText.requestFocus();
-        editText.setFocusable(true);
-
-        InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         editText.addTextChangedListener(filterTextWatcher);
 
@@ -80,6 +75,12 @@ public class PhoneNumberActivity extends AppCompatActivity {
             alpha2Code = extras.getString("alpha2Code");
             callingCodes = extras.getString("callingCodes");
             phone_number = extras.getString("phone_number");
+//            if(extras.getString("errorMsg") != null){
+//                PPSnackbar.getSnackbar(mainView,getApplicationContext(),extras.getString("errorMsg")).show();
+//            }else{
+                editText.requestFocus();
+//                editText.setFocusable(true);
+//            }
 
             TextView alpha2CodeView = this.findViewById(R.id.alpha2CodeView);
             alpha2CodeView.setText(alpha2Code);
@@ -121,7 +122,7 @@ public class PhoneNumberActivity extends AppCompatActivity {
                             enableView();
                         }else if (!object.getBoolean("status") && object.has("error_msg")){
                             enableView();
-                            PPSnackbar.getSnackbar(mainView,object.getString("error_msg")).show();
+                            PPSnackbar.getSnackbar(mainView,getApplicationContext(),object.getString("error_msg")).show();
                         }else {
                             TextInputLayout til = (TextInputLayout) findViewById(R.id.text_input_layout);
                             til.setError("Invalid phone number");

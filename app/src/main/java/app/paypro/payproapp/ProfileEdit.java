@@ -95,23 +95,23 @@ public class ProfileEdit extends Fragment {
                                 }else if (!object.getBoolean("status") && object.has("error_msg")){
                                     doneButton.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.INVISIBLE);
-                                    PPSnackbar.getSnackbar(view,object.getString("error_msg")).show();
+                                    PPSnackbar.getSnackbar(view,getContext(),object.getString("error_msg")).show();
                                 }else{
                                     doneButton.setVisibility(View.VISIBLE);
                                     progressBar.setVisibility(View.INVISIBLE);
-                                    PPSnackbar.getSnackbar(view,"error_save").show();
+                                    PPSnackbar.getSnackbar(view,getContext(),"error_save").show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 doneButton.setVisibility(View.VISIBLE);
                                 progressBar.setVisibility(View.INVISIBLE);
-                                PPSnackbar.getSnackbar(view,"Error").show();
+                                PPSnackbar.getSnackbar(view,getContext(),"Error").show();
                             }
                         }
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    PPSnackbar.getSnackbar(view,"Error").show();
+                    PPSnackbar.getSnackbar(view,getContext(),"Error").show();
                 }
             }
         });

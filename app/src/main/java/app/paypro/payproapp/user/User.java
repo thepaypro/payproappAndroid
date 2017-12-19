@@ -37,6 +37,12 @@ public class User {
 
                     app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
 
+                    if(!userJSON.isNull("bitcoinAccount")){
+                        JSONObject accountJSON = userJSON.getJSONObject("bitcoinAccount");
+                        Account accountEntity= new Account(accountJSON.getInt("id"),accountJSON.getString("address"));
+                        new SaveAccountAsyncTask(context).execute(accountEntity);
+                    }
+
                     new SaveUserAsyncTask(context).execute(userEntity);
 
                     JSONObject responseJSON = new JSONObject();
@@ -48,22 +54,22 @@ public class User {
 
                     if (object.has("message"))
                     {
-                        Log.i("message", object.getString("message"));
+//                        Log.i("message", object.getString("message"));
 
                         if (object.getString("message").equals("Username already exist")) {
-                            errorResponse.put("errorMessage","error_username_exist");
+                            errorResponse.put("error_msg","error_username_exist");
                         }
 
                         if (object.getString("message").equals("Invalid verification code")) {
-                            errorResponse.put("errorMessage","error_invalid_verification_code");
+                            errorResponse.put("error_msg","error_invalid_verification_code");
                         }
 
                         if (object.getString("message").equals("Passwords dont match")) {
-                            errorResponse.put("errorMessage","error_passcode_dont_match");
+                            errorResponse.put("error_msg","error_passcode_dont_match");
                         }
 
                         if (object.getString("message").equals("Invalid phone number")) {
-                            errorResponse.put("errorMessage","error_invalid_phonenumber");
+                            errorResponse.put("error_msg","error_invalid_phonenumber");
                         }
                     }
 
@@ -164,9 +170,9 @@ public class User {
                                 }
                             }
                         });
-                                JSONObject responseJSON = new JSONObject();
-                                        responseJSON.put("status", true);
-                                        listener.getResult(responseJSON);
+//                                JSONObject responseJSON = new JSONObject();
+//                                        responseJSON.put("status", true);
+//                                        listener.getResult(responseJSON);
                     } else {
                         JSONObject errorResponse = new JSONObject();
                         if(object.has("error_msg")){

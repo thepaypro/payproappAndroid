@@ -19,25 +19,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +45,7 @@ import java.util.Iterator;
 import app.paypro.payproapp.contacts.Contacts;
 import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.http.ResponseListener;
+import app.paypro.payproapp.utils.PPAlertDialog;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
@@ -171,13 +166,7 @@ public class ContactsFragment extends Fragment {
 
     private void requestContactsPermission() {
 
-
         final String[] permissions = new String[]{READ_CONTACTS};
-
-//        if (!shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-//            requestPermissions(permissions, REQUEST_READ_CONTACTS);
-//            return;
-//        }
 
         requestPermissions(permissions, REQUEST_READ_CONTACTS);
 
@@ -316,46 +305,32 @@ public class ContactsFragment extends Fragment {
                                     ((TabActivity) getActivity()).hideVirtualKeyboard();
                                     transaction.commit();
                                 }else{
-                                    //Contact Invite
-
-                                    // Use the Builder class for convenient dialog construction
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    builder.setMessage(R.string.invite_dialog)
-                                            .setTitle(R.string.invite_dialog_title)
-                                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-
-                                                    PackageManager pm = getActivity().getPackageManager();
-
-                                                    Intent sendIntent = new Intent();
-                                                    sendIntent.setAction(Intent.ACTION_SEND);
-                                                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
-                                                    sendIntent.setType("text/plain");
-                                                    try {
-                                                        PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
-                                                        sendIntent.setPackage("com.whatsapp");
-                                                    } catch (PackageManager.NameNotFoundException e) {
-                                                        //
-                                                    }
-
-                                                    startActivity(sendIntent);
-                                                }
-                                            })
-                                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                    // User cancelled the dialog
-                                                }
-                                            })
-                                            .show();
-
-//                                    SmsManager smsManager = SmsManager.getDefault();
-//                                    smsManager.sendTextMessage(contact.getNumbers().get(0), null, getResources().getString(R.string.sms_msg), null, null);
+                                    DialogInterface.OnClickListener dialogInterfaceOK = new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            PackageManager pm = getActivity().getPackageManager();
+                                            Intent sendIntent = new Intent();
+                                            sendIntent.setAction(Intent.ACTION_SEND);
+                                            sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
+                                            sendIntent.setType("text/plain");
+                                            try {
+                                                PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+                                                sendIntent.setPackage("com.whatsapp");
+                                            } catch (PackageManager.NameNotFoundException e) {
+                                                // SHOW ALL MSG APPS
+                                            }
+                                            startActivity(sendIntent);
+                                        }
+                                    };
+                                    DialogInterface.OnClickListener dialogInterfaceCancell = new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    };
+                                    PPAlertDialog.getAlertDialogBuilder(getActivity(), "invite_dialog", dialogInterfaceOK, dialogInterfaceCancell).show();
                                 }
                             }
                         });
                         enableView();
                         toolbar.setSubtitle(contacts.size() + " contacts");
-//                        toolbarSubtitle.setText(contacts.size() + " contacts");
                     }
                 });
             } catch (JSONException e) {

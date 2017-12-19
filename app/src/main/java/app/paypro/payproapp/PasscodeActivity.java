@@ -1,6 +1,7 @@
 package app.paypro.payproapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -8,11 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +23,7 @@ import org.json.JSONObject;
 
 import app.paypro.payproapp.http.ResponseListener;
 import app.paypro.payproapp.user.User;
+import app.paypro.payproapp.utils.PPAlertDialog;
 import app.paypro.payproapp.utils.PPSnackbar;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.identity.Registration;
@@ -50,6 +49,15 @@ public class PasscodeActivity extends AppCompatActivity{
     private String old_passcode = "";
     private LinearLayout mainView;
 
+    DialogInterface.OnClickListener dialogInterfaceDefaultCancel = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            Intent intent = new Intent(PasscodeActivity.this, PhoneNumberActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    };
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_passcode);
@@ -68,6 +76,12 @@ public class PasscodeActivity extends AppCompatActivity{
         if (extras != null) {
             passcode_state = extras.getString("passcode_state");
             username = extras.getString("username");
+
+//            if(extras.getString("errorMsg") != null){
+//                PPSnackbar.getSnackbar(mainView,getApplicationContext(),extras.getString("errorMsg")).show();
+//            }else{
+                editText.requestFocus();
+//            }
 
             TextView titleTextView = this.findViewById(R.id.titleTextView);
             TextView descTextView = this.findViewById(R.id.descTextView);
@@ -89,11 +103,6 @@ public class PasscodeActivity extends AppCompatActivity{
                     titleTextView.setText(R.string.enter_passcode_old);
                     descTextView.setText(R.string.enter_passcode_desc_old);
                     toolbar.setTitle(R.string.title_passcode_create);
-                    break;
-                case "new":
-                    titleTextView.setText(R.string.enter_passcode_new);
-                    descTextView.setText(R.string.enter_passcode_desc_new);
-                    toolbar.setTitle(R.string.title_passcode_new);
                     break;
                 case "confirm":
                     first_passcode = extras.getString("first_passcode");
@@ -123,8 +132,6 @@ public class PasscodeActivity extends AppCompatActivity{
         editText.requestFocus();
         editText.setFocusableInTouchMode(true);
 
-        InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
     }
 
     public void shake(){
@@ -241,7 +248,7 @@ public class PasscodeActivity extends AppCompatActivity{
                                                 finish();
                                             }else if (!object.getBoolean("status") && object.has("error_msg")){
                                                 enableView();
-                                                PPSnackbar.getSnackbar(mainView,object.getString("error_msg")).show();
+                                                PPSnackbar.getSnackbar(mainView,getApplicationContext(),object.getString("error_msg")).show();
                                                 editText.setText("");
                                             }else{
                                                 enableView();
@@ -265,10 +272,9 @@ public class PasscodeActivity extends AppCompatActivity{
                             startActivity(intentOld);
                             finish();
                             break;
-                        case "new":
-                            break;
                         case "confirm":
                             JSONObject registerParameters = new JSONObject();
+                            disableView();
                             try {
                                 JSONObject userInfo = new JSONObject();
                                 userInfo.put("username", username);
@@ -277,10 +283,10 @@ public class PasscodeActivity extends AppCompatActivity{
                                 password.put("first", first_passcode);
                                 password.put("second", editTextString);
 
-                                userInfo.put("plainPassword", password.toString());
+                                userInfo.put("plainPassword", password);
                                 userInfo.put("mobileVerificationCode", sms_code);
 
-                                registerParameters.put("app_user_registration", userInfo.toString());
+                                registerParameters.put("app_user_registration", userInfo);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -290,15 +296,50 @@ public class PasscodeActivity extends AppCompatActivity{
                                     @Override
                                     public void getResult(JSONObject object) throws JSONException {
                                         try {
-                                            if (object.getString("status").equals("true")) {
+                                            if (object.getBoolean("status")) {
                                                 Intent intentComfirm = new Intent(PasscodeActivity.this, TabActivity.class);
                                                 startActivity(intentComfirm);
                                                 finish();
-                                            } else {
+                                            } else if(!object.getBoolean("status") && object.has("error_msg")) {
+                                                enableView();
                                                 shake();
                                                 editText.setText("");
-                                                InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-                                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                                                final String errorMsg = object.getString("error_msg");
+
+                                                if(errorMsg.equals("error_invalid_verification_code")) {
+                                                    DialogInterface.OnClickListener dialogInterface = new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            Intent intent = new Intent(PasscodeActivity.this, SmsCodeActivity.class);
+                                                            intent.putExtra("username", username);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    };
+                                                    PPAlertDialog.getAlertDialogBuilder(PasscodeActivity.this,errorMsg,dialogInterface,dialogInterfaceDefaultCancel).show();
+                                                }else if(errorMsg.equals("error_passcode_dont_match")) {
+                                                    DialogInterface.OnClickListener dialogInterface = new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            Intent intent = new Intent(PasscodeActivity.this, PasscodeActivity.class);
+                                                            intent.putExtra("username", username);
+                                                            intent.putExtra("sms_code", sms_code);
+                                                            intent.putExtra("passcode_state", "create");
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    };
+                                                    PPAlertDialog.getAlertDialogBuilder(PasscodeActivity.this, errorMsg, dialogInterface, dialogInterfaceDefaultCancel).show();
+                                                }else if(errorMsg.equals("error_username_exist") || errorMsg.equals("error_invalid_phonenumber")) {
+                                                    PPAlertDialog.getAlertDialogBuilder(PasscodeActivity.this,errorMsg,dialogInterfaceDefaultCancel,dialogInterfaceDefaultCancel).show();
+                                                }else {
+                                                    PPAlertDialog.getAlertDialogBuilder(PasscodeActivity.this,errorMsg,dialogInterfaceDefaultCancel,dialogInterfaceDefaultCancel).show();
+                                                }
+                                            }else{
+                                                enableView();
+                                                shake();
+                                                editText.setText("");
+                                                PPAlertDialog.getAlertDialogBuilder(PasscodeActivity.this,"",dialogInterfaceDefaultCancel,dialogInterfaceDefaultCancel).show();
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();

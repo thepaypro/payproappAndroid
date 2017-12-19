@@ -122,4 +122,20 @@
 
   <string name="invite_dialog">This is not a PayPro user. Do you want to send an invite?</string>
   <string name="invite_dialog_title">Invite</string>
+
+
+
+  <!--Errors-->
+  <string name="error_connection">No internet connection!</string>
+  <string name="error_save">Saving error!</string>
+  <string name="error_username_exist">Phone number already registered</string>
+  <string name="error_invalid_verification_code">Invalid verification code</string>
+  <string name="error_passcode_dont_match">Passcodes don\'t match</string>
+  <string name="error_invalid_phonenumber">Invalid phone number</string>
+  <string name="error_insufficient_funds">Insufficient funds</string>
+  <string name="error_basic">Ups! Sorry, something went wrong</string>
+  
+  
+  <string name="try_again">Try Again</string>
+
 </resources>

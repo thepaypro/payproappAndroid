@@ -1,7 +1,10 @@
 package app.paypro.payproapp.utils;
 
+import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+
+import app.paypro.payproapp.R;
 
 /**
  * Created by rogerbaiget on 17/11/17.
@@ -9,28 +12,25 @@ import android.view.View;
 
 public class PPSnackbar {
 
-    public static Snackbar getSnackbar(View view, String type){
+    public static Snackbar getSnackbar(View view,Context context, String type){
         Snackbar snackbar;
         switch(type){
             case "connection_error":
                 snackbar = Snackbar
-                        .make(view, "No internet connection!", Snackbar.LENGTH_LONG);
+                        .make(view, context.getResources().getString(R.string.error_connection) , Snackbar.LENGTH_LONG);
                 return snackbar;
             case "error_save":
                 snackbar = Snackbar
-                        .make(view, "Saving error!", Snackbar.LENGTH_LONG);
+                        .make(view, context.getResources().getString(R.string.error_save), Snackbar.LENGTH_LONG);
                 return snackbar;
             case "Insufficient funds":
                 snackbar = Snackbar
-                        .make(view, "Insufficient funds", Snackbar.LENGTH_LONG);
+                        .make(view, context.getResources().getString(R.string.error_insufficient_funds), Snackbar.LENGTH_LONG);
                 return snackbar;
             default:
                 snackbar = Snackbar
-                        .make(view, "Ups! Sorry, something went wrong", Snackbar.LENGTH_LONG);
+                        .make(view, context.getResources().getString(R.string.error_basic), Snackbar.LENGTH_LONG);
                 return snackbar;
         }
     }
-
-
-
 }

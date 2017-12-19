@@ -127,9 +127,9 @@ public class TabActivity extends AppCompatActivity {
                         if (object.getString("status").equals("true")) {
                             ((AccountFragment) navigationAccount).onRefreshInfo(new GetAccountAsyncTask(getApplicationContext()).execute().get()[0]);
                         }else if (!object.getBoolean("status") && object.has("error_msg")){
-                            PPSnackbar.getSnackbar(activityMain,object.getString("error_msg")).show();
+                            PPSnackbar.getSnackbar(activityMain,getApplicationContext(),object.getString("error_msg")).show();
                         } else {
-                            PPSnackbar.getSnackbar(activityMain,"").show();
+                            PPSnackbar.getSnackbar(activityMain,getApplicationContext(),"").show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
