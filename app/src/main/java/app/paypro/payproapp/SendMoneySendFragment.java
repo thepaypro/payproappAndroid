@@ -163,11 +163,13 @@ public class SendMoneySendFragment extends Fragment {
         progressBarLayout.setVisibility(View.VISIBLE);
         swipeButton.disable();
         activityBlocked = true;
+        ((TabActivity)getActivity()).dissableBottomNavigationView();
     }
 
     public void hideActivityIndicator(){
         progressBarLayout.setVisibility(View.INVISIBLE);
         swipeButton.enable();
         activityBlocked = false;
+        ((TabActivity)getActivity()).enableBottomNavigationView();
     }
 }

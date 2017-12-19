@@ -34,6 +34,7 @@ public class TabActivity extends AppCompatActivity {
     RelativeLayout activityMain;
     Fragment navigationAccount;
     BottomNavigationView navigation;
+    Boolean navigationEnabled = true;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -41,47 +42,51 @@ public class TabActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment = null;
-            Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
-            Boolean selectedActualFragment = false;
-            switch (item.getItemId()) {
-                case R.id.navigation_support:
-                    Intercom.client().displayMessenger();
-                    return false;
-                case R.id.navigation_scan:
-                    if (f instanceof ScanFragment){
-                        selectedActualFragment = true;
-                    }
-                    selectedFragment = ScanFragment.newInstance();
-                    break;
-                case R.id.navigation_send:
-                    if (f instanceof ContactsFragment){
-                        selectedActualFragment = true;
-                    }
-                    selectedFragment = ContactsFragment.newInstance();
-                    break;
-                case R.id.navigation_account:
-                    if (f instanceof AccountFragment){
-                        selectedActualFragment = true;
-                    }
-                    selectedFragment = AccountFragment.newInstance();
-                    navigationAccount = selectedFragment;
-                    break;
-                case R.id.navigation_settings:
-                    if (f instanceof SettingsFragment){
-                        selectedActualFragment = true;
-                    }
-                    selectedFragment = SettingsFragment.newInstance();
-                    break;
+            if(navigationEnabled){
+                Fragment selectedFragment = null;
+                Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+                Boolean selectedActualFragment = false;
+                switch (item.getItemId()) {
+                    case R.id.navigation_support:
+                        Intercom.client().displayMessenger();
+                        return false;
+                    case R.id.navigation_scan:
+                        if (f instanceof ScanFragment){
+                            selectedActualFragment = true;
+                        }
+                        selectedFragment = ScanFragment.newInstance();
+                        break;
+                    case R.id.navigation_send:
+                        if (f instanceof ContactsFragment){
+                            selectedActualFragment = true;
+                        }
+                        selectedFragment = ContactsFragment.newInstance();
+                        break;
+                    case R.id.navigation_account:
+                        if (f instanceof AccountFragment){
+                            selectedActualFragment = true;
+                        }
+                        selectedFragment = AccountFragment.newInstance();
+                        navigationAccount = selectedFragment;
+                        break;
+                    case R.id.navigation_settings:
+                        if (f instanceof SettingsFragment){
+                            selectedActualFragment = true;
+                        }
+                        selectedFragment = SettingsFragment.newInstance();
+                        break;
+                }
+                if(!selectedActualFragment){
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
+                    transaction.replace(R.id.frame_layout, selectedFragment);
+                    hideVirtualKeyboard();
+                    transaction.commit();
+                }
+                return true;
+            }else{
+                return false;
             }
-            if(!selectedActualFragment){
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
-                transaction.replace(R.id.frame_layout, selectedFragment);
-                hideVirtualKeyboard();
-                transaction.commit();
-            }
-            return true;
         }
     };
 
@@ -161,5 +166,13 @@ public class TabActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode,resultCode,data);
+    }
+
+    public void dissableBottomNavigationView(){
+        navigationEnabled = false;
+    }
+
+    public void enableBottomNavigationView(){
+        navigationEnabled = true;
     }
 }
