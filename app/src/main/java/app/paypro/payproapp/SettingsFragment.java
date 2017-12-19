@@ -120,7 +120,10 @@ public class SettingsFragment extends Fragment {
         rowInfo.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
-                Log.i("eeeeee", "33333333333");
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+                transaction.replace(R.id.frame_layout, new InfoFragment());
+                transaction.commit();
             }
         } );
     }
