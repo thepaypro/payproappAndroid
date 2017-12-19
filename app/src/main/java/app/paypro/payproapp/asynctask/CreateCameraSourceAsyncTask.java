@@ -32,7 +32,7 @@ import app.paypro.payproapp.utils.Barcode.BarcodeTrackerFactory;
  * Created by rogerbaiget on 19/12/17.
  */
 
-public class createCameraSourceAsyncTask extends AsyncTask<Void,Void,Void> {
+public class CreateCameraSourceAsyncTask extends AsyncTask<Void,Void,Void> {
     private static final String TAG = "Barcode-reader";
     private Context context;
     private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
@@ -40,7 +40,7 @@ public class createCameraSourceAsyncTask extends AsyncTask<Void,Void,Void> {
     private BarcodeDetector barcodeDetector;
     private ScanFragment fragment;
 
-    public createCameraSourceAsyncTask(Context context, GraphicOverlay<BarcodeGraphic> mGraphicOverlay, ScanFragment fragment){
+    public CreateCameraSourceAsyncTask(Context context, GraphicOverlay<BarcodeGraphic> mGraphicOverlay, ScanFragment fragment){
         this.context = context;
         this.mGraphicOverlay = mGraphicOverlay;
         this.fragment = fragment;

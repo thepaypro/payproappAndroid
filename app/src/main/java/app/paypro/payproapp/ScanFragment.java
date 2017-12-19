@@ -22,7 +22,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
-import app.paypro.payproapp.asynctask.createCameraSourceAsyncTask;
+import app.paypro.payproapp.asynctask.CreateCameraSourceAsyncTask;
 import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.utils.Barcode.BarcodeGraphic;
 import app.paypro.payproapp.utils.Barcode.BarcodeGraphicTracker;
@@ -90,7 +90,7 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
 
     @SuppressLint("InlinedApi")
     private void createCameraSource() {
-        new createCameraSourceAsyncTask(getContext(), mGraphicOverlay, this).execute();
+        new CreateCameraSourceAsyncTask(getContext(), mGraphicOverlay, this).execute();
     }
 
     @Override
