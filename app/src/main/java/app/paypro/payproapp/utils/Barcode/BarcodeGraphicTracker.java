@@ -1,10 +1,9 @@
-package app.paypro.payproapp;
+package app.paypro.payproapp.utils.Barcode;
 
 /**
  * Created by rogerbaiget on 28/11/17.
  */
 
-import android.content.Context;
 import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 

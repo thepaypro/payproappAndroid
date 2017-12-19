@@ -2,12 +2,7 @@ package app.paypro.payproapp;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.hardware.Camera;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -20,15 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+
 import java.io.IOException;
 
+import app.paypro.payproapp.asynctask.createCameraSourceAsyncTask;
 import app.paypro.payproapp.global.Global;
+import app.paypro.payproapp.utils.Barcode.BarcodeGraphic;
+import app.paypro.payproapp.utils.Barcode.BarcodeGraphicTracker;
 import app.paypro.payproapp.ui.camera.CameraSource;
 import app.paypro.payproapp.ui.camera.CameraSourcePreview;
 import app.paypro.payproapp.ui.camera.GraphicOverlay;
@@ -43,6 +40,7 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
     private CameraSourcePreview mPreview;
     private LinearLayout permissionDeniedView;
     private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
+    private BarcodeDetector barcodeDetector;
 
     private static final int RC_HANDLE_GMS = 9001;
     private static final int RC_HANDLE_CAMERA_PERM = 2;
@@ -69,14 +67,15 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
 
         mPreview = getActivity().findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) getActivity().findViewById(R.id.graphicOverlay);
+    }
 
+    public void initializeCamera(){
         int rc = ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA);
         if (rc == PackageManager.PERMISSION_GRANTED) {
             createCameraSource();
         } else {
             requestCameraPermission();
         }
-
     }
 
     private void requestCameraPermission() {
@@ -91,42 +90,13 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
 
     @SuppressLint("InlinedApi")
     private void createCameraSource() {
-        Context context = getContext();
-
-        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build();
-        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay, this);
-        barcodeDetector.setProcessor(
-                new MultiProcessor.Builder<>(barcodeFactory).build());
-
-        if (!barcodeDetector.isOperational()) {
-            Log.w(TAG, "Detector dependencies are not yet available.");
-
-            IntentFilter lowstorageFilter = new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW);
-            boolean hasLowStorage = getActivity().registerReceiver(null, lowstorageFilter) != null;
-
-            if (hasLowStorage) {
-                Toast.makeText(getContext(), R.string.low_storage_error, Toast.LENGTH_LONG).show();
-                Log.w(TAG, getString(R.string.low_storage_error));
-            }
-        }
-
-            CameraSource.Builder builder = new CameraSource.Builder(getContext(), barcodeDetector)
-                .setRequestedPreviewSize(768, 1240)
-                .setRequestedFps(15.0f);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            builder = builder.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-        }
-
-        mCameraSource = builder
-                .build();
-
+        new createCameraSourceAsyncTask(getContext(), mGraphicOverlay, this).execute();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        startCameraSource();
+        initializeCamera();
     }
 
     @Override
@@ -203,5 +173,10 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
     public void showPermissionDeniedView(){
         mPreview.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.VISIBLE);
+    }
+
+    public void setmCameraSource(CameraSource mCameraSource){
+        this.mCameraSource = mCameraSource;
+        startCameraSource();
     }
 }
