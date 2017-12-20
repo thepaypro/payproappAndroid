@@ -9,20 +9,54 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/PayPro_Background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
-        <EditText
-            android:id="@+id/inputNickname"
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:ems="10"
-            android:hint="@string/nickname"
-            android:inputType="textPersonName"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:layout_editor_absoluteY="66dp" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/PayPro_Line"
+                android:minHeight="0.5dp" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/ic_launcher_background">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent">
+
+                    <EditText
+                        android:id="@+id/inputNickname"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:ems="10"
+                        android:hint="@string/nickname"
+                        android:inputType="textPersonName"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        tools:layout_editor_absoluteY="66dp" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/PayPro_Line"
+                android:minHeight="0.5dp" />
+
+        </TableLayout>
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
