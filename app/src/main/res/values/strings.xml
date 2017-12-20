@@ -122,4 +122,6 @@
 
   <string name="invite_dialog">This is not a PayPro user. Do you want to send an invite?</string>
   <string name="invite_dialog_title">Invite</string>
+    <string name="community">Community</string>
+  <string name="terms_and_conditions"><![CDATA[Terms & Conditions]]></string>
 </resources>
