@@ -6,83 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar4"
-        android:layout_width="0dp"
-        android:layout_height="44dp"
-        android:background="@color/PayPro_NavigationBar"
-        android:minHeight="?attr/actionBarSize"
-        android:textStyle="normal"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@color/PayPro_Blue" />
-
-    <ImageButton
-        android:id="@+id/backInfoView"
-        android:layout_width="wrap_content"
-        android:layout_height="44dp"
-        android:background="@color/defaultBackgroundColor"
-        android:contentDescription="TODO"
-        android:paddingLeft="10dp"
-        android:paddingRight="70dp"
-        android:tint="@color/PayPro_Blue"
-        app:layout_constraintLeft_toLeftOf="@+id/toolbar4"
-        app:layout_constraintTop_toTopOf="@+id/toolbar4"
-        app:srcCompat="?attr/actionModeCloseDrawable" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
-        android:text="Profile"
-        android:textColor="@color/PayPro_Blue"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toLeftOf="@+id/toolbar4"
-        app:layout_constraintTop_toTopOf="@+id/toolbar4" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="Info"
-        android:textColor="@color/defaultTextColor"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toLeftOf="@+id/toolbar4"
-        app:layout_constraintRight_toRightOf="@+id/toolbar4"
-        app:layout_constraintTop_toTopOf="@+id/toolbar4" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="44dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintLeft_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/PayPro_Background">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/PayPro_Line"
-                android:minHeight="0.5dp" />
-        </TableLayout>
-    </RelativeLayout>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="44.5dp"
+        android:layout_marginTop="0dp"
         android:background="@color/PayPro_Background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
@@ -106,7 +33,7 @@
         android:id="@+id/relativeRows"
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:layout_marginTop="244.5dp"
+        android:layout_marginTop="200dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">

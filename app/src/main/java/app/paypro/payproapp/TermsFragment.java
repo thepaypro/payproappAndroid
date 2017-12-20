@@ -3,10 +3,14 @@ package app.paypro.payproapp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
@@ -23,6 +27,31 @@ public class TermsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText("Terms & Conditions");
+
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+        toolbar_back_button_text.setText("Info");
+        toolbar_back_button_text.setVisibility(View.VISIBLE);
+
+        Button confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
+        confirmButton.setVisibility(View.INVISIBLE);
+
+        ProgressBar progressBar = getActivity().findViewById(R.id.app_toolbar_progress_bar);
+        progressBar.setVisibility(View.INVISIBLE);
+
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.VISIBLE);
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+                transaction.replace(R.id.frame_layout, new InfoFragment());
+                transaction.commit();
+            }
+        });
 
         TextView terms = getView().findViewById(R.id.terms_text);
         terms.setText(Html.fromHtml("<p>This is a binding Agreement between THEPAYPRO LTD. (“PayPro App” or “We”) and the person, persons, or entity (“You” or “Your”) using the service, Software, or application (“Software”).</p>\n" +

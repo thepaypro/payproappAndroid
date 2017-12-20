@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -195,6 +196,31 @@ public class ProfileView extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText("Profile");
+
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+        toolbar_back_button_text.setText("Settings");
+        toolbar_back_button_text.setVisibility(View.VISIBLE);
+
+        Button confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
+        confirmButton.setVisibility(View.INVISIBLE);
+
+        ProgressBar progressBar = getActivity().findViewById(R.id.app_toolbar_progress_bar);
+        progressBar.setVisibility(View.INVISIBLE);
+
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.VISIBLE);
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+                transaction.replace(R.id.frame_layout, new SettingsFragment());
+                transaction.commit();
+            }
+        });
+
         avatarImage = getView().findViewById(R.id.avatarProfileView);
 
         try {
@@ -211,17 +237,6 @@ public class ProfileView extends Fragment {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
-        ImageButton backButton = getView().findViewById(R.id.backButtonToolbar);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.replace(R.id.frame_layout, new SettingsFragment());
-                transaction.commit();
-            }
-        });
 
         Button editAvatarButton = getView().findViewById(R.id.editAvatarButton);
         editAvatarButton.setOnClickListener(new View.OnClickListener() {

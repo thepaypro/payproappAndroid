@@ -10,6 +10,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
@@ -25,7 +28,6 @@ import app.paypro.payproapp.db.entity.Account;
 
 public class AccountFragment extends Fragment implements AccountFragmentsInterface{
 
-//    private app.paypro.payproapp.db.entity.Account account;
     private TextView currencyBalance;
     private AccountInfoFragment infoFragment;
     private AccountTransactionsFragment transactionsFragment;
@@ -48,6 +50,21 @@ public class AccountFragment extends Fragment implements AccountFragmentsInterfa
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText("Account");
+
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.INVISIBLE);
+
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+        toolbar_back_button_text.setVisibility(View.INVISIBLE);
+
+        Button confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
+        confirmButton.setVisibility(View.INVISIBLE);
+
+        ProgressBar progressBar = getActivity().findViewById(R.id.app_toolbar_progress_bar);
+        progressBar.setVisibility(View.INVISIBLE);
 
         currencyBalance = getView().findViewById(R.id.currency_balance);
         ViewPager viewPager = (ViewPager) getView().findViewById(R.id.viewpager);

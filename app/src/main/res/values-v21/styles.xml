@@ -7,5 +7,7 @@
         <item name="colorPrimary">@color/PayPro_Blue</item>
         <item name="colorPrimaryDark">@color/PayPro_Blue</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>

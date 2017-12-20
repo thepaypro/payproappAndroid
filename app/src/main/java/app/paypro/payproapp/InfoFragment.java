@@ -1,5 +1,7 @@
 package app.paypro.payproapp;
 
+import android.app.ActionBar;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,14 +9,20 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 /**
  * Created by kike on 19/12/17.
  */
 
 public class InfoFragment extends Fragment {
+    View v;
+    Context mContext;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -25,8 +33,22 @@ public class InfoFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ImageButton backButton = getView().findViewById(R.id.backInfoView);
-        backButton.setOnClickListener(new View.OnClickListener() {
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText("Info");
+
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+        toolbar_back_button_text.setText("Settings");
+        toolbar_back_button_text.setVisibility(View.VISIBLE);
+
+        Button confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
+        confirmButton.setVisibility(View.INVISIBLE);
+
+        ProgressBar progressBar = getActivity().findViewById(R.id.app_toolbar_progress_bar);
+        progressBar.setVisibility(View.INVISIBLE);
+
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.VISIBLE);
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
