@@ -6,11 +6,108 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/app_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/PayPro_NavigationBar"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/app_toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/PayPro_NavigationBar"
+        android:clickable="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/app_toolbar_back_button_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:background="@color/defaultBackgroundColor"
+            android:paddingLeft="5dp"
+            android:paddingRight="70dp"
+            android:tint="@color/PayPro_Blue"
+            android:visibility="invisible"
+            app:srcCompat="?attr/actionModeCloseDrawable" />
+
+        <TextView
+            android:id="@+id/app_toolbar_back_button_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="false"
+            android:gravity="center_vertical"
+            android:paddingLeft="30dp"
+            android:text="TextView"
+            android:textColor="@color/PayPro_Blue"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/app_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="TextView"
+            android:textColor="@color/defaultTextColor"
+            android:textStyle="normal" />
+
+        <Button
+            android:id="@+id/app_toolbar_confirm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@color/defaultBackgroundColor"
+            android:text="Confirm"
+            android:textColor="@color/PayPro_Blue"
+            android:visibility="invisible" />
+
+        <ProgressBar
+            android:id="@+id/app_toolbar_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/custom_progress_loader_blue"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="43.5dp"
+        android:background="@color/PayPro_Background">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/PayPro_Line"
+            android:minHeight="0.5dp" />
+    </TableLayout>
+
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/navigation"
+        android:layout_below="@+id/app_toolbar"
         android:animateLayoutChanges="true"
         android:background="@color/PayPro_Background">
 

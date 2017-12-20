@@ -64,8 +64,8 @@ public class SendMoneyAmountFragment extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((TabActivity)getActivity()).hideVirtualKeyboard();
-                getActivity().onBackPressed();
+                ((TabActivity) getActivity()).hideVirtualKeyboard();
+                getFragmentManager().popBackStack();
             }
         });
 

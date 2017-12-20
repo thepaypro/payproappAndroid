@@ -1,6 +1,8 @@
 package app.paypro.payproapp;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,7 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -46,6 +51,21 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText("Settings");
+
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.INVISIBLE);
+
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+        toolbar_back_button_text.setVisibility(View.INVISIBLE);
+
+        Button confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
+        confirmButton.setVisibility(View.INVISIBLE);
+
+        ProgressBar progressBar = getActivity().findViewById(R.id.app_toolbar_progress_bar);
+        progressBar.setVisibility(View.INVISIBLE);
 
         ImageView avatarImage;
 
@@ -111,7 +131,18 @@ public class SettingsFragment extends Fragment {
         rowTell.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
-                Log.i("eeeeee", "2222222222");
+                PackageManager pm = getActivity().getPackageManager();
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
+                sendIntent.setType("text/plain");
+                try {
+                    PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+                    sendIntent.setPackage("com.whatsapp");
+                } catch (PackageManager.NameNotFoundException e) {
+                    // SHOW ALL MSG APPS
+                }
+                startActivity(sendIntent);
             }
         } );
 
@@ -120,7 +151,10 @@ public class SettingsFragment extends Fragment {
         rowInfo.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
-                Log.i("eeeeee", "33333333333");
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+                transaction.replace(R.id.frame_layout, new InfoFragment());
+                transaction.commit();
             }
         } );
     }

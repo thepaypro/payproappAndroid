@@ -38,6 +38,7 @@
 
   <color name="inactive_grey">#a9a9a9</color>
   <color name="secundary_grey">#747474</color>
+    <color name="PayPro_NavigationBar">#f7f7f7</color>
 
 
 </resources>
