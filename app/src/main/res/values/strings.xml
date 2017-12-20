@@ -91,6 +91,8 @@
 
   <string name="low_storage_error">The phone storage is low</string>
   <string name="camera_permission_denied_text">To scan a qr code, allow PayPro to access the camera.</string>
+  
+  <string name="no_internet">No Internet</string>
 
   <string name="bits_lowercase">bits</string>
 
