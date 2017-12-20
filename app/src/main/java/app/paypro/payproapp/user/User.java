@@ -37,6 +37,12 @@ public class User {
 
                     app.paypro.payproapp.db.entity.User userEntity = new app.paypro.payproapp.db.entity.User(userJSON.getInt("id"),userJSON.getString("username"));
 
+                    if(!userJSON.isNull("bitcoinAccount")){
+                        JSONObject accountJSON = userJSON.getJSONObject("bitcoinAccount");
+                        Account accountEntity= new Account(accountJSON.getInt("id"),accountJSON.getString("address"));
+                        new SaveAccountAsyncTask(context).execute(accountEntity);
+                    }
+
                     new SaveUserAsyncTask(context).execute(userEntity);
 
                     JSONObject responseJSON = new JSONObject();
@@ -48,7 +54,7 @@ public class User {
 
                     if (object.has("message"))
                     {
-                        Log.i("message", object.getString("message"));
+//                        Log.i("message", object.getString("message"));
 
                         if (object.getString("message").equals("Username already exist")) {
                             errorResponse.put("error_msg","error_username_exist");

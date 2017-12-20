@@ -12,7 +12,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.text.TextWatcher;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import app.paypro.payproapp.utils.PPSnackbar;
 
 /**
  * Created by rogerbaiget on 13/11/17.
@@ -20,12 +23,13 @@ import android.widget.TextView;
 
 public class SmsCodeActivity extends AppCompatActivity{
 
-    public EditText editText;
-    public TextView firstTextView;
-    public TextView secondTextView;
-    public TextView thirdTextView;
-    public TextView fourTextView;
-    public String username;
+    private EditText editText;
+    private TextView firstTextView;
+    private TextView secondTextView;
+    private TextView thirdTextView;
+    private TextView fourTextView;
+    private String username;
+    private LinearLayout mainView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +38,25 @@ public class SmsCodeActivity extends AppCompatActivity{
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        editText= findViewById(R.id.editText);
-        firstTextView= findViewById(R.id.viewText1);
-        secondTextView= findViewById(R.id.viewText2);
-        thirdTextView= findViewById(R.id.viewText3);
-        fourTextView= findViewById(R.id.viewText4);
-        editText.requestFocus();
 
-        InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        mainView = findViewById(R.id.main_view);
+        editText = findViewById(R.id.editText);
+        firstTextView = findViewById(R.id.viewText1);
+        secondTextView = findViewById(R.id.viewText2);
+        thirdTextView = findViewById(R.id.viewText3);
+        fourTextView = findViewById(R.id.viewText4);
 
         editText.addTextChangedListener(filterTextWatcher);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             username = extras.getString("username");
+//            if(extras.getString("errorMsg") != null){
+//                hideVirtualKeyboard();
+//                PPSnackbar.getSnackbar(mainView,getApplicationContext(),extras.getString("errorMsg")).show();
+//            }else{
+                editText.requestFocus();
+//            }
         }
 
     }
@@ -119,5 +127,4 @@ public class SmsCodeActivity extends AppCompatActivity{
         }
 
     };
-
 }

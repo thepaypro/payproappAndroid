@@ -142,11 +142,11 @@ public class SendMoneySendFragment extends Fragment {
                                 getActivity().finish();
                             }else if (!object.getBoolean("status") && object.has("error_msg")){
                                 hideActivityIndicator();
-                                PPSnackbar.getSnackbar(mainView,object.getString("error_msg")).show();
+                                PPSnackbar.getSnackbar(mainView,getContext(),object.getString("error_msg")).show();
                                 swipeButton.restartSwipeButton();
                             }else{
                                 hideActivityIndicator();
-                                PPSnackbar.getSnackbar(mainView,"").show();
+                                PPSnackbar.getSnackbar(mainView,getContext(),"").show();
                                 swipeButton.restartSwipeButton();
                             }
                         }
