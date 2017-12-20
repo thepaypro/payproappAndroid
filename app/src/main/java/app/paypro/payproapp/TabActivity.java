@@ -43,7 +43,7 @@ public class TabActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            if(navigationEnabled){
+            if(navigationEnabled) {
                 Fragment selectedFragment = null;
                 Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
                 Boolean selectedActualFragment = false;
@@ -52,32 +52,33 @@ public class TabActivity extends AppCompatActivity {
                         Intercom.client().displayMessenger();
                         return false;
                     case R.id.navigation_scan:
-                        if (f instanceof ScanFragment){
+                        if (f instanceof ScanFragment) {
                             selectedActualFragment = true;
                         }
                         selectedFragment = ScanFragment.newInstance();
                         break;
                     case R.id.navigation_send:
-                        if (f instanceof ContactsFragment){
+                        if (f instanceof ContactsFragment) {
                             selectedActualFragment = true;
                         }
                         selectedFragment = ContactsFragment.newInstance();
                         break;
                     case R.id.navigation_account:
-                        if (f instanceof AccountFragment){
+                        if (f instanceof AccountFragment) {
                             selectedActualFragment = true;
                         }
                         selectedFragment = AccountFragment.newInstance();
                         navigationAccount = selectedFragment;
                         break;
                     case R.id.navigation_settings:
-                        if (f instanceof SettingsFragment){
+                        if (f instanceof SettingsFragment) {
                             selectedActualFragment = true;
                         }
                         selectedFragment = SettingsFragment.newInstance();
                         break;
                 }
-                if(!selectedActualFragment){
+
+                if (!selectedActualFragment) {
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
                     transaction.replace(R.id.frame_layout, selectedFragment);

@@ -1,4 +1,4 @@
-package app.paypro.payproapp;
+package app.paypro.payproapp.utils.Barcode;
 
 /**
  * Created by rogerbaiget on 28/11/17.
@@ -11,6 +11,7 @@ import android.graphics.RectF;
 
 import com.google.android.gms.vision.barcode.Barcode;
 
+import app.paypro.payproapp.SendMoney;
 import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.ui.camera.GraphicOverlay;
 
