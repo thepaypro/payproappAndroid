@@ -84,8 +84,6 @@
 
   <string name="micro">μ</string>
 
-  <string name="show_qr_title">QR Code</string>
-
   <string name="contacts_permission_denied_text">To send money to your friends, allow PayPro to acces your contacts.</string>
   <string name="empty_contacts_list">Your contacts list is empty</string>
 
@@ -117,6 +115,7 @@
   <string name="amount_title">Amount</string>
   <string name="send_title">Send</string>
   <string name="bitcoin_address_title">Bitcoin Address</string>
+  <string name="account_title">Account</string>
 
   <string name="sms_msg">Hi! I am trying to send you money via PayPro but I see you don\'t have an account. Can you download it so you can instantly have the money? It\'s available for iOS and Android :)</string>
 
