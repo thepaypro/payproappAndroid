@@ -2,6 +2,7 @@ package app.paypro.payproapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -46,7 +47,7 @@ public class AccountInfoFragment extends Fragment implements AccountFragmentsInt
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        LinearLayout qrCodeClickable = getView().findViewById(R.id.qr_code_clickable);
+        ConstraintLayout qrCodeClickable = getView().findViewById(R.id.qr_code_clickable);
 
         qrCodeClickable.setOnClickListener( new View.OnClickListener() {
 

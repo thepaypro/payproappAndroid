@@ -3,7 +3,6 @@
 
     <style name="PayProTheme" parent="AppTheme">
         <item name="android:statusBarColor">@color/PayPro_NavigationBar</item>
-        <item name="android:windowLightStatusBar">true</item>
         <item name="colorPrimary">@color/PayPro_Blue</item>
         <item name="colorPrimaryDark">@color/PayPro_Blue</item>
         <item name="colorAccent">@color/colorAccent</item>
