@@ -36,15 +36,13 @@ public class TransactionsRecyclerViewAdapter  extends RecyclerView.Adapter<Trans
         Transaction transaction = transactionsList.get(position);
 
         NumberFormat format = NumberFormat.getInstance(Locale.UK);
-//        Locale.Builder b = new Locale.Builder();
-//        b.setRegion("XB");
-//        Locale xb = b.build();
-//        format.setCurrency(Currency.getInstance(xb));
+        format.setMinimumFractionDigits(2);
+        format.setMaximumFractionDigits(2);
         String amount = format.format(transaction.getAmount());
-//        amount = "μ\u20BF " + amount;
-        String title = "";
+        String signal = "";
+        String title;
         if(transaction.getPayer()){
-            amount = "-"+amount;
+            signal = "-";
             title = "Transfer out ";
         }else{
             title = "Transfer in ";
@@ -54,6 +52,7 @@ public class TransactionsRecyclerViewAdapter  extends RecyclerView.Adapter<Trans
 
         holder.titleTextView.setText(title);
         holder.addressTextView.setText(transaction.getAddressTo());
+        holder.signalTextView.setText(signal);
         holder.amountTextView.setText(amount);
         holder.subtitleTextView.setText(transaction.getSubject());
         holder.dateTextView.setText(date);
@@ -75,6 +74,7 @@ public class TransactionsRecyclerViewAdapter  extends RecyclerView.Adapter<Trans
         private TextView titleTextView;
         private TextView addressTextView;
         private TextView amountTextView;
+        private TextView signalTextView;
         private TextView subtitleTextView;
         private TextView dateTextView;
 
@@ -83,6 +83,7 @@ public class TransactionsRecyclerViewAdapter  extends RecyclerView.Adapter<Trans
             titleTextView = (TextView) view.findViewById(R.id.title_text);
             addressTextView = (TextView) view.findViewById(R.id.address_text);
             amountTextView = (TextView) view.findViewById(R.id.amount_text);
+            signalTextView = (TextView) view.findViewById(R.id.amount_sign) ;
             subtitleTextView = (TextView) view.findViewById(R.id.subtitle_text);
             dateTextView = (TextView) view.findViewById(R.id.date_text);
         }

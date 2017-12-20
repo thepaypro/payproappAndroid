@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,7 +63,7 @@ public class Account {
                                 String transactionDate = ((JSONObject) bitcoinTransactions.get(i)).getJSONObject("createdAt").getString("date");
                                 Date date = format.parse(transactionDate);
 
-                                Transaction transaction = new Transaction(((JSONObject) bitcoinTransactions.get(i)).getInt("id"), payer, ((JSONObject) bitcoinTransactions.get(i)).getInt("amount"), date);
+                                Transaction transaction = new Transaction(((JSONObject) bitcoinTransactions.get(i)).getInt("id"), payer, ((JSONObject) bitcoinTransactions.get(i)).getDouble("amount"), date);
 
                                 if(!((JSONObject) bitcoinTransactions.get(i)).isNull("subject")){
                                     transaction.setSubject(((JSONObject) bitcoinTransactions.get(i)).getString("subject"));
@@ -80,7 +81,7 @@ public class Account {
                                 new SaveTransactionsAsyncTask(context).execute(transactionsArray);
                             }
                         }
-                        account.setBalance(infoJSON.getInt("bitcoinBalance"));
+                        account.setBalance(infoJSON.getDouble("bitcoinBalance"));
                         account.setLast_synced_transaction_id(lastSyncedTransactionId);
                         new UpdateAccountAsyncTask(context).execute(account);
 

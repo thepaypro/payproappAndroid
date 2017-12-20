@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
 @Entity
 public class Transaction {
 
-    public Transaction(int uid, Boolean payer, int amount, Date date){
+    public Transaction(int uid, Boolean payer, Double amount, Date date){
         this.uid = uid;
         this.payer = payer;
         this.amount = amount;
@@ -27,7 +28,7 @@ public class Transaction {
     private Boolean payer;
 
     @ColumnInfo(name = "amount")
-    private int amount;
+    private Double amount;
 
     @ColumnInfo(name = "subject")
     private String subject;
@@ -54,11 +55,11 @@ public class Transaction {
         this.payer = payer;
     }
 
-    public int getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

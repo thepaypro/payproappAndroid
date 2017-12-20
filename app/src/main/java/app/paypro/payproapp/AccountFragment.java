@@ -98,8 +98,9 @@ public class AccountFragment extends Fragment implements AccountFragmentsInterfa
 
         if(account.getBalance() != null){
             NumberFormat format = NumberFormat.getInstance(Locale.UK);
+            format.setMinimumFractionDigits(2);
+            format.setMaximumFractionDigits(2);
             String amount = format.format(account.getBalance());
-//            amount = "μ\u20BF " + amount;
             currencyBalance.setText(amount);
         }else{
             currencyBalance.setText(R.string.balance_empty);
