@@ -164,9 +164,9 @@ public class User {
                                 }
                             }
                         });
-                                JSONObject responseJSON = new JSONObject();
-                                        responseJSON.put("status", true);
-                                        listener.getResult(responseJSON);
+//                                JSONObject responseJSON = new JSONObject();
+//                                        responseJSON.put("status", true);
+//                                        listener.getResult(responseJSON);
                     } else {
                         JSONObject errorResponse = new JSONObject();
                         if(object.has("error_msg")){

@@ -102,17 +102,6 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
                 viewHolder.ppLogo.setVisibility(View.GONE);
             }
 
-
-//            BitmapShader shader;
-//            shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-//
-//            Paint paint = new Paint();
-//            paint.setAntiAlias(true);
-//            paint.setShader(shader);
-//
-//            RectF rect = new RectF(0.0f, 0.0f, width, height);
-
-
             viewHolder.name.setText(item.getName());
             viewHolder.number.setText(item.getNumbers().get(0));
 
