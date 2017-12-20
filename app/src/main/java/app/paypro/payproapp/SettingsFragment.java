@@ -1,6 +1,8 @@
 package app.paypro.payproapp;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -111,7 +113,18 @@ public class SettingsFragment extends Fragment {
         rowTell.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
-                Log.i("eeeeee", "2222222222");
+                PackageManager pm = getActivity().getPackageManager();
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.sms_msg));
+                sendIntent.setType("text/plain");
+                try {
+                    PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+                    sendIntent.setPackage("com.whatsapp");
+                } catch (PackageManager.NameNotFoundException e) {
+                    // SHOW ALL MSG APPS
+                }
+                startActivity(sendIntent);
             }
         } );
 
