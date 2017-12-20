@@ -249,6 +249,7 @@ public class PasscodeActivity extends AppCompatActivity{
                                             }else if (!object.getBoolean("status") && object.has("error_msg")){
                                                 enableView();
                                                 PPSnackbar.getSnackbar(mainView,getApplicationContext(),object.getString("error_msg")).show();
+                                                shake();
                                                 editText.setText("");
                                             }else{
                                                 enableView();

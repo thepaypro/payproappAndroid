@@ -17,11 +17,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="PayProTheme" parent="AppTheme" >
-        <item name="android:colorBackground">@color/PayPro_Blue</item>
-        <item name="android:windowBackground">@color/PayPro_Blue</item>
-    </style>
-
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
@@ -45,13 +40,14 @@
         <item name="colorAccent">@android:color/black</item>
     </style>
 
-
     <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@android:color/white</item>
         <item name="colorPrimaryDark">@android:color/white</item>
         <item name="colorAccent">@android:color/white</item>
     </style>
+
+    <style name="PayProTheme" parent="AppTheme" />
 
 
 </resources>

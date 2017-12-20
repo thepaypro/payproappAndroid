@@ -43,6 +43,7 @@ public class SendMoneySendFragment extends Fragment {
     private TextView toText4;
     private LinearLayout progressBarLayout;
     private Toolbar toolbar;
+    private Boolean activityBlocked = false;
 
 
     public static SendMoneySendFragment newInstance() {
@@ -80,8 +81,10 @@ public class SendMoneySendFragment extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((TabActivity) getActivity()).hideVirtualKeyboard();
-                getActivity().onBackPressed();
+                if(!activityBlocked){
+                    ((TabActivity) getActivity()).hideVirtualKeyboard();
+                    getFragmentManager().popBackStack();
+                }
             }
         });
 
@@ -159,10 +162,14 @@ public class SendMoneySendFragment extends Fragment {
     public void showActivityIndicator(){
         progressBarLayout.setVisibility(View.VISIBLE);
         swipeButton.disable();
+        activityBlocked = true;
+        ((TabActivity)getActivity()).dissableBottomNavigationView();
     }
 
     public void hideActivityIndicator(){
         progressBarLayout.setVisibility(View.INVISIBLE);
         swipeButton.enable();
+        activityBlocked = false;
+        ((TabActivity)getActivity()).enableBottomNavigationView();
     }
 }

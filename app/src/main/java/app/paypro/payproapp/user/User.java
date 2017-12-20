@@ -72,6 +72,9 @@ public class User {
                             errorResponse.put("error_msg","error_invalid_phonenumber");
                         }
                     }
+                    if (object.has("error_msg")){
+                        errorResponse.put("error_msg",object.getString("error_msg"));
+                    }
 
                     listener.getResult(errorResponse);
                 }
@@ -170,13 +173,13 @@ public class User {
                                 }
                             }
                         });
-//                                JSONObject responseJSON = new JSONObject();
-//                                        responseJSON.put("status", true);
-//                                        listener.getResult(responseJSON);
                     } else {
                         JSONObject errorResponse = new JSONObject();
                         if(object.has("error_msg")){
                             errorResponse.put("error_msg", object.getString("error_msg"));
+                        }
+                        if (object.has("errorMessage")){
+                            errorResponse.put("error_msg",object.getString("errorMessage"));
                         }
                         errorResponse.put("status", false);
                         listener.getResult(errorResponse);
@@ -187,7 +190,7 @@ public class User {
 
                     JSONObject errorResponse = new JSONObject();
                     errorResponse.put("status", false);
-                    errorResponse.put("message", e.getMessage());
+                    errorResponse.put("error_msg", e.getMessage());
                     listener.getResult(errorResponse);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -221,8 +224,11 @@ public class User {
                     } else {
                         JSONObject errorResponse = new JSONObject();
 
-                        if(object.has("errorMessage")){
-                            errorResponse.put("error_msg", object.getString("errorMessage"));
+                        if(object.has("error_msg")){
+                            errorResponse.put("error_msg", object.getString("error_msg"));
+                        }
+                        if (object.has("errorMessage")){
+                            errorResponse.put("error_msg",object.getString("errorMessage"));
                         }
 
                         errorResponse.put("status", false);
@@ -254,6 +260,9 @@ public class User {
                     } else {
                         JSONObject errorResponse = new JSONObject();
 
+                        if (object.has("error_msg")){
+                            errorResponse.put("error_msg",object.getString("error_msg"));
+                        }
                         if(object.has("message")){
                             errorResponse.put("error_msg", object.getString("message"));
                         }

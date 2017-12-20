@@ -62,7 +62,7 @@ public class SendMoneyAddressFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ((TabActivity) getActivity()).hideVirtualKeyboard();
-                getActivity().onBackPressed();
+                getFragmentManager().popBackStack();
             }
         });
 

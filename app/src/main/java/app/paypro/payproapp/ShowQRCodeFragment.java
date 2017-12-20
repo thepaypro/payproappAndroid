@@ -60,48 +60,13 @@ public class ShowQRCodeFragment extends Fragment {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
                 transaction.replace(R.id.frame_layout, AccountFragment.newInstance());
-//                transaction.addToBackStack(null);
                 transaction.commit();
-//                getActivity().onBackPressed();
             }
         });
-
 
         QRBitmapGeneratorAsyncTask qrBitmapGeneratorAsyncTask = new QRBitmapGeneratorAsyncTask(qrImageView,progressBar);
         qrBitmapGeneratorAsyncTask.execute("bitcoin:"+addr);
 
-
-//        qrImageView.setImageBitmap(generateQRBitMap("bitcoin:"+addr));
     }
 
-//    private Bitmap generateQRBitMap(final String content) {
-//
-//        Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
-//
-//        hints.put(EncodeHintType.ERROR_CORRECTION,ErrorCorrectionLevel.H);
-//
-//        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-//
-//        try {
-//            BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, 512, 512, hints);
-//
-//            int width = bitMatrix.getWidth();
-//            int height = bitMatrix.getHeight();
-//
-//            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-//
-//            for (int x = 0; x < width; x++) {
-//                for (int y = 0; y < height; y++) {
-//
-//                    bmp.setPixel(x , y, bitMatrix.get(x,y) ? Color.BLACK : Color.WHITE);
-//                }
-//            }
-//
-//            return bmp;
-//        } catch (WriterException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
 }
