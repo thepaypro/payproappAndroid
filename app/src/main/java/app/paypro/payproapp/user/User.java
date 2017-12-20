@@ -51,20 +51,23 @@ public class User {
                         Log.i("message", object.getString("message"));
 
                         if (object.getString("message").equals("Username already exist")) {
-                            errorResponse.put("errorMessage","error_username_exist");
+                            errorResponse.put("error_msg","error_username_exist");
                         }
 
                         if (object.getString("message").equals("Invalid verification code")) {
-                            errorResponse.put("errorMessage","error_invalid_verification_code");
+                            errorResponse.put("error_msg","error_invalid_verification_code");
                         }
 
                         if (object.getString("message").equals("Passwords dont match")) {
-                            errorResponse.put("errorMessage","error_passcode_dont_match");
+                            errorResponse.put("error_msg","error_passcode_dont_match");
                         }
 
                         if (object.getString("message").equals("Invalid phone number")) {
-                            errorResponse.put("errorMessage","error_invalid_phonenumber");
+                            errorResponse.put("error_msg","error_invalid_phonenumber");
                         }
+                    }
+                    if (object.has("error_msg")){
+                        errorResponse.put("error_msg",object.getString("error_msg"));
                     }
 
                     listener.getResult(errorResponse);
@@ -164,13 +167,13 @@ public class User {
                                 }
                             }
                         });
-                                JSONObject responseJSON = new JSONObject();
-                                        responseJSON.put("status", true);
-                                        listener.getResult(responseJSON);
                     } else {
                         JSONObject errorResponse = new JSONObject();
                         if(object.has("error_msg")){
                             errorResponse.put("error_msg", object.getString("error_msg"));
+                        }
+                        if (object.has("errorMessage")){
+                            errorResponse.put("error_msg",object.getString("errorMessage"));
                         }
                         errorResponse.put("status", false);
                         listener.getResult(errorResponse);
@@ -181,7 +184,7 @@ public class User {
 
                     JSONObject errorResponse = new JSONObject();
                     errorResponse.put("status", false);
-                    errorResponse.put("message", e.getMessage());
+                    errorResponse.put("error_msg", e.getMessage());
                     listener.getResult(errorResponse);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -215,8 +218,11 @@ public class User {
                     } else {
                         JSONObject errorResponse = new JSONObject();
 
-                        if(object.has("errorMessage")){
-                            errorResponse.put("error_msg", object.getString("errorMessage"));
+                        if(object.has("error_msg")){
+                            errorResponse.put("error_msg", object.getString("error_msg"));
+                        }
+                        if (object.has("errorMessage")){
+                            errorResponse.put("error_msg",object.getString("errorMessage"));
                         }
 
                         errorResponse.put("status", false);
@@ -248,6 +254,9 @@ public class User {
                     } else {
                         JSONObject errorResponse = new JSONObject();
 
+                        if (object.has("error_msg")){
+                            errorResponse.put("error_msg",object.getString("error_msg"));
+                        }
                         if(object.has("message")){
                             errorResponse.put("error_msg", object.getString("message"));
                         }

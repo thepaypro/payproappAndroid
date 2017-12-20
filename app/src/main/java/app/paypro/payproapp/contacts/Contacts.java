@@ -32,6 +32,9 @@ public class Contacts {
                     if(object.has("error_msg")){
                         errorResponse.put("error_msg", object.getString("error_msg"));
                     }
+                    if (object.has("errorMessage")){
+                        errorResponse.put("error_msg",object.getString("errorMessage"));
+                    }
                     errorResponse.put("status", false);
                     listener.getResult(errorResponse);
                 }
