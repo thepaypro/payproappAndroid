@@ -23,10 +23,6 @@ public class PPSnackbar {
                 snackbar = Snackbar
                         .make(view, context.getResources().getString(R.string.error_save), Snackbar.LENGTH_LONG);
                 return snackbar;
-            case "Insufficient funds":
-                snackbar = Snackbar
-                        .make(view, context.getResources().getString(R.string.error_insufficient_funds), Snackbar.LENGTH_LONG);
-                return snackbar;
             default:
                 snackbar = Snackbar
                         .make(view, context.getResources().getString(R.string.error_basic), Snackbar.LENGTH_LONG);

@@ -86,6 +86,7 @@
                     android:background="@android:color/transparent"
                     android:gravity="center"
                     android:hint="@string/private_msg_placeholder"
+                    android:maxLength="99"
                     android:inputType="textPersonName"
                     android:textColor="@color/colorAccent"
                     android:textSize="20dp" />

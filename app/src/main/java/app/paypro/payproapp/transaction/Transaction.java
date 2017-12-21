@@ -33,8 +33,14 @@ public class Transaction {
                     if (object.has("error_msg")){
                         errorResponse.put("error_msg",object.getString("error_msg"));
                     }
-                    if (object.has("errorMessage")){
-                        errorResponse.put("error_msg",object.getString("errorMessage"));
+                    else if (object.has("errorMessage")){
+                        switch(object.getString("errorMessage")) {
+                            case "Insufficient funds":
+                                errorResponse.put("error_msg", "insufficient_funds");
+                                break;
+                            default:
+                                errorResponse.put("error_msg", "");
+                        }
                     }
                     listener.getResult(errorResponse);
                 }
