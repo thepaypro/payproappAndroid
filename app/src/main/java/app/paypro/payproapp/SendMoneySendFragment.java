@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,7 +44,6 @@ public class SendMoneySendFragment extends Fragment {
     private TextView toText3;
     private TextView toText4;
     private LinearLayout progressBarLayout;
-    private Toolbar toolbar;
     private Boolean activityBlocked = false;
 
 
@@ -66,6 +67,26 @@ public class SendMoneySendFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText(getResources().getString(R.string.send_title));
+
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+        toolbar_back_button_text.setText(getResources().getString(R.string.amount_title));
+        toolbar_back_button_text.setVisibility(View.VISIBLE);
+
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.VISIBLE);
+
+        Button confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
+        confirmButton.setVisibility(View.GONE);
+
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+            }
+        });
+
         mainView = getActivity().findViewById(R.id.main_view);
         swipeButton = getActivity().findViewById(R.id.swipe_btn);
         readyToSendText = getActivity().findViewById(R.id.ready_to_send_text);
@@ -74,19 +95,6 @@ public class SendMoneySendFragment extends Fragment {
         toText3 = getActivity().findViewById(R.id.to_text_3);
         toText4 = getActivity().findViewById(R.id.to_text_4);
         progressBarLayout = getActivity().findViewById(R.id.activity_indicator);
-        toolbar = getActivity().findViewById(R.id.toolbar);
-
-        ((TabActivity)getActivity()).setSupportActionBar(toolbar);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!activityBlocked){
-                    ((TabActivity) getActivity()).hideVirtualKeyboard();
-                    getFragmentManager().popBackStack();
-                }
-            }
-        });
 
         // Hide the virtual keyboard
         View view = getActivity().getCurrentFocus();

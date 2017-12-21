@@ -24,21 +24,23 @@ public class SwipeButton extends RelativeLayout {
 
     private ConstraintLayout swipeButtonInner;
     private int mainViewWidth;
+    private int startPosition;
     private int initialOffsetFrac = 5;
     private TextView centerText;
     private ViewGroup background;
     private Boolean activated = false;
     private Boolean enabled = true;
     private Boolean restarted = false;
+    private float actionDownPos;
 
 
     private OnStateChangeListener onStateChangeListener;
 
-    private int collapsedWidth;
-    private int collapsedHeight;
+//    private int collapsedWidth;
+//    private int collapsedHeight;
 
     private LinearLayout layer;
-    private boolean trailEnabled = false;
+//    private boolean trailEnabled = false;
 
     public SwipeButton(Context context) {
         super(context);
@@ -94,8 +96,8 @@ public class SwipeButton extends RelativeLayout {
         centerText.setGravity(Gravity.CENTER);
 
         LayoutParams layoutParams = new LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
 
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
@@ -109,13 +111,13 @@ public class SwipeButton extends RelativeLayout {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SwipeButton,
                     defStyleAttr, defStyleRes);
 
-            collapsedWidth = (int) typedArray.getDimension(R.styleable.SwipeButton_button_image_width,
-                    ViewGroup.LayoutParams.MATCH_PARENT);
-            collapsedHeight = (int) typedArray.getDimension(R.styleable.SwipeButton_button_image_height,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
+//            collapsedWidth = (int) typedArray.getDimension(R.styleable.SwipeButton_button_image_width,
+//                    ViewGroup.LayoutParams.MATCH_PARENT);
+//            collapsedHeight = (int) typedArray.getDimension(R.styleable.SwipeButton_button_image_height,
+//                    ViewGroup.LayoutParams.WRAP_CONTENT);
 
-            trailEnabled = typedArray.getBoolean(R.styleable.SwipeButton_button_trail_enabled,
-                    false);
+//            trailEnabled = typedArray.getBoolean(R.styleable.SwipeButton_button_trail_enabled,
+//                    false);
             Drawable trailingDrawable = typedArray.getDrawable(R.styleable.SwipeButton_button_trail_drawable);
 
             Drawable backgroundDrawable = typedArray.getDrawable(R.styleable.SwipeButton_inner_text_background);
@@ -126,19 +128,19 @@ public class SwipeButton extends RelativeLayout {
                 background.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_swipe_rounded));
             }
 
-            if (trailEnabled) {
-                layer = new LinearLayout(context);
-
-                if (trailingDrawable != null) {
-                    layer.setBackground(trailingDrawable);
-                } else {
-                    layer.setBackground(typedArray.getDrawable(R.styleable.SwipeButton_button_background));
-                }
-
-                layer.setGravity(Gravity.START);
-                layer.setVisibility(View.GONE);
-                background.addView(layer, layoutParamsView);
-            }
+//            if (trailEnabled) {
+//                layer = new LinearLayout(context);
+//
+//                if (trailingDrawable != null) {
+//                    layer.setBackground(trailingDrawable);
+//                } else {
+//                    layer.setBackground(typedArray.getDrawable(R.styleable.SwipeButton_button_background));
+//                }
+//
+//                layer.setGravity(Gravity.START);
+//                layer.setVisibility(View.GONE);
+//                background.addView(layer, layoutParamsView);
+//            }
 
             centerText.setText(typedArray.getText(R.styleable.SwipeButton_inner_text));
             centerText.setTextColor(typedArray.getColor(R.styleable.SwipeButton_inner_text_color,
@@ -161,7 +163,11 @@ public class SwipeButton extends RelativeLayout {
             float innerTextBottomPadding = typedArray.getDimension(
                     R.styleable.SwipeButton_inner_text_bottom_padding, 0);
 
-            LayoutParams layoutParamsButton = new LayoutParams(collapsedWidth, collapsedHeight);
+//            LayoutParams layoutParamsButton = new LayoutParams(collapsedWidth, collapsedHeight);
+
+            LayoutParams layoutParamsButton = new LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
 
             layoutParamsButton.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
             layoutParamsButton.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
@@ -174,7 +180,8 @@ public class SwipeButton extends RelativeLayout {
                 @Override
                 public void run() {
                     mainViewWidth = mainView.getWidth();
-                    swipeButton.animate().translationX(-mainViewWidth + mainViewWidth/initialOffsetFrac);
+                    startPosition = -mainViewWidth + mainViewWidth/initialOffsetFrac;
+                    swipeButton.animate().translationX(startPosition);
                 }
             });
 
@@ -202,51 +209,49 @@ public class SwipeButton extends RelativeLayout {
         return new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        return !TouchUtils.isTouchOutsideInitialPosition(event, swipeButtonInner);
-                    case MotionEvent.ACTION_UP:
-                        if(activated){
-                            swipeButtonInner.setX(0);
-//                            centerText.setAlpha(0);
-                            if (onStateChangeListener != null) {
-                                onStateChangeListener.onStateChange(true);
-                            }
-                        }
-                        else if(enabled){
-                            restartSwipeButton();
-                        }
-                    case MotionEvent.ACTION_MOVE:
-                        if(enabled){
-                            if(event.getX() < mainViewWidth/initialOffsetFrac){
-                                int start = -mainViewWidth + mainViewWidth/initialOffsetFrac;
-                                swipeButtonInner.setX(start);
-//                                centerText.setAlpha(1);
-                            }else if (event.getX() > getWidth()) {
-                                activated = true;
+                if(enabled) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            if (!TouchUtils.isTouchOutsideInitialPosition(event, swipeButtonInner)) {
+                                actionDownPos = mainViewWidth / initialOffsetFrac - event.getX();
+                                return true;
                             } else {
-                                if(!activated&&!restarted){
-                                    swipeButtonInner.setX(event.getX() - swipeButtonInner.getWidth());
-//                                    centerText.setAlpha(1 - 1.3f * (swipeButtonInner.getX() + swipeButtonInner.getWidth()) / getWidth());
-                                }else{
-                                    activated = false;
-                                    restarted = false;
-                                }
+                                return false;
                             }
-                        }
-
-                        return true;
+                        case MotionEvent.ACTION_UP:
+                            if (activated) {
+                                swipeButtonInner.setX(0);
+                                if (onStateChangeListener != null) {
+                                    onStateChangeListener.onStateChange(true);
+                                }
+                            } else {
+                                restartSwipeButton();
+                            }
+                        case MotionEvent.ACTION_MOVE:
+                            if (swipeButtonInner.getX() >= 0 && !activated) {
+                                activated = true;
+                                swipeButtonInner.setX(0);
+                            } else {
+                                if(swipeButtonInner.getX() <= 0 && (event.getX() - mainViewWidth + actionDownPos) < 0 ){
+                                    swipeButtonInner.setX(event.getX() - mainViewWidth + actionDownPos);
+                                }else{
+                                    swipeButtonInner.setX(0);
+                                }
+                                activated = false;
+                                restarted = false;
+                            }
+                            return true;
+                    }
+                    return false;
+                }else{
+                    return false;
                 }
-
-                return false;
             }
         };
     }
 
     public void restartSwipeButton(){
-        int start = -mainViewWidth + mainViewWidth/initialOffsetFrac;
-        swipeButtonInner.animate().translationX(start);
-//        centerText.setAlpha(1);
+        swipeButtonInner.animate().translationX(startPosition);
         restarted = true;
     }
 
