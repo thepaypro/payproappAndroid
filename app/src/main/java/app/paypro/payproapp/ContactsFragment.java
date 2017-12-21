@@ -28,11 +28,15 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+
 import app.paypro.payproapp.asynctask.SaveContactsAsyncTask;
 import app.paypro.payproapp.global.Global;
 import org.json.JSONException;
@@ -96,6 +100,14 @@ public class ContactsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText(getResources().getString(R.string.contacts_title));
+
+        getActivity().findViewById(R.id.app_toolbar_back_button_image).setVisibility(View.INVISIBLE);
+        getActivity().findViewById(R.id.app_toolbar_back_button_text).setVisibility(View.INVISIBLE);
+        getActivity().findViewById(R.id.app_toolbar_confirm_button).setVisibility(View.INVISIBLE);
+        getActivity().findViewById(R.id.app_toolbar_progress_bar).setVisibility(View.INVISIBLE);
 
         mContactsList = getActivity().findViewById(R.id.contacts_list);
         emptyListView = getActivity().findViewById(R.id.empty_list_view);
