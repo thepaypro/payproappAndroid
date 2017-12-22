@@ -55,6 +55,20 @@ public class SendMoneyAddressFragment extends Fragment {
 
         addrEditText = getActivity().findViewById(R.id.addr_edit_text);
 
+        addrEditText.requestFocus();
+        addrEditText.setFocusable(true);
+
+        InputMethodManager imm = (InputMethodManager)   getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+        addrEditText.addTextChangedListener(filterTextWatcher);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
         toolbarTitle.setText(getResources().getString(R.string.bitcoin_address_title));
 
@@ -73,6 +87,7 @@ public class SendMoneyAddressFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getFragmentManager().popBackStack();
+                ((TabActivity) getActivity()).hideVirtualKeyboard();
             }
         });
 
@@ -100,15 +115,6 @@ public class SendMoneyAddressFragment extends Fragment {
                 }
             }
         });
-
-        addrEditText.requestFocus();
-        addrEditText.setFocusable(true);
-
-        InputMethodManager imm = (InputMethodManager)   getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-
-        addrEditText.addTextChangedListener(filterTextWatcher);
-
     }
 
     private TextWatcher filterTextWatcher = new TextWatcher() {

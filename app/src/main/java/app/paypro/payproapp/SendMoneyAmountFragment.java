@@ -54,58 +54,6 @@ public class SendMoneyAmountFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
-        toolbarTitle.setText(getResources().getString(R.string.amount_title));
-
-        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            toolbar_back_button_text.setText(bundle.getString("origin"));
-            toolbar_back_button_text.setVisibility(View.VISIBLE);
-        }
-
-        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
-        toolbar_back_button_image.setVisibility(View.VISIBLE);
-
-        confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
-        confirmButton.setText(getResources().getString(R.string.next));
-        confirmButton.setVisibility(View.GONE);
-
-        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getFragmentManager().popBackStack();
-            }
-        });
-
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                SendMoney sendMoney = Global.getSendMoney();
-                try {
-                    sendMoney.setAmount(amountInput.getText().toString());
-                    if(privateMsgInput.getText().toString().isEmpty()){
-                        sendMoney.setMessage(getResources().getString(R.string.default_transaction_msg));
-                    }else{
-                        sendMoney.setMessage(privateMsgInput.getText().toString());
-                    }
-                    SendMoneySendFragment myfragment = new SendMoneySendFragment();
-                    FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                    transaction.replace(R.id.frame_layout, myfragment);
-                    transaction.addToBackStack(null);
-                    ((TabActivity) getActivity()).hideVirtualKeyboard();
-                    transaction.commit();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-
         amountInput = getActivity().findViewById(R.id.amount_input);
         privateMsgInput = getActivity().findViewById(R.id.private_msg_input);
 
@@ -136,6 +84,63 @@ public class SendMoneyAmountFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText(getResources().getString(R.string.amount_title));
+
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            toolbar_back_button_text.setText(bundle.getString("origin"));
+            toolbar_back_button_text.setVisibility(View.VISIBLE);
+        }
+
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.VISIBLE);
+
+        confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
+        confirmButton.setText(getResources().getString(R.string.next));
+        confirmButton.setVisibility(View.GONE);
+
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+                ((TabActivity) getActivity()).hideVirtualKeyboard();
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                SendMoney sendMoney = Global.getSendMoney();
+                try {
+                    sendMoney.setAmount(amountInput.getText().toString());
+                    if(privateMsgInput.getText().toString().isEmpty()){
+                        sendMoney.setMessage(getResources().getString(R.string.default_transaction_msg));
+                    }else{
+                        sendMoney.setMessage(privateMsgInput.getText().toString());
+                    }
+                    SendMoneySendFragment myfragment = new SendMoneySendFragment();
+                    FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                    transaction.replace(R.id.frame_layout, myfragment);
+                    transaction.addToBackStack(null);
+                    ((TabActivity) getActivity()).hideVirtualKeyboard();
+                    transaction.commit();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

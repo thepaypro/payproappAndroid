@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -19,7 +18,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -28,9 +26,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -39,12 +35,6 @@ import android.widget.TextView;
 
 import app.paypro.payproapp.asynctask.SaveContactsAsyncTask;
 import app.paypro.payproapp.global.Global;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.util.ArrayList;
-import java.util.Iterator;
-import app.paypro.payproapp.contacts.Contacts;
-import app.paypro.payproapp.http.ResponseListener;
 import app.paypro.payproapp.utils.PPAlertDialog;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -63,6 +53,7 @@ public class ContactsFragment extends Fragment {
     private ProgressBar progressBar;
     private FloatingActionButton fab;
     private Toolbar toolbar;
+    private Boolean mIsRestoredFromBackstack;
 
     private ContactsAdapter contactsAdapter;
 
@@ -89,11 +80,11 @@ public class ContactsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mIsRestoredFromBackstack = false;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.contacts_list_fragment, container, false);
     }
 
@@ -101,15 +92,7 @@ public class ContactsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
-        toolbarTitle.setText(getResources().getString(R.string.contacts_title));
 
-        getActivity().findViewById(R.id.app_toolbar_back_button_image).setVisibility(View.INVISIBLE);
-        getActivity().findViewById(R.id.app_toolbar_back_button_text).setVisibility(View.INVISIBLE);
-        getActivity().findViewById(R.id.app_toolbar_confirm_button).setVisibility(View.INVISIBLE);
-        getActivity().findViewById(R.id.app_toolbar_progress_bar).setVisibility(View.INVISIBLE);
-
-        mContactsList = getActivity().findViewById(R.id.contacts_list);
         emptyListView = getActivity().findViewById(R.id.empty_list_view);
         permissionDeniedView = getActivity().findViewById(R.id.permission_denied_view);
         connectionErrorView = getActivity().findViewById(R.id.connection_error_view);
@@ -133,6 +116,7 @@ public class ContactsFragment extends Fragment {
             }
         });
 
+        mContactsList = getActivity().findViewById(R.id.contacts_list);
         mContactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -181,13 +165,35 @@ public class ContactsFragment extends Fragment {
                 }
             }
         });
+    }
 
-        int rc = checkSelfPermission(getContext(), READ_CONTACTS);
-        if (rc == PackageManager.PERMISSION_GRANTED) {
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(!mIsRestoredFromBackstack)
+        {
             loadContacts();
-        } else {
-            requestContactsPermission();
+        }else{
+            contactsAdapter.getFilter().filter("");
+            mContactsList.setAdapter(contactsAdapter);
         }
+
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText(getResources().getString(R.string.contacts_title));
+
+        getActivity().findViewById(R.id.app_toolbar_back_button_image).setVisibility(View.INVISIBLE);
+        getActivity().findViewById(R.id.app_toolbar_back_button_text).setVisibility(View.INVISIBLE);
+        getActivity().findViewById(R.id.app_toolbar_confirm_button).setVisibility(View.INVISIBLE);
+        getActivity().findViewById(R.id.app_toolbar_progress_bar).setVisibility(View.INVISIBLE);
+
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        mIsRestoredFromBackstack = true;
     }
 
     @Override
@@ -252,21 +258,20 @@ public class ContactsFragment extends Fragment {
 
     public void loadContacts() {
 
-        Uri allContacts = ContactsContract.Contacts.CONTENT_URI;
-
-        //declare our cursor
-        Cursor c;
-
-        CursorLoader cursorLoader = new CursorLoader(
-                getContext(),
-                allContacts,
-                PROJECTION,
-                null,
-                null,
-                null);
-        c = cursorLoader.loadInBackground();
-
-        new SaveContactsAsyncTask(getContext(), c, this, mContactsList).execute();
+        int rc = checkSelfPermission(getContext(), READ_CONTACTS);
+        if (rc == PackageManager.PERMISSION_GRANTED) {
+            Uri allContacts = ContactsContract.Contacts.CONTENT_URI;
+            CursorLoader cursorLoader = new CursorLoader(
+                    getContext(),
+                    allContacts,
+                    PROJECTION,
+                    null,
+                    null,
+                    null);
+            new SaveContactsAsyncTask(getContext(), cursorLoader.loadInBackground(), this, mContactsList).execute();
+        } else {
+            requestContactsPermission();
+        }
 
     }
 
