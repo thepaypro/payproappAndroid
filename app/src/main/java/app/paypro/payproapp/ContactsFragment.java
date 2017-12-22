@@ -203,15 +203,15 @@ public class ContactsFragment extends Fragment {
 
         SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
-        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(Color.WHITE);
-        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(Color.WHITE);
-        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHighlightColor(Color.WHITE);
+        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(Color.BLACK);
+        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(Color.BLACK);
+        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHighlightColor(Color.BLACK);
 
         ImageView searchCloseIcon = search.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
-        searchCloseIcon.setImageResource(R.drawable.ic_close_white_24dp);
+        searchCloseIcon.setImageResource(R.drawable.ic_close_black_24dp);
 
         ImageView searchIcon = search.findViewById(android.support.v7.appcompat.R.id.search_button);
-        searchIcon.setImageResource(R.drawable.ic_search_white_24dp);
+        searchIcon.setImageResource(R.drawable.ic_search_black_24dp);
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
