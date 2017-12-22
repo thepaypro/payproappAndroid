@@ -58,8 +58,12 @@ public class SendMoneyAmountFragment extends Fragment {
         toolbarTitle.setText(getResources().getString(R.string.amount_title));
 
         TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
-        toolbar_back_button_text.setText(getResources().getString(R.string.contacts_title));
-        toolbar_back_button_text.setVisibility(View.VISIBLE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            toolbar_back_button_text.setText(bundle.getString("origin"));
+            toolbar_back_button_text.setVisibility(View.VISIBLE);
+        }
 
         ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
         toolbar_back_button_image.setVisibility(View.VISIBLE);

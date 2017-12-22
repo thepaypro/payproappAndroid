@@ -1,18 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="PayProTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/PayPro_Blue</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/pp_light_purple</item>
+        <item name="colorPrimaryDark">@color/pp_light_purple</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="PayProTheme.NoActionBar" parent="PayProTheme">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/PayPro_Blue</item>
-        <item name="colorPrimaryDark">@color/PayPro_Blue</item>
-        <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -22,20 +21,20 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_marginLeft">15dp</item>
         <item name="android:layout_marginRight">15dp</item>
-        <item name="android:background">?android:attr/listDivider</item>
+        <item name="android:background">@color/PayPro_Line</item>
     </style>
 
     <style name="DividerWithStartMargin">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
         <item name="android:layout_marginLeft">15dp</item>
-        <item name="android:background">?android:attr/listDivider</item>
+        <item name="android:background">@color/PayPro_Line</item>
     </style>
 
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
-        <item name="android:background">?android:attr/listDivider</item>
+        <item name="android:background">@color/PayPro_Line</item>
     </style>
       
     <style name="continue_button" parent="@android:style/Widget.Button">
@@ -53,14 +52,11 @@
         <item name="colorAccent">@android:color/black</item>
     </style>
 
-    <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="PayProTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@android:color/white</item>
         <item name="colorPrimaryDark">@android:color/white</item>
         <item name="colorAccent">@android:color/white</item>
     </style>
-
-    <style name="PayProTheme" parent="AppTheme" />
-
 
 </resources>

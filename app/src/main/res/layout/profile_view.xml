@@ -42,7 +42,7 @@
             android:background="@color/defaultBackgroundColor"
             android:contentDescription="@string/todo"
             android:text="@string/edit"
-            android:textColor="@color/PayPro_Blue" />
+            android:textColor="@color/pp_light_purple" />
 
     </RelativeLayout>
 

@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import app.paypro.payproapp.global.Global;
 
@@ -29,8 +31,7 @@ import app.paypro.payproapp.global.Global;
 public class SendMoneyAddressFragment extends Fragment {
 
     private EditText addrEditText;
-    private Button nextButton;
-    private Toolbar toolbar;
+    private Button confirmButton;
 
     public static SendMoneyAddressFragment newInstance() {
         SendMoneyAddressFragment fragment = new SendMoneyAddressFragment();
@@ -53,27 +54,40 @@ public class SendMoneyAddressFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         addrEditText = getActivity().findViewById(R.id.addr_edit_text);
-        nextButton = getActivity().findViewById(R.id.next_button);
-        toolbar = getActivity().findViewById(R.id.toolbar);
 
-        ((TabActivity)getActivity()).setSupportActionBar(toolbar);
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText(getResources().getString(R.string.bitcoin_address_title));
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+        toolbar_back_button_text.setText(getResources().getString(R.string.contacts_title));
+        toolbar_back_button_text.setVisibility(View.VISIBLE);
+
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.VISIBLE);
+
+        confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
+        confirmButton.setText(getResources().getString(R.string.next));
+        confirmButton.setVisibility(View.GONE);
+
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                ((TabActivity) getActivity()).hideVirtualKeyboard();
+            public void onClick(View view) {
                 getFragmentManager().popBackStack();
             }
         });
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v)
+            {
                 String addr = addrEditText.getText().toString();
                 if(addr.matches("\"^[13][a-km-zA-HJ-NP-Z0-9]{26,33}$\"")){
                     Global.getSendMoney().setAddress(addr);
 
                     SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("origin",getResources().getString(R.string.bitcoin_address_title));
+                    myfragment.setArguments(bundle);
                     FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
@@ -117,12 +131,10 @@ public class SendMoneyAddressFragment extends Fragment {
     };
 
     public void enableNextButton(){
-        nextButton.setEnabled(true);
-        nextButton.setTextColor(Color.WHITE);
+        confirmButton.setVisibility(View.VISIBLE);
     }
 
     public void dissableNextButton(){
-        nextButton.setEnabled(false);
-        nextButton.setTextColor(getActivity().getResources().getColor(R.color.inactive_grey));
+        confirmButton.setVisibility(View.GONE);
     }
 }

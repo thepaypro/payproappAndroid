@@ -65,7 +65,7 @@
                     android:paddingLeft="15dp"
                     android:paddingStart="15dp"
                     android:text="@string/community"
-                    android:textColor="@color/PayPro_Blue" />
+                    android:textColor="@color/pp_light_purple" />
             </TableRow>
 
             <TableRow
@@ -89,7 +89,7 @@
                     android:paddingLeft="15dp"
                     android:paddingStart="15dp"
                     android:text="@string/terms_and_conditions"
-                    android:textColor="@color/PayPro_Blue" />
+                    android:textColor="@color/pp_light_purple" />
             </TableRow>
 
             <TableRow

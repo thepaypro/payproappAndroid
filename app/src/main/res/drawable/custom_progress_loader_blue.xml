@@ -16,7 +16,7 @@
                 android:type="sweep"
                 android:useLevel="false"
                 android:startColor="@android:color/transparent"
-                android:endColor="@color/PayPro_Blue"
+                android:endColor="@color/pp_light_purple"
                 android:angle="0" />
 
     </shape>

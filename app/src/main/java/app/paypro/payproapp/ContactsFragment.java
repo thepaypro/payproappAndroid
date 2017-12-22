@@ -123,7 +123,6 @@ public class ContactsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 SendMoneyAddressFragment myfragment = new SendMoneyAddressFragment();
                 FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -147,6 +146,9 @@ public class ContactsFragment extends Fragment {
                     Global.setSendMoney(sendMoney);
 
                     SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("origin",getResources().getString(R.string.contacts_title));
+                    myfragment.setArguments(bundle);
                     FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
