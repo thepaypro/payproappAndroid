@@ -198,7 +198,7 @@ public class ContactsFragment extends Fragment {
                 SendMoneyAddressFragment myfragment = new SendMoneyAddressFragment();
                 FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                 transaction.replace(R.id.frame_layout, myfragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
@@ -230,7 +230,7 @@ public class ContactsFragment extends Fragment {
                     myfragment.setArguments(bundle);
                     FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                     transaction.replace(R.id.frame_layout, myfragment);
                     transaction.addToBackStack(null);
                     ((TabActivity) getActivity()).hideVirtualKeyboard();

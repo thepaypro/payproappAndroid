@@ -110,6 +110,7 @@ public class SettingsFragment extends Fragment {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                 transaction.replace(R.id.frame_layout, new ProfileView());
+                transaction.addToBackStack(null);
                 transaction.commit();
 
             }
@@ -154,6 +155,7 @@ public class SettingsFragment extends Fragment {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                 transaction.replace(R.id.frame_layout, new InfoFragment());
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         } );

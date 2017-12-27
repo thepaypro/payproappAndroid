@@ -7,129 +7,137 @@
     android:background="@color/app_ico_background">
 
     <RelativeLayout
-        android:id="@+id/avatarLayout"
         android:layout_width="match_parent"
-        android:layout_height="76dp"
-        android:layout_marginTop="0dp"
-        android:background="@color/appIco_background"
+        android:layout_height="match_parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintLeft_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintRight_toRightOf="parent">
 
-        <ImageView
-            android:id="@+id/avatarProfileView"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="10dp"
-            android:contentDescription="@string/todo"
-            android:minHeight="44dp"
-            android:minWidth="44dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:srcCompat="@drawable/default_profile"
-            tools:layout_editor_absoluteY="72dp" />
-
-        <Button
-            android:id="@+id/editAvatarButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/avatarProfileView"
-            android:layout_centerHorizontal="true"
-            android:background="@color/defaultBackgroundColor"
-            android:contentDescription="@string/todo"
-            android:text="@string/edit"
-            android:textColor="@color/pp_light_purple" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/avatarLayout">
-
-        <TableLayout
+        <RelativeLayout
+            android:id="@+id/avatarLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/PayPro_Background">
+            android:layout_height="76dp"
+            android:layout_marginTop="0dp"
+            android:background="@color/appIco_background"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/PayPro_Line"
-                android:minHeight="0.5dp" />
+            <ImageView
+                android:id="@+id/avatarProfileView"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="10dp"
+                android:contentDescription="@string/todo"
+                android:minHeight="44dp"
+                android:minWidth="44dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:srcCompat="@drawable/default_profile"
+                tools:layout_editor_absoluteY="72dp" />
 
-            <TableRow
+            <Button
+                android:id="@+id/editAvatarButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/avatarProfileView"
+                android:layout_centerHorizontal="true"
+                android:background="@color/defaultBackgroundColor"
+                android:contentDescription="@string/todo"
+                android:text="@string/edit"
+                android:textColor="@color/pp_light_purple" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="76dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/avatarLayout">
+
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/PayPro_Background">
 
-                <TextView
-                    android:id="@+id/textView4"
+                <TableRow
                     android:layout_width="match_parent"
-                    android:height="30dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
-                    android:text="@string/nickname" android:paddingStart="15dp" />
-            </TableRow>
+                    android:layout_height="match_parent"
+                    android:background="@color/PayPro_Line"
+                    android:minHeight="0.5dp" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/PayPro_Line"
-                android:minHeight="0.5dp" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/PayPro_Background">
 
-            <TableRow
-                android:id="@+id/rowNickname"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/appIco_background">
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:height="30dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="15dp"
+                        android:text="@string/nickname" android:paddingStart="15dp" />
+                </TableRow>
 
-                <TextView
-                    android:id="@+id/nicknameProfileView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginStart="15dp"
-                    android:height="44dp"
-                    android:contentDescription="@string/nickname"
-                    android:gravity="center_vertical"
-                    android:text="@string/nickname"
-                    android:textColor="@android:color/black" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/PayPro_Line"
+                    android:minHeight="0.5dp" />
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1">
+                <TableRow
+                    android:id="@+id/rowNickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/appIco_background">
 
-                    <ImageView
-                        android:id="@+id/nicknameArrow"
-                        android:layout_width="8dp"
-                        android:layout_height="13dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginRight="16dp"
-                        android:contentDescription="@string/todo"
-                        android:src="@mipmap/arrow_right" />
-                </RelativeLayout>
-            </TableRow>
+                    <TextView
+                        android:id="@+id/nicknameProfileView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:height="44dp"
+                        android:contentDescription="@string/nickname"
+                        android:gravity="center_vertical"
+                        android:text="@string/nickname"
+                        android:textColor="@android:color/black" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/PayPro_Line"
-                android:minHeight="0.5dp" />
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1">
 
-        </TableLayout>
+                        <ImageView
+                            android:id="@+id/nicknameArrow"
+                            android:layout_width="8dp"
+                            android:layout_height="13dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginRight="16dp"
+                            android:contentDescription="@string/todo"
+                            android:src="@mipmap/arrow_right" />
+                    </RelativeLayout>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/PayPro_Line"
+                    android:minHeight="0.5dp" />
+
+            </TableLayout>
+
+        </RelativeLayout>
+
     </RelativeLayout>
-
 
 </android.support.constraint.ConstraintLayout>
