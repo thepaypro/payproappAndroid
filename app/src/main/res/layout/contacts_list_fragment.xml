@@ -113,6 +113,25 @@
                 android:layout_height="wrap_content"
                 android:text="@string/no_internet" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/no_results_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:gravity="center_horizontal"
+            android:clickable="false">
+
+            <TextView
+                android:id="@+id/no_results_text"
+                android:layout_marginTop="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="@string/no_results" />
 
         </LinearLayout>
 

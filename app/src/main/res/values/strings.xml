@@ -142,4 +142,7 @@
   
   <string name="community">Community</string>
   <string name="terms_and_conditions"><![CDATA[Terms & Conditions]]></string>
+
+
+  <string name="no_results">No results for \"%1$s\"</string>
 </resources>

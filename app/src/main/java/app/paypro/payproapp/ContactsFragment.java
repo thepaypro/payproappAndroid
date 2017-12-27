@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -59,6 +60,8 @@ public class ContactsFragment extends Fragment {
     private LinearLayout emptyListView;
     private LinearLayout permissionDeniedView;
     private LinearLayout connectionErrorView;
+    private LinearLayout noResultsView;
+    private TextView noResultsText;
     private RelativeLayout mainView;
     private ProgressBar progressBar;
     private FloatingActionButton fab;
@@ -75,7 +78,19 @@ public class ContactsFragment extends Fragment {
 
     private ContactsAdapter contactsAdapter;
 
-    public void setContactsAdapter(ContactsAdapter contactsAdapter) {
+    public void setContactsAdapter(final ContactsAdapter contactsAdapter) {
+        contactsAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (contactsAdapter.getCount() == 0){
+                    noResultsText.setText(String.format(getResources().getString(R.string.no_results), searchText.getText().toString()));
+                    noResultsView.setVisibility(View.VISIBLE);
+                }else{
+                    noResultsView.setVisibility(View.GONE);
+                }
+            }
+        });
         this.contactsAdapter = contactsAdapter;
     }
 
@@ -113,6 +128,8 @@ public class ContactsFragment extends Fragment {
         emptyListView = getActivity().findViewById(R.id.empty_list_view);
         permissionDeniedView = getActivity().findViewById(R.id.permission_denied_view);
         connectionErrorView = getActivity().findViewById(R.id.connection_error_view);
+        noResultsView = getActivity().findViewById(R.id.no_results_view);
+        noResultsText = getActivity().findViewById(R.id.no_results_text);
         mainView = getActivity().findViewById(R.id.main_view);
         progressBar = getActivity().findViewById(R.id.progress_bar);
         fab = getActivity().findViewById(R.id.fab);
@@ -316,9 +333,10 @@ public class ContactsFragment extends Fragment {
         mContactsList.setVisibility(View.GONE);
         emptyListView.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.GONE);
+        searchButton.setVisibility(View.GONE);
+        noResultsView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
-        searchButton.setVisibility(View.GONE);
     }
 
     public void hideProgressBar(){
@@ -326,6 +344,7 @@ public class ContactsFragment extends Fragment {
         emptyListView.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.GONE);
         connectionErrorView.setVisibility(View.GONE);
+        noResultsView.setVisibility(View.GONE);
         mContactsList.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
         searchButton.setVisibility(View.VISIBLE);
@@ -337,6 +356,7 @@ public class ContactsFragment extends Fragment {
         permissionDeniedView.setVisibility(View.GONE);
         connectionErrorView.setVisibility(View.GONE);
         searchButton.setVisibility(View.GONE);
+        noResultsView.setVisibility(View.GONE);
         emptyListView.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
     }
@@ -347,6 +367,7 @@ public class ContactsFragment extends Fragment {
         emptyListView.setVisibility(View.GONE);
         connectionErrorView.setVisibility(View.GONE);
         searchButton.setVisibility(View.GONE);
+        noResultsView.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
 
@@ -359,6 +380,7 @@ public class ContactsFragment extends Fragment {
         emptyListView.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.GONE);
         searchButton.setVisibility(View.GONE);
+        noResultsView.setVisibility(View.GONE);
         connectionErrorView.setVisibility(View.VISIBLE);
     }
 
