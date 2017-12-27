@@ -147,22 +147,6 @@ public class ContactsFragment extends Fragment {
         searchCloseButton = getActivity().findViewById(R.id.search_close_button);
         searchBackButton = getActivity().findViewById(R.id.search_back_button);
 
-//        getView().setFocusableInTouchMode(true);
-//        getView().requestFocus();
-//        getView().setOnKeyListener( new View.OnKeyListener()
-//        {
-//            @Override
-//            public boolean onKey( View v, int keyCode, KeyEvent event )
-//            {
-//                if( keyCode == KeyEvent.KEYCODE_BACK && searchView.getVisibility() == View.VISIBLE && !isKeyboardShown())
-//                {
-//                    AppToolbarSearchHideAnimation();
-//                    return true;
-//                }
-//                return false;
-//            }
-//        } );
-
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -189,14 +173,14 @@ public class ContactsFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                AppToolbarSearchShowAnimation();
+                showToolbarSearch();
             }
         });
 
         searchBackButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                AppToolbarSearchHideAnimation();
+                hideToolbarSearch();
             }
         });
 
@@ -210,7 +194,7 @@ public class ContactsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppToolbarSearchHideAnimation();
+                hideToolbarSearch();
                 SendMoneyAddressFragment myfragment = new SendMoneyAddressFragment();
                 FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -228,7 +212,7 @@ public class ContactsFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Contact contact = (Contact) adapterView.getItemAtPosition(i);
                 if(contact.getIsUser()){
-                    AppToolbarSearchHideAnimation();
+                    hideToolbarSearch();
                     SendMoney sendMoney = Global.resetSendMoney();
 
                     sendMoney.setUserId(contact.getUserId());
@@ -285,6 +269,9 @@ public class ContactsFragment extends Fragment {
         }else{
             contactsAdapter.getFilter().filter("");
             mContactsList.setAdapter(contactsAdapter);
+            if(contactsAdapter.getCount() > 0){
+                searchButton.setVisibility(View.VISIBLE);
+            }
         }
 
         TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
@@ -350,9 +337,11 @@ public class ContactsFragment extends Fragment {
     }
 
     public void showProgressBar(){
+        hideToolbarSearch();
         mContactsList.setVisibility(View.GONE);
         emptyListView.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.GONE);
+        connectionErrorView.setVisibility(View.GONE);
         searchButton.setVisibility(View.GONE);
         noResultsView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -404,7 +393,7 @@ public class ContactsFragment extends Fragment {
         connectionErrorView.setVisibility(View.VISIBLE);
     }
 
-    public void AppToolbarSearchShowAnimation(){
+    public void showToolbarSearch(){
         appToolbarLayout.setVisibility(View.GONE);
         searchView.setVisibility(View.VISIBLE);
         searchView.bringToFront();
@@ -412,17 +401,17 @@ public class ContactsFragment extends Fragment {
         ((TabActivity)getActivity()).showVirtualKeyboard(searchText);
     }
 
-    public void AppToolbarSearchHideAnimation() {
+    public void hideToolbarSearch() {
+        ((TabActivity)getActivity()).hideVirtualKeyboard();
         searchText.setText("");
         searchView.setVisibility(View.GONE);
         appToolbarLayout.setVisibility(View.VISIBLE);
-        ((TabActivity)getActivity()).hideVirtualKeyboard();
     }
 
 
     public Boolean onBackPressed(){
         if(searchView.getVisibility() == View.VISIBLE) {
-            AppToolbarSearchHideAnimation();
+            hideToolbarSearch();
             return true;
         }else{
             return false;

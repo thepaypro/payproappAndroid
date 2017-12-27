@@ -40,6 +40,8 @@ public class TabActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             if(navigationEnabled) {
+                findViewById(R.id.search_view).setVisibility(View.GONE);
+                findViewById(R.id.app_toolbar_layout).setVisibility(View.VISIBLE);
                 Fragment selectedFragment = null;
                 Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
                 Boolean selectedActualFragment = false;
@@ -88,14 +90,14 @@ public class TabActivity extends AppCompatActivity {
         }
     };
 
-//    @Override
-//    public void onAttachFragment(Fragment fragment){
-//        if (fragment instanceof ContactsFragment){
-//            findViewById(R.id.app_toolbar_search_button).setVisibility(View.VISIBLE);
-//        }else{
-//            findViewById(R.id.app_toolbar_search_button).setVisibility(View.GONE);
-//        }
-//    }
+    @Override
+    public void onAttachFragment(Fragment fragment){
+        if (!(fragment instanceof ContactsFragment)){
+            findViewById(R.id.search_view).setVisibility(View.GONE);
+            findViewById(R.id.app_toolbar_layout).setVisibility(View.VISIBLE);
+            findViewById(R.id.app_toolbar_search_button).setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -173,7 +175,6 @@ public class TabActivity extends AppCompatActivity {
         }
     }
     public void hideVirtualKeyboard(){
-        // Hide the virtual keyboard
         View view = getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);

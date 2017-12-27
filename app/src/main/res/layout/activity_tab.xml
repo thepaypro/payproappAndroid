@@ -127,17 +127,23 @@ android:layout_height="match_parent">
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
 
-            <EditText
-                android:id="@+id/search_text"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                style="@style/SearchView"
-                android:hint="@string/search_hint"
-                android:background="@android:color/transparent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/search_close_button"
-                app:layout_constraintStart_toEndOf="@id/search_back_button" />
+                app:layout_constraintStart_toEndOf="@id/search_back_button"
+                app:layout_constraintEnd_toStartOf="@id/search_close_button">
+
+                <EditText
+                    android:id="@+id/search_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    style="@style/SearchView"
+                    android:hint="@string/search_hint"
+                    android:background="@android:color/transparent"/>
+
+            </RelativeLayout>
 
             <ImageButton
                 android:id="@+id/search_close_button"
