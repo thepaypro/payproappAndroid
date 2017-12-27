@@ -10,6 +10,7 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -79,8 +80,8 @@ public class ContactsFragment extends Fragment {
     private RelativeLayout appToolbarLayout;
     private FrameLayout frameLayout;
     private ConstraintLayout activityMain;
-
     private ContactsAdapter contactsAdapter;
+    private SaveContactsAsyncTask saveContactsAsyncTask;
 
     public void setContactsAdapter(final ContactsAdapter contactsAdapter) {
         contactsAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -194,6 +195,7 @@ public class ContactsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                saveContactsAsyncTask.cancel(true);
                 hideToolbarSearch();
                 SendMoneyAddressFragment myfragment = new SendMoneyAddressFragment();
                 FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
@@ -333,7 +335,9 @@ public class ContactsFragment extends Fragment {
                     null,
                     null,
                     null);
-            new SaveContactsAsyncTask(getContext(), cursorLoader.loadInBackground(), this, mContactsList).execute();
+            saveContactsAsyncTask = new SaveContactsAsyncTask(getContext(), cursorLoader.loadInBackground(), this, mContactsList);
+            ((TabActivity)getActivity()).setSaveContactsAsyncTask(saveContactsAsyncTask);
+            saveContactsAsyncTask.execute();
         } else {
             requestContactsPermission();
         }

@@ -1,6 +1,7 @@
 package app.paypro.payproapp;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -29,10 +30,15 @@ import io.intercom.android.sdk.Intercom;
 
 public class TabActivity extends AppCompatActivity {
 
-    ConstraintLayout activityMain;
-    Fragment navigationAccount;
-    BottomNavigationView navigation;
-    Boolean navigationEnabled = true;
+    private ConstraintLayout activityMain;
+    private Fragment navigationAccount;
+    private BottomNavigationView navigation;
+    private Boolean navigationEnabled = true;
+    private AsyncTask<Void,Void,Void> saveContactsAsyncTask;
+
+    public void setSaveContactsAsyncTask(AsyncTask<Void, Void, Void> saveContactsAsyncTask) {
+        this.saveContactsAsyncTask = saveContactsAsyncTask;
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -77,6 +83,9 @@ public class TabActivity extends AppCompatActivity {
                 }
 
                 if (!selectedActualFragment) {
+                    if(!(selectedFragment instanceof ContactsFragment) && saveContactsAsyncTask != null){
+                        saveContactsAsyncTask.cancel(true);
+                    }
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                     transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
                     transaction.replace(R.id.frame_layout, selectedFragment);
