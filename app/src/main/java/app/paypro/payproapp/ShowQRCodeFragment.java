@@ -60,10 +60,11 @@ public class ShowQRCodeFragment extends Fragment {
         toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.replace(R.id.frame_layout, AccountFragment.newInstance());
-                transaction.commit();
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+//                transaction.replace(R.id.frame_layout, AccountFragment.newInstance());
+//                transaction.commit();
+                getFragmentManager().popBackStack();
             }
         });
 
