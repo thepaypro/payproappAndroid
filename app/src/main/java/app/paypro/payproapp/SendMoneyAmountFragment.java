@@ -108,7 +108,11 @@ public class SendMoneyAmountFragment extends Fragment {
 
         confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
         confirmButton.setText(getResources().getString(R.string.next));
-        confirmButton.setVisibility(View.GONE);
+        if(checkValidAmount(amountInput.getText().toString())){
+            enableNextButton();
+        }else{
+            dissableNextButton();
+        }
 
         toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
             @Override
