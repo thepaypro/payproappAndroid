@@ -218,6 +218,10 @@ public class ContactsFragment extends Fragment {
                     sendMoney.setUserId(contact.getUserId());
                     sendMoney.setAccountId(contact.getAccountId());
 
+                    if(!contact.getBackFullName().isEmpty()){
+                        sendMoney.setLabel(contact.getBackFullName());
+                    }
+
                     Global.setSendMoney(sendMoney);
 
                     SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();

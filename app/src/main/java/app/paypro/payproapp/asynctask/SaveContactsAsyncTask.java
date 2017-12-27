@@ -112,6 +112,9 @@ public class SaveContactsAsyncTask extends AsyncTask<Void,Void,Void> {
                                                     if(contact.getIsUser()){
                                                         contact.setUserId(responseNumberObject.getInt("userId"));
                                                         contact.setAccountId(responseNumberObject.getInt("accountId"));
+                                                        if(responseNumberObject.has("fullName")){
+                                                            contact.setBackFullName(responseNumberObject.getString("fullName"));
+                                                        }
                                                     }
                                                 }
                                             }

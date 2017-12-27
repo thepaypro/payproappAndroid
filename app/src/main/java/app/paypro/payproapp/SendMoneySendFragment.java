@@ -96,7 +96,7 @@ public class SendMoneySendFragment extends Fragment {
         }
 
         if(sendMoney.getMessage() == null){
-            toText2.setText("");
+            toText2.setText(R.string.default_transaction_msg);
         }else{
             toText2.setText(sendMoney.getMessage());
         }

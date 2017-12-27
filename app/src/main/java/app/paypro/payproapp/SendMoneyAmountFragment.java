@@ -129,9 +129,7 @@ public class SendMoneyAmountFragment extends Fragment {
                 SendMoney sendMoney = Global.getSendMoney();
                 try {
                     sendMoney.setAmount(amountInput.getText().toString());
-                    if(privateMsgInput.getText().toString().isEmpty()){
-                        sendMoney.setMessage(getResources().getString(R.string.default_transaction_msg));
-                    }else{
+                    if(!privateMsgInput.getText().toString().isEmpty()) {
                         sendMoney.setMessage(privateMsgInput.getText().toString());
                     }
                     SendMoneySendFragment myfragment = new SendMoneySendFragment();
