@@ -20,19 +20,29 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import app.paypro.payproapp.anim.ResizeAnimation;
 import app.paypro.payproapp.asynctask.SaveContactsAsyncTask;
 import app.paypro.payproapp.global.Global;
 import app.paypro.payproapp.utils.PPAlertDialog;
@@ -49,11 +59,19 @@ public class ContactsFragment extends Fragment {
     private LinearLayout emptyListView;
     private LinearLayout permissionDeniedView;
     private LinearLayout connectionErrorView;
-    private ConstraintLayout mainView;
+    private RelativeLayout mainView;
     private ProgressBar progressBar;
     private FloatingActionButton fab;
     private Toolbar toolbar;
     private Boolean mIsRestoredFromBackstack;
+    private ImageButton searchButton;
+    private ConstraintLayout searchView;
+    private EditText searchText;
+    private ImageButton searchCloseButton;
+    private ImageButton searchBackButton;
+    private RelativeLayout appToolbarLayout;
+    private FrameLayout frameLayout;
+    private ConstraintLayout activityMain;
 
     private ContactsAdapter contactsAdapter;
 
@@ -92,20 +110,70 @@ public class ContactsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         emptyListView = getActivity().findViewById(R.id.empty_list_view);
         permissionDeniedView = getActivity().findViewById(R.id.permission_denied_view);
         connectionErrorView = getActivity().findViewById(R.id.connection_error_view);
         mainView = getActivity().findViewById(R.id.main_view);
         progressBar = getActivity().findViewById(R.id.progress_bar);
         fab = getActivity().findViewById(R.id.fab);
-        toolbar = getActivity().findViewById(R.id.toolbar);
+        appToolbarLayout = getActivity().findViewById(R.id.app_toolbar_layout);
+        frameLayout = getActivity().findViewById(R.id.frame_layout);
+        activityMain = getActivity().findViewById(R.id.activity_main);
 
-        ((TabActivity)getActivity()).setSupportActionBar(toolbar);
+        searchButton = getActivity().findViewById(R.id.app_toolbar_search_button);
+        searchView = getActivity().findViewById(R.id.search_view);
+        searchText = getActivity().findViewById(R.id.search_text);
+        searchCloseButton = getActivity().findViewById(R.id.search_close_button);
+        searchBackButton = getActivity().findViewById(R.id.search_back_button);
+
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(contactsAdapter != null){
+                    contactsAdapter.getFilter().filter(charSequence);
+                }
+                if(charSequence.length() > 0){
+                    searchCloseButton.setVisibility(View.VISIBLE);
+                }else{
+                    searchCloseButton.setVisibility(View.GONE);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        searchButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                AppToolbarSearchShowAnimation();
+            }
+        });
+
+        searchBackButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                AppToolbarSearchHideAnimation();
+            }
+        });
+
+        searchCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchText.setText("");
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AppToolbarSearchHideAnimation();
                 SendMoneyAddressFragment myfragment = new SendMoneyAddressFragment();
                 FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -113,6 +181,7 @@ public class ContactsFragment extends Fragment {
                 transaction.replace(R.id.frame_layout, myfragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+                appToolbarLayout.setVisibility(View.VISIBLE);
             }
         });
 
@@ -122,6 +191,7 @@ public class ContactsFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Contact contact = (Contact) adapterView.getItemAtPosition(i);
                 if(contact.getIsUser()){
+                    AppToolbarSearchHideAnimation();
                     SendMoney sendMoney = Global.resetSendMoney();
 
                     sendMoney.setUserId(contact.getUserId());
@@ -140,6 +210,7 @@ public class ContactsFragment extends Fragment {
                     transaction.addToBackStack(null);
                     ((TabActivity) getActivity()).hideVirtualKeyboard();
                     transaction.commit();
+                    appToolbarLayout.setVisibility(View.VISIBLE);
                 }else{
                     DialogInterface.OnClickListener dialogInterfaceOK = new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -182,6 +253,7 @@ public class ContactsFragment extends Fragment {
         TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
         toolbarTitle.setText(getResources().getString(R.string.contacts_title));
 
+
         getActivity().findViewById(R.id.app_toolbar_back_button_image).setVisibility(View.INVISIBLE);
         getActivity().findViewById(R.id.app_toolbar_back_button_text).setVisibility(View.INVISIBLE);
         getActivity().findViewById(R.id.app_toolbar_confirm_button).setVisibility(View.INVISIBLE);
@@ -194,41 +266,6 @@ public class ContactsFragment extends Fragment {
     {
         super.onDestroyView();
         mIsRestoredFromBackstack = true;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu,inflater);
-        inflater.inflate(R.menu.search_menu, menu);
-
-        SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
-        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setTextColor(Color.BLACK);
-        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHintTextColor(Color.BLACK);
-        ((EditText)search.findViewById(android.support.v7.appcompat.R.id.search_src_text)).setHighlightColor(Color.BLACK);
-
-        ImageView searchCloseIcon = search.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
-        searchCloseIcon.setImageResource(R.drawable.ic_close_black_24dp);
-
-        ImageView searchIcon = search.findViewById(android.support.v7.appcompat.R.id.search_button);
-        searchIcon.setImageResource(R.drawable.ic_search_black_24dp);
-
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(contactsAdapter != null){
-                    contactsAdapter.getFilter().filter(newText);
-                    return true;
-                }
-                return false;
-            }
-        });
-
     }
 
     private void requestContactsPermission() {
@@ -281,6 +318,7 @@ public class ContactsFragment extends Fragment {
         permissionDeniedView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
+        searchButton.setVisibility(View.GONE);
     }
 
     public void hideProgressBar(){
@@ -290,6 +328,7 @@ public class ContactsFragment extends Fragment {
         connectionErrorView.setVisibility(View.GONE);
         mContactsList.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
+        searchButton.setVisibility(View.VISIBLE);
     }
 
     public void showEmptyListView(){
@@ -297,6 +336,7 @@ public class ContactsFragment extends Fragment {
         mContactsList.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.GONE);
         connectionErrorView.setVisibility(View.GONE);
+        searchButton.setVisibility(View.GONE);
         emptyListView.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
     }
@@ -306,6 +346,7 @@ public class ContactsFragment extends Fragment {
         mContactsList.setVisibility(View.GONE);
         emptyListView.setVisibility(View.GONE);
         connectionErrorView.setVisibility(View.GONE);
+        searchButton.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
 
@@ -317,11 +358,23 @@ public class ContactsFragment extends Fragment {
         fab.setVisibility(View.GONE);
         emptyListView.setVisibility(View.GONE);
         permissionDeniedView.setVisibility(View.GONE);
+        searchButton.setVisibility(View.GONE);
         connectionErrorView.setVisibility(View.VISIBLE);
     }
 
-    public void setToolbarSubtitle(int contactsSize){
-        toolbar.setSubtitle(contactsSize + " contacts");
-
+    public void AppToolbarSearchShowAnimation(){
+        appToolbarLayout.setVisibility(View.GONE);
+        searchView.setVisibility(View.VISIBLE);
+        searchView.bringToFront();
+        searchText.requestFocus();
+        ((TabActivity)getActivity()).showVirtualKeyboard(searchText);
     }
+
+    public void AppToolbarSearchHideAnimation() {
+        searchText.setText("");
+        searchView.setVisibility(View.GONE);
+        appToolbarLayout.setVisibility(View.VISIBLE);
+        ((TabActivity)getActivity()).hideVirtualKeyboard();
+    }
+
 }

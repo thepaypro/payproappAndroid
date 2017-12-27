@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -32,11 +33,10 @@ import io.intercom.android.sdk.Intercom;
 
 public class TabActivity extends AppCompatActivity {
 
-    RelativeLayout activityMain;
+    ConstraintLayout activityMain;
     Fragment navigationAccount;
     BottomNavigationView navigation;
     Boolean navigationEnabled = true;
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -91,6 +91,15 @@ public class TabActivity extends AppCompatActivity {
             }
         }
     };
+
+//    @Override
+//    public void onAttachFragment(Fragment fragment){
+//        if (fragment instanceof ContactsFragment){
+//            findViewById(R.id.app_toolbar_search_button).setVisibility(View.VISIBLE);
+//        }else{
+//            findViewById(R.id.app_toolbar_search_button).setVisibility(View.GONE);
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +171,11 @@ public class TabActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public void showVirtualKeyboard(View v){
+        InputMethodManager imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+        imm.showSoftInput(v,InputMethodManager.SHOW_IMPLICIT);
     }
 
     @Override

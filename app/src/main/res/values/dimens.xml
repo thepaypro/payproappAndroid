@@ -12,4 +12,7 @@
   <dimen name="design_bottom_navigation_active_text_size">10sp</dimen>
 
   <dimen name="passcode_circle_diameter">20dp</dimen>
+
+  <dimen name="custom_toolbar_height">44dp</dimen>
+  <dimen name="custom_search_toolbar_height">56dp</dimen>
 </resources>

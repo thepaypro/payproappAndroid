@@ -104,6 +104,8 @@
 
             </android.support.constraint.ConstraintLayout>
 
+            <View style="@style/Divider"/>
+
         </LinearLayout>
 
     </LinearLayout>

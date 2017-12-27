@@ -2,7 +2,6 @@
 
     <!-- Base application theme. -->
     <style name="PayProTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/pp_light_purple</item>
         <item name="colorPrimaryDark">@color/pp_light_purple</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -11,9 +10,14 @@
     </style>
 
     <style name="PayProTheme.NoActionBar" parent="PayProTheme">
-        <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+    
+    <style name="SearchView">
+        <item name="colorControlNormal">@android:color/transparent</item>
+        <item name="colorControlActivated">?colorAccent</item>
+        <item name="colorControlHighlight">?colorAccent</item>
     </style>
 
     <style name="DividerWithStartEndMargin">
@@ -50,13 +54,6 @@
 
     <style name="PPAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@android:color/black</item>
-    </style>
-
-    <style name="PayProTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/white</item>
-        <item name="colorPrimaryDark">@android:color/white</item>
-        <item name="colorAccent">@android:color/white</item>
     </style>
 
 </resources>

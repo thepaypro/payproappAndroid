@@ -51,7 +51,7 @@ public class SaveContactsAsyncTask extends AsyncTask<Void,Void,Void> {
             //---display the contact id and name and phone number----
             if(c.getCount() == 0){
                 contactsFragment.showEmptyListView();
-                contactsFragment.setToolbarSubtitle(0);
+//                contactsFragment.setToolbarSubtitle(0);
                 task.cancel(true);
                 return null;
             }
@@ -120,7 +120,7 @@ public class SaveContactsAsyncTask extends AsyncTask<Void,Void,Void> {
                                 }
                                 if(!isCancelled() && contactsFragment!=null && contactsFragment.getActivity()!=null) {
                                     contactsFragment.hideProgressBar();
-                                    contactsFragment.setToolbarSubtitle(contacts.size());
+//                                    contactsFragment.setToolbarSubtitle(contacts.size());
                                     contactsAdapter = new ContactsAdapter(context, R.layout.contacts_list_item, sortList(contacts));
                                     mContactsList.setAdapter(contactsAdapter);
                                     contactsFragment.setContactsAdapter(contactsAdapter);
