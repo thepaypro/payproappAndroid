@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,12 +24,15 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.view.inputmethod.InputMethodManager;
@@ -142,6 +146,22 @@ public class ContactsFragment extends Fragment {
         searchText = getActivity().findViewById(R.id.search_text);
         searchCloseButton = getActivity().findViewById(R.id.search_close_button);
         searchBackButton = getActivity().findViewById(R.id.search_back_button);
+
+//        getView().setFocusableInTouchMode(true);
+//        getView().requestFocus();
+//        getView().setOnKeyListener( new View.OnKeyListener()
+//        {
+//            @Override
+//            public boolean onKey( View v, int keyCode, KeyEvent event )
+//            {
+//                if( keyCode == KeyEvent.KEYCODE_BACK && searchView.getVisibility() == View.VISIBLE && !isKeyboardShown())
+//                {
+//                    AppToolbarSearchHideAnimation();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        } );
 
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -397,6 +417,16 @@ public class ContactsFragment extends Fragment {
         searchView.setVisibility(View.GONE);
         appToolbarLayout.setVisibility(View.VISIBLE);
         ((TabActivity)getActivity()).hideVirtualKeyboard();
+    }
+
+
+    public Boolean onBackPressed(){
+        if(searchView.getVisibility() == View.VISIBLE) {
+            AppToolbarSearchHideAnimation();
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

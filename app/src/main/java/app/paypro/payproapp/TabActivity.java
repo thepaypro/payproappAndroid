@@ -1,21 +1,17 @@
 package app.paypro.payproapp;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.RelativeLayout;
 
 import com.android.support.BottomNavigationViewHelper;
 
@@ -100,6 +96,18 @@ public class TabActivity extends AppCompatActivity {
 //            findViewById(R.id.app_toolbar_search_button).setVisibility(View.GONE);
 //        }
 //    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+        if (f instanceof ContactsFragment){
+            if(!((ContactsFragment) f).onBackPressed()){
+                super.onBackPressed();
+            }
+        }else{
+            super.onBackPressed();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
