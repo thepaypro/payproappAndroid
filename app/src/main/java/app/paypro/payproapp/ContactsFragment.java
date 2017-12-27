@@ -195,7 +195,6 @@ public class ContactsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveContactsAsyncTask.cancel(true);
                 hideToolbarSearch();
                 SendMoneyAddressFragment myfragment = new SendMoneyAddressFragment();
                 FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
@@ -204,6 +203,7 @@ public class ContactsFragment extends Fragment {
                 transaction.replace(R.id.frame_layout, myfragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+                saveContactsAsyncTask.cancel(true);
                 appToolbarLayout.setVisibility(View.VISIBLE);
             }
         });
@@ -269,8 +269,7 @@ public class ContactsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if(!mIsRestoredFromBackstack)
-        {
+        if(!mIsRestoredFromBackstack || contactsAdapter == null) {
             loadContacts();
         }else{
             contactsAdapter.getFilter().filter("");
