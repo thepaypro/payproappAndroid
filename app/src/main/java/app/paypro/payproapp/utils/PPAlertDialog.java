@@ -45,6 +45,11 @@ public class PPAlertDialog {
                         .setPositiveButton(android.R.string.ok, okAction)
                         .setNegativeButton(android.R.string.cancel, cancelAction);
                 return builder;
+            case "error_change_passcode":
+                builder.setMessage(R.string.error_change_passcode)
+                        .setTitle(R.string.error)
+                        .setPositiveButton(android.R.string.ok, okAction);
+                return builder;
             case "invite_dialog":
                 builder.setMessage(R.string.invite_dialog)
                         .setTitle(R.string.invite_dialog_title)

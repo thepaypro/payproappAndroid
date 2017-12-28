@@ -373,10 +373,16 @@ public class PasscodeActivity extends AppCompatActivity{
                                                 finish();
                                             } else {
                                                 enableView();
-                                                shake();
-                                                editText.setText("");
-                                                InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-                                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                                                DialogInterface.OnClickListener dialogInterfaceOK = new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        Intent intent = new Intent(PasscodeActivity.this, PasscodeActivity.class);
+                                                        intent.putExtra("passcode_state", "old");
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                };
+                                                PPAlertDialog.getAlertDialogBuilder(PasscodeActivity.this,"error_change_passcode",dialogInterfaceOK,dialogInterfaceOK).show();
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();

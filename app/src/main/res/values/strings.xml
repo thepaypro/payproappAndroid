@@ -3,8 +3,6 @@
   <string name="app_name" translatable="false">PayPro</string>
 
   <string name="search_hint">Search&#8230;</string>
-  <string name="no_result_found">No result found</string>
-  <string name="select_country">Select county</string>
 
   <string name="continue_button">Continue</string>
 
@@ -127,6 +125,7 @@
   <string name="invite_dialog_title">Invite</string>
 
   <!--Errors-->
+  <string name="error">Error</string>
   <string name="error_connection">No internet connection!</string>
   <string name="error_save">Saving error!</string>
   <string name="error_username_exist">Phone number already registered</string>
@@ -135,6 +134,8 @@
   <string name="error_invalid_phonenumber">Invalid phone number</string>
   <string name="error_insufficient_funds">Insufficient funds</string>
   <string name="error_basic">Ups! Sorry, something went wrong</string>
+  <string name="error_change_passcode">Passcodes don\'t match or old passcode is incorrect.</string>
+
   
   <string name="try_again">Try Again</string>
   
