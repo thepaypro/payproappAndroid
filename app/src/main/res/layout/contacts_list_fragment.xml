@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:indeterminateDrawable="@drawable/custom_progress_loader_black"
+                android:indeterminateDrawable="@drawable/custom_progress_loader_blue"
                 android:indeterminate="true"/>
 
         </LinearLayout>
