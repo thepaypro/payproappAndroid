@@ -35,8 +35,8 @@ public class SmsCodeActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_code);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
 
 
         mainView = findViewById(R.id.main_view);
@@ -51,12 +51,7 @@ public class SmsCodeActivity extends AppCompatActivity{
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             username = extras.getString("username");
-//            if(extras.getString("errorMsg") != null){
-//                hideVirtualKeyboard();
-//                PPSnackbar.getSnackbar(mainView,getApplicationContext(),extras.getString("errorMsg")).show();
-//            }else{
-                editText.requestFocus();
-//            }
+            editText.requestFocus();
         }
 
     }

@@ -373,6 +373,8 @@ public class PasscodeActivity extends AppCompatActivity{
                                                 finish();
                                             } else {
                                                 enableView();
+                                                shake();
+                                                editText.setText("");
                                                 DialogInterface.OnClickListener dialogInterfaceOK = new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
