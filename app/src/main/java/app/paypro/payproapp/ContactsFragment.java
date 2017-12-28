@@ -70,6 +70,7 @@ public class ContactsFragment extends Fragment {
     private RelativeLayout mainView;
     private ProgressBar progressBar;
     private FloatingActionButton fab;
+
     private Boolean mIsRestoredFromBackstack;
     private ImageButton searchButton;
     private ConstraintLayout searchView;

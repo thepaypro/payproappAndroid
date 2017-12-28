@@ -6,6 +6,7 @@ package app.paypro.payproapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import java.io.InputStream;
 import org.json.JSONArray;
@@ -33,6 +34,7 @@ import android.support.v7.app.ActionBar;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -48,6 +50,8 @@ public class PhoneNumberListActivity extends AppCompatActivity{
     private ImageButton searchCloseButton;
     private ImageButton searchBackButton;
     private RelativeLayout appToolbarLayout;
+    private LinearLayout noResultsView;
+    private TextView noResultsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,9 @@ public class PhoneNumberListActivity extends AppCompatActivity{
         searchText = findViewById(R.id.search_text);
         searchCloseButton = findViewById(R.id.search_close_button);
         searchBackButton = findViewById(R.id.search_back_button);
+
+        noResultsView = findViewById(R.id.no_results_view);
+        noResultsText = findViewById(R.id.no_results_text);
 
         ImageButton toolbar_back_button_image = findViewById(R.id.app_toolbar_back_button_image);
         toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +144,19 @@ public class PhoneNumberListActivity extends AppCompatActivity{
 
         mAdapter = new CountriesListAdapter(sortList(myDataset));
         mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (mAdapter.getItemCount() == 0){
+                    noResultsText.setText(String.format(getResources().getString(R.string.no_results), searchText.getText().toString()));
+                    noResultsView.setVisibility(View.VISIBLE);
+                }else {
+                    noResultsView.setVisibility(View.GONE);
+                }
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
