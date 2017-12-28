@@ -84,6 +84,8 @@ public class AccountFragment extends Fragment implements AccountFragmentsInterfa
             e.printStackTrace();
         }
 
+        viewPager.setCurrentItem(1);
+
     }
 
     @Override
