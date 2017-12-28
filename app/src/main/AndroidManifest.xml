@@ -15,9 +15,11 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/app_ico"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_ico_round"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/PayProTheme">
 
