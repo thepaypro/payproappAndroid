@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
+                    android:paddingRight="10dp"
                     android:text="@string/address_label" />
 
                 <TextView
@@ -62,7 +62,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingRight="15dp"
+                    android:textIsSelectable="true"
                     android:maxLines="1"
+                    android:textSize="13sp"
                     android:padding="10dp"
                     android:textColor="@android:color/black" />
 
