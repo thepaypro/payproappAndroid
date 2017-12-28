@@ -167,7 +167,6 @@
                 android:id="@+id/swipe_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:initial_state="disabled"
                 app:inner_text="@string/swipe_to_send"
                 app:inner_text_bottom_padding="18dp"
                 app:inner_text_color="@color/pp_purple"

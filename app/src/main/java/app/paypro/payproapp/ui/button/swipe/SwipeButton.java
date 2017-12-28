@@ -3,7 +3,9 @@ package app.paypro.payproapp.ui.button.swipe;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
@@ -13,6 +15,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -74,6 +77,7 @@ public class SwipeButton extends RelativeLayout {
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 
         background = new RelativeLayout(context);
+//        ImageView backgroundImageView = new ImageView(context);
 
         LayoutParams layoutParamsView = new LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -99,17 +103,13 @@ public class SwipeButton extends RelativeLayout {
 
         this.swipeButtonInner = swipeButton;
 
+        swipeButton.setBackgroundResource(R.drawable.swipe_button);
+
+        background.setBackgroundResource(R.drawable.swipe_rounded);
+
         if (attrs != null && defStyleAttr == -1 && defStyleRes == -1) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SwipeButton,
                     defStyleAttr, defStyleRes);
-
-            Drawable backgroundDrawable = typedArray.getDrawable(R.styleable.SwipeButton_inner_text_background);
-
-            if (backgroundDrawable != null) {
-                background.setBackground(backgroundDrawable);
-            } else {
-                background.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_swipe_rounded));
-            }
 
             centerText.setText(typedArray.getText(R.styleable.SwipeButton_inner_text));
             centerText.setTextColor(typedArray.getColor(R.styleable.SwipeButton_inner_text_color,
@@ -156,14 +156,6 @@ public class SwipeButton extends RelativeLayout {
                     (int) innerTextTopPadding,
                     (int) innerTextRightPadding,
                     (int) innerTextBottomPadding);
-
-            Drawable buttonBackground = typedArray.getDrawable(R.styleable.SwipeButton_button_background);
-
-            if (buttonBackground != null) {
-                swipeButton.setBackground(buttonBackground);
-            } else {
-                swipeButton.setBackground(ContextCompat.getDrawable(context, R.drawable.shape_swipe_button));
-            }
 
             typedArray.recycle();
         }
