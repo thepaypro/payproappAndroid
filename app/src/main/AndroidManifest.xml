@@ -30,7 +30,7 @@
         <activity
             android:screenOrientation="portrait"
             android:name=".WelcomeActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/PayProTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,27 +39,28 @@
         <activity
             android:screenOrientation="portrait"
             android:name=".PhoneNumberActivity"
+            android:parentActivityName=".WelcomeActivity"
             android:windowSoftInputMode="stateVisible"
-            android:label="@string/title_activity_phone_number"
-            android:theme="@style/PayProTheme.NoActionBar">
+            android:theme="@style/PayProTheme">
         </activity>
         <activity
             android:screenOrientation="portrait"
             android:name=".PhoneNumberListActivity"
             android:parentActivityName=".PhoneNumberActivity"
-            android:label="@string/title_activity_phone_number">
+            android:theme="@style/PayProTheme">
         </activity>
         <activity
             android:screenOrientation="portrait"
             android:name=".SmsCodeActivity"
             android:windowSoftInputMode="stateVisible"
             android:parentActivityName=".PhoneNumberActivity"
+            android:theme="@style/PayProTheme"
             android:label="@string/title_activity_sms_code">
         </activity>
         <activity
             android:screenOrientation="portrait"
             android:name=".PasscodeActivity"
-            android:theme="@style/PayProTheme.NoActionBar"
+            android:theme="@style/PayProTheme"
             android:windowSoftInputMode="stateVisible">
         </activity>
         <activity
@@ -69,7 +70,7 @@
             android:theme="@style/PayProTheme">
         </activity>
         <activity android:name=".SendMoneyConfirmActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/PayProTheme"
             android:screenOrientation="portrait">
         </activity>
     </application>

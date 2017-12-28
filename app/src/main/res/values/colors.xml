@@ -24,7 +24,7 @@
   <color name="PayPro_NavigationBar">#f7f7f7</color>
 
   <!-- dots-->
-  <color name="dot_dark_slider">#ffffff</color>
-  <color name="dot_light_slider">#7271FF</color>
+  <color name="dot_dark_slider">#7271FF</color>
+  <color name="dot_light_slider">#ffffff</color>
 
 </resources>

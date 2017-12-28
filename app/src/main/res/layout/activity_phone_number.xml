@@ -6,73 +6,103 @@
     android:layout_height="match_parent"
     android:background="@color/bg_gray">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/app_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/custom_toolbar_height"
+        android:background="@color/PayPro_NavigationBar"
+        android:minHeight="@dimen/custom_toolbar_height"
+        android:theme="?attr/actionBarTheme">
+    </android.support.v7.widget.Toolbar>
 
-        <android.support.v7.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/toolbar"
-            android:textColor="@android:color/white"
-            android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/app_toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/custom_toolbar_height"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/PayPro_NavigationBar"
+        android:clickable="false"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="@id/app_toolbar">
+
+        <ImageButton
+            android:id="@+id/app_toolbar_back_button_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:background="@color/defaultBackgroundColor"
+            android:paddingLeft="5dp"
+            android:paddingRight="70dp"
+            android:tint="@color/pp_light_purple"
+            android:visibility="visible"
+            app:srcCompat="?attr/actionModeCloseDrawable" />
+
+        <TextView
+            android:id="@+id/app_toolbar_back_button_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="false"
+            android:layout_centerVertical="false"
+            android:gravity="center_vertical"
+            android:paddingLeft="30dp"
+            android:text="@string/back"
+            android:textColor="@color/pp_light_purple"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/app_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/title_phone_number"
+            android:textColor="@color/defaultTextColor"
+            android:textStyle="normal" />
+
+        <Button
+            android:id="@+id/app_toolbar_confirm_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:background="?colorPrimary"
-            app:titleTextColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/content">
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@color/defaultBackgroundColor"
+            android:text="@string/next"
+            android:textColor="@color/pp_light_purple"
+            android:visibility="invisible" />
 
-            <LinearLayout
-                android:id="@+id/toolbar_next_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:clickable="true"
-                android:padding="15dp"
-                android:layout_gravity="right"
-                android:gravity="center_vertical"
-                android:onClick="launchSmsCodeActivity"
-                android:orientation="horizontal">
+        <ProgressBar
+            android:id="@+id/app_toolbar_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/custom_progress_loader_blue"
+            android:visibility="invisible" />
 
-                <TextView
-                    android:id="@+id/next_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/confirmation_code_actionbar"
-                    android:textColor="@android:color/white" />
+    </RelativeLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/toolbar_progress_bar_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:padding="15dp"
-                android:layout_gravity="right"
-                android:gravity="center_vertical"
-                android:visibility="gone"
-                android:orientation="horizontal">
-
-                <ProgressBar
-                    android:id="@+id/progress_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:indeterminateDrawable="@drawable/custom_progress_loader"
-                    android:indeterminate="true"/>
-
-            </LinearLayout>
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+    <View
+        android:id="@+id/divider"
+        style="@style/Divider"
+        app:layout_constraintTop_toBottomOf="@id/app_toolbar_layout"
+        app:layout_constraintBottom_toTopOf="@id/frame_layout"/>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:id="@+id/info"

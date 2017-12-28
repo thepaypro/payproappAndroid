@@ -8,11 +8,6 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-    <style name="PayProTheme.NoActionBar" parent="PayProTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
     
     <style name="SearchView">
         <item name="colorControlNormal">@android:color/transparent</item>
