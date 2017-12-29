@@ -91,8 +91,7 @@
   <string name="amount_placeholder">"000.00</string>
   <string name="private_msg_placeholder">Message for beneficiary</string>
 
-  <string name="bitcoin_address">Addr:</string>
-  <string name="hint_bitcoin_address">1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2</string>
+  <string name="hint_bitcoin_address">Address</string>
 
   <string name="ready_to_send">READY TO SEND</string>
   <string name="to">TO</string>
