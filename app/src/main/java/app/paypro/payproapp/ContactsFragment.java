@@ -127,7 +127,7 @@ public class ContactsFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         emptyListView = getActivity().findViewById(R.id.empty_list_view);
@@ -203,7 +203,10 @@ public class ContactsFragment extends Fragment {
                 transaction.replace(R.id.frame_layout, myfragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
-                saveContactsAsyncTask.cancel(true);
+                if (saveContactsAsyncTask != null) {
+                    saveContactsAsyncTask.cancel(true);
+                }
+
                 appToolbarLayout.setVisibility(View.VISIBLE);
             }
         });
