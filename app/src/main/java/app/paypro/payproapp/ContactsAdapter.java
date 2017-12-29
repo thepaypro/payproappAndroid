@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import app.paypro.payproapp.global.Global;
+import app.paypro.payproapp.utils.CropImage;
 
 /**
  * Created by rogerbaiget on 24/11/17.
@@ -86,15 +87,21 @@ public class ContactsAdapter extends ArrayAdapter<Contact> implements Filterable
                     e.printStackTrace();
                 }
             }
-            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getContext().getResources(), bitmapImage);
-            roundedBitmapDrawable.setAntiAlias(true);
-            roundedBitmapDrawable.setCircular(true);
-            viewHolder.photo.setImageDrawable(roundedBitmapDrawable);
+
+
+//            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getContext().getResources(), bitmapImage);
+//            roundedBitmapDrawable.setAntiAlias(true);
+//            roundedBitmapDrawable.setCircular(true);
+//            viewHolder.photo.setImageDrawable(roundedBitmapDrawable);
+
+            viewHolder.photo.setImageBitmap(CropImage.transform(bitmapImage));
 
             Bitmap bitmapLogo = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.logo_alone);
-            roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getContext().getResources(), bitmapLogo);
-            roundedBitmapDrawable.setCircular(true);
-            viewHolder.ppLogo.setImageDrawable(roundedBitmapDrawable);
+//            roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getContext().getResources(), bitmapLogo);
+//            roundedBitmapDrawable.setCircular(true);
+//            viewHolder.ppLogo.setImageDrawable(roundedBitmapDrawable);
+
+            viewHolder.ppLogo.setImageBitmap(CropImage.transform(bitmapLogo));
 
             if (item.getIsUser()) {
                 viewHolder.ppLogo.setVisibility(View.VISIBLE);
