@@ -83,14 +83,17 @@ android:layout_height="match_parent">
                 android:id="@+id/app_toolbar_progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
+                android:visibility="invisible"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="17dp"
                 android:layout_marginRight="17dp"
-                android:indeterminate="true"
-                android:indeterminateDrawable="@drawable/custom_progress_loader_blue"
-                android:visibility="invisible" />
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateTint="@color/pp_light_purple"
+                android:layout_gravity="center" />
+
+
 
             <ImageButton
                 android:id="@+id/app_toolbar_search_button"

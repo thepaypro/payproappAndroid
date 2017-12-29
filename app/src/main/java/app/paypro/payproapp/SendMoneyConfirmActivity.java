@@ -28,7 +28,7 @@ public class SendMoneyConfirmActivity extends AppCompatActivity {
         to = findViewById(R.id.to);
 
         amount.setText("bits " + sendMoney.getAmount());
-        to.setText(sendMoney.getMessage());
+        to.setText("sent to " + sendMoney.getLabel());
 
         new Handler().postDelayed(new Runnable() {
             @Override

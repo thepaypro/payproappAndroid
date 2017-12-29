@@ -35,10 +35,11 @@
             <ProgressBar
                 android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:visibility="visible"
-                android:indeterminateDrawable="@drawable/custom_progress_loader_blue"
-                android:indeterminate="true"/>
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateTint="@color/pp_light_purple"
+                android:layout_gravity="center" />
 
         </LinearLayout>
 
