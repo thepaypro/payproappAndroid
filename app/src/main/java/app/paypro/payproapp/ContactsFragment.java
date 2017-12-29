@@ -337,7 +337,7 @@ public class ContactsFragment extends Fragment {
             saveContactsAsyncTask = new SaveContactsAsyncTask(getContext(), cursorLoader.loadInBackground(), this, mContactsList);
             ((TabActivity)getActivity()).setSaveContactsAsyncTask(saveContactsAsyncTask);
             saveContactsAsyncTask.execute();
-        } else {
+        } else if (permissionDeniedView.getVisibility() == View.GONE){
             requestContactsPermission();
         }
 

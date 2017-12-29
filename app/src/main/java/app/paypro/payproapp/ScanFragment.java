@@ -95,7 +95,7 @@ public class ScanFragment extends Fragment implements BarcodeGraphicTracker.Barc
         int rc = ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA);
         if (rc == PackageManager.PERMISSION_GRANTED) {
             createCameraSource();
-        } else {
+        } else if (permissionDeniedView.getVisibility() == View.GONE) {
             requestCameraPermission();
         }
     }
