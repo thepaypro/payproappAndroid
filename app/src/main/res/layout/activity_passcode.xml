@@ -28,7 +28,6 @@
             android:layout_gravity="right"
             android:clickable="true"
             android:gravity="center_vertical"
-            android:onClick="launchSmsCodeActivity"
             android:orientation="horizontal"
             android:padding="15dp">
 

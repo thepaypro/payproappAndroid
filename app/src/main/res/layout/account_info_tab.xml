@@ -64,7 +64,8 @@
                     android:paddingRight="15dp"
                     android:textIsSelectable="true"
                     android:maxLines="1"
-                    android:textSize="13sp"
+                    android:lines="1"
+                    android:textSize="11sp"
                     android:padding="10dp"
                     android:textColor="@android:color/black" />
 
