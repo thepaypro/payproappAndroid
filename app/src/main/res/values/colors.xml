@@ -22,6 +22,7 @@
   <color name="pp_sm_gradTop">#70ffe2fd</color>
   <color name="pp_sm_gradMiddle">#b5987ff7</color>
   <color name="PayPro_NavigationBar">#f7f7f7</color>
+  <color name="pp_ray_pink">#FF57DD</color>
 
   <!-- dots-->
   <color name="dot_dark_slider">#7271FF</color>
