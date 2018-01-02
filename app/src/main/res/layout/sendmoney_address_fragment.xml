@@ -40,9 +40,10 @@
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/addr_edit_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="43dp"
                 android:textSize="15sp"
                 android:ems="17"
+                android:background="@android:color/transparent"
                 android:maxLength="35"
                 android:singleLine="true"
                 android:ellipsize="end"
