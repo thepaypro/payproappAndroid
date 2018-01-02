@@ -153,8 +153,8 @@ public class SendMoneySendFragment extends Fragment {
                                 }
                             }else{
                                 hideActivityIndicator();
-                                PPSnackbar.getSnackbar(mainView,getContext(),"").show();
                                 swipeButton.restartSwipeButton();
+                                PPAlertDialog.getAlertDialogBuilder(getContext(),"",defaultDialogInterface,defaultDialogInterface).show();
                             }
                         }
                     });
