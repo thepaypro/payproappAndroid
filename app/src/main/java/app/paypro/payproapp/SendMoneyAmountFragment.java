@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,8 @@ public class SendMoneyAmountFragment extends Fragment {
                 if(!textFormated && !charSequence.toString().equals("")) {
                     String amount = currencyInputFormatting(charSequence.toString());
                     textFormated = true;
+                    Log.d(amount,"amount");
+                    Log.d(String.valueOf(amount.length()),"amount.length()");
                     amountInput.setText(amount);
                     amountInput.setSelection(amount.length());
                     if(checkValidAmount(amount)){
@@ -158,50 +161,47 @@ public class SendMoneyAmountFragment extends Fragment {
     }
 
     public String currencyInputFormatting(String amount){
+        NumberFormat format = NumberFormat.getInstance(Locale.UK);
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(0);
+
         if (amount.substring(amount.length() - 1 ).equals(",")) {
             amount = amount.replace(amount.substring(amount.length()-1),".");
         }
 
-        amount = amount.replace( ",",  "");
         amount = amount.replace("..",  ".");
 
-        Boolean matched = amount.matches( "^\\d+((,[0-9]{0,3})+.|\\.[0-9]{0,2})?");
-        Boolean matchedFull = amount.matches("^\\d+(,[0-9]{3})+\\.([0-9]{1,2})?");
-
-        if (!(matchedFull || (matched && !amount.equals("0"))) || amount.length() > 10){
-            amount = amount.substring(0,amount.length()-1);
-        }
-
-        String amount_integer = amount;
-        String amount_decimals = "";
-        String amount_decimals_origin = "";
         Integer pos_dot = amount.indexOf(".");
 
-        if (pos_dot != -1) {
-            amount_integer = amount.substring(0,pos_dot);
-            amount_decimals_origin = amount.substring(pos_dot);
-            amount_decimals = amount_decimals_origin;
-
-            if (amount_decimals_origin == ".") {
-                amount_decimals = "";
+        if (amount.equals("0") || amount.equals(".")) {
+            return "";
+        }else if(amount.substring(amount.length() -1 ).equals(".")){
+            String amountToFormat = amount.substring(0,amount.length()-1);
+            amountToFormat = amountToFormat.replace( ",",  "");
+            if(amountToFormat.length() >= 7){
+                return format.format(Double.parseDouble(amountToFormat));
+            }else{
+                return format.format(Double.parseDouble(amountToFormat)).concat(".");
             }
+
+        }else if (pos_dot!= -1 && ((amount.length() - pos_dot) > 3)){
+            amount = amount.replace( ",",  "");
+            return format.format(Double.parseDouble(amount.substring(0, amount.length() - 1)));
+
+        }else if((format.format(Double.parseDouble(amount.replace( ",",  ""))).length() > 10)){
+            int selectionStarts = amountInput.getSelectionStart();
+            String amountToFormat = amount.substring(0,selectionStarts-1).concat(amount.substring(selectionStarts,amount.length()));
+            amountToFormat = amountToFormat.replace( ",",  "");
+            if(format.format(Double.parseDouble(amountToFormat)).length() > 10){
+                return "";
+            }else{
+                return format.format(Double.parseDouble(amountToFormat));
+            }
+        }else{
+            amount = amount.replace( ",",  "");
+            return format.format(Double.parseDouble(amount));
         }
 
-        Integer amount_number = Integer.parseInt(amount_integer);
-
-
-        NumberFormat format = NumberFormat.getInstance(Locale.UK);
-        format.setMaximumFractionDigits(2);
-        format.setMinimumFractionDigits(0);
-        String amount_formatted = format.format(amount_number);
-
-        if (!amount_decimals_origin.equals(amount_decimals)) {
-            amount_formatted = amount_formatted.concat(amount_decimals_origin);
-        } else {
-            amount_formatted = amount_formatted.concat(amount_decimals);
-        }
-
-        return amount_formatted;
     }
 
     public void enableNextButton(){
