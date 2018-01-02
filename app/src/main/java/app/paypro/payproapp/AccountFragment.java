@@ -77,7 +77,8 @@ public class AccountFragment extends Fragment implements AccountFragmentsInterfa
         tabLayout.setupWithViewPager(viewPager);
 
         try {
-            this.refreshInfo(new GetAccountAsyncTask(getContext()).execute().get()[0]);
+            Account[] account = new GetAccountAsyncTask(getContext()).execute().get();
+            this.refreshInfo(account[0]);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

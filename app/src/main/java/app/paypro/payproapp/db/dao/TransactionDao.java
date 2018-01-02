@@ -22,4 +22,7 @@ public interface TransactionDao {
 
     @Insert(onConflict = REPLACE)
     void insert(Transaction[] transactions);
+
+    @Query("DELETE FROM `transaction`")
+    void deleteAll();
 }
