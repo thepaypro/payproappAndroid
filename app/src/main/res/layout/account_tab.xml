@@ -8,83 +8,85 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".AccountFragment">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/topPanel"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="217dp"
+        android:background="@drawable/gradient"
+        android:elevation="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <LinearLayout
+            android:id="@+id/currency_layout"
             android:layout_width="match_parent"
-            android:layout_height="217dp"
-            android:elevation="0dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
-            android:background="@drawable/gradient">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/tabs"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/currency_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/bits"
+                android:textColor="@android:color/white"
+                android:textSize="40sp" />
 
             <LinearLayout
-                android:id="@+id/currency_layout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:gravity="center"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/tabs">
-
-                <TextView
-                    android:id="@+id/currency_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/bits"
-                    android:textColor="@android:color/white"
-                    android:textSize="40sp" />
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_height="50dp"
+                    android:layout_marginRight="7dp"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginRight="7dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="10dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="3dp"
-                            app:srcCompat="@drawable/ic_greek_letter_mu_serif_sans" />
-
-
-                        <ImageView
-                            android:layout_width="13dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="2dp"
-                            app:srcCompat="@drawable/ic_btc_sans" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/currency_balance"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="10dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/balance_empty"
-                        android:textColor="@android:color/white"
-                        android:textSize="25sp" />
+                        android:layout_marginRight="3dp"
+                        app:srcCompat="@drawable/ic_greek_letter_mu_serif_sans" />
+
+
+                    <ImageView
+                        android:layout_width="13dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        app:srcCompat="@drawable/ic_btc_sans" />
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/currency_balance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/balance_empty"
+                    android:textColor="@android:color/white"
+                    android:textSize="25sp" />
+
             </LinearLayout>
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                app:tabContentStart="72dp"
-                app:tabIndicatorColor="@android:color/white"
-                app:tabMode="scrollable"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+        </LinearLayout>
 
-        </android.support.constraint.ConstraintLayout>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tabIndicatorColor="@android:color/white"
+            app:tabMode="scrollable" />
+
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
