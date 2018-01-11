@@ -80,7 +80,9 @@ public class SendMoneyAddressFragment extends Fragment {
 
         confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
         confirmButton.setText(getResources().getString(R.string.next));
-        confirmButton.setVisibility(View.GONE);
+        if(!(addrEditText.getText().toString().length() > 0)) {
+            confirmButton.setVisibility(View.GONE);
+        }
 
         toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +97,7 @@ public class SendMoneyAddressFragment extends Fragment {
             public void onClick(View v)
             {
                 String addr = addrEditText.getText().toString();
-                if(addr.matches("\"^[13][a-km-zA-HJ-NP-Z0-9]{26,33}$\"")){
+                if(addr.matches("^[13][a-km-zA-HJ-NP-Z0-9]{26,33}$")){
                     Global.getSendMoney().setAddress(addr);
 
                     SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
