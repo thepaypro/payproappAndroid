@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Currency;
@@ -50,13 +52,18 @@ public class TransactionsRecyclerViewAdapter  extends RecyclerView.Adapter<Trans
 
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(transaction.getDate());
 
-        holder.titleTextView.setText(title);
-        holder.addressTextView.setText(transaction.getAddressTo());
-        holder.signalTextView.setText(signal);
-        holder.amountTextView.setText(amount);
-        holder.subtitleTextView.setText(transaction.getSubject());
-        holder.dateTextView.setText(date);
-        holder.itemView.setTag(transaction);
+        try {
+            holder.titleTextView.setText(title);
+            holder.addressTextView.setText(transaction.getAddressTo());
+            holder.signalTextView.setText(signal);
+            holder.amountTextView.setText(amount);
+            holder.subtitleTextView.setText(URLDecoder.decode(transaction.getSubject(), "UTF-8"));
+            holder.dateTextView.setText(date);
+            holder.itemView.setTag(transaction);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
     }
 
