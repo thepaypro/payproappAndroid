@@ -10,6 +10,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
@@ -73,8 +76,24 @@ public class TransactionsRecyclerViewAdapter  extends RecyclerView.Adapter<Trans
     }
 
     public void addItems(List<Transaction> transactionsList){
-        this.transactionsList = transactionsList;
+        this.transactionsList = sortList(transactionsList);
         notifyDataSetChanged();
+    }
+
+    List<Transaction> sortList(List<Transaction> list) {
+        Collections.sort(list, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction transaction1, Transaction transaction2) {
+                if (transaction1.getDate().before(transaction2.getDate())) {
+                    return 1;
+                } else if (transaction1.getDate().after(transaction2.getDate())) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        return list;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
