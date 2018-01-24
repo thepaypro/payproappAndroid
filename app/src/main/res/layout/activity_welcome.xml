@@ -4,16 +4,17 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_slider"
-    android:paddingTop="50dp">
+    android:background="@color/bg_slider">
 
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/layoutDots"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button">
 
     </android.support.v4.view.ViewPager>
 
@@ -23,12 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/continue_button"
-        app:layout_constraintBottom_toTopOf="@+id/layoutDots"
+        app:layout_constraintTop_toBottomOf="@id/view_pager"
+        app:layout_constraintBottom_toTopOf="@id/layoutDots"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_pager"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1"
         android:onClick="launchPhoneActivity"/>
 
     <LinearLayout
@@ -41,8 +40,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_pager"
-        android:layout_marginBottom="@dimen/dots_margin_bottom">
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        android:layout_marginBottom="20dp">
 
     </LinearLayout>
 

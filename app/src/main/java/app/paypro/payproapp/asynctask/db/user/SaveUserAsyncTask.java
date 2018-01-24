@@ -17,6 +17,7 @@ public class SaveUserAsyncTask extends AsyncTask<User, Void, Void> {
     }
 
     protected Void doInBackground(User... users) {
+        AppDatabase.getAppDatabase(context).userDao().deleteAll();
         AppDatabase.getAppDatabase(context).userDao().insert(users[0]);
         return null;
     }

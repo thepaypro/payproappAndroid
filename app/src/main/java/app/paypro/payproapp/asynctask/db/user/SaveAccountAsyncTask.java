@@ -2,6 +2,7 @@ package app.paypro.payproapp.asynctask.db.user;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
 
 import app.paypro.payproapp.db.AppDatabase;
 import app.paypro.payproapp.db.entity.Account;
@@ -17,6 +18,8 @@ public class SaveAccountAsyncTask extends AsyncTask<Account, Void, Void> {
     }
 
     protected Void doInBackground(Account... accounts) {
+        AppDatabase.getAppDatabase(context).accountDao().deleteAll();
+        AppDatabase.getAppDatabase(context).transactionDao().deleteAll();
         AppDatabase.getAppDatabase(context).accountDao().insert(accounts[0]);
         return null;
     }

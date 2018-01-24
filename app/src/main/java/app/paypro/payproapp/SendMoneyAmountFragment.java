@@ -8,12 +8,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -27,11 +30,10 @@ import app.paypro.payproapp.global.Global;
 
 public class SendMoneyAmountFragment extends Fragment {
 
-    private Button nextButton;
+    private Button confirmButton;
     private EditText amountInput;
     private EditText privateMsgInput;
     private Boolean textFormated = false;
-    private Toolbar toolbar;
 
     public static ContactsFragment newInstance() {
         ContactsFragment fragment = new ContactsFragment();
@@ -52,22 +54,9 @@ public class SendMoneyAmountFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        nextButton = getActivity().findViewById(R.id.next_button);
+
         amountInput = getActivity().findViewById(R.id.amount_input);
         privateMsgInput = getActivity().findViewById(R.id.private_msg_input);
-        toolbar = getActivity().findViewById(R.id.toolbar);
-
-        nextButton.setEnabled(false);
-
-        ((TabActivity)getActivity()).setSupportActionBar(toolbar);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((TabActivity) getActivity()).hideVirtualKeyboard();
-                getFragmentManager().popBackStack();
-            }
-        });
 
         amountInput.addTextChangedListener(new TextWatcher(){
             @Override
@@ -79,6 +68,8 @@ public class SendMoneyAmountFragment extends Fragment {
                 if(!textFormated && !charSequence.toString().equals("")) {
                     String amount = currencyInputFormatting(charSequence.toString());
                     textFormated = true;
+                    Log.d(amount,"amount");
+                    Log.d(String.valueOf(amount.length()),"amount.length()");
                     amountInput.setText(amount);
                     amountInput.setSelection(amount.length());
                     if(checkValidAmount(amount)){
@@ -98,24 +89,56 @@ public class SendMoneyAmountFragment extends Fragment {
 
             }
         });
+    }
 
-        nextButton.setOnClickListener(new View.OnClickListener()
-        {
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText(getResources().getString(R.string.amount_title));
+
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            toolbar_back_button_text.setText(bundle.getString("origin"));
+            toolbar_back_button_text.setVisibility(View.VISIBLE);
+        }
+
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.VISIBLE);
+
+        confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
+        confirmButton.setText(getResources().getString(R.string.next));
+        if(checkValidAmount(amountInput.getText().toString())){
+            enableNextButton();
+        }else{
+            dissableNextButton();
+        }
+
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+                ((TabActivity) getActivity()).hideVirtualKeyboard();
+            }
+        });
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 SendMoney sendMoney = Global.getSendMoney();
                 try {
                     sendMoney.setAmount(amountInput.getText().toString());
-                    if(privateMsgInput.getText().toString().isEmpty()){
-                        sendMoney.setMessage(getResources().getString(R.string.default_transaction_msg));
-                    }else{
+                    if(!privateMsgInput.getText().toString().isEmpty()) {
                         sendMoney.setMessage(privateMsgInput.getText().toString());
                     }
                     SendMoneySendFragment myfragment = new SendMoneySendFragment();
                     FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                    transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                     transaction.replace(R.id.frame_layout, myfragment);
                     transaction.addToBackStack(null);
                     ((TabActivity) getActivity()).hideVirtualKeyboard();
@@ -138,59 +161,54 @@ public class SendMoneyAmountFragment extends Fragment {
     }
 
     public String currencyInputFormatting(String amount){
+        NumberFormat format = NumberFormat.getInstance(Locale.UK);
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(0);
+
         if (amount.substring(amount.length() - 1 ).equals(",")) {
             amount = amount.replace(amount.substring(amount.length()-1),".");
         }
 
-        amount = amount.replace( ",",  "");
         amount = amount.replace("..",  ".");
 
-        Boolean matched = amount.matches( "^\\d+((,[0-9]{0,3})+.|\\.[0-9]{0,2})?");
-        Boolean matchedFull = amount.matches("^\\d+(,[0-9]{3})+\\.([0-9]{1,2})?");
-
-        if (!(matchedFull || (matched && !amount.equals("0"))) || amount.length() > 10){
-            amount = amount.substring(0,amount.length()-1);
-        }
-
-        String amount_integer = amount;
-        String amount_decimals = "";
-        String amount_decimals_origin = "";
         Integer pos_dot = amount.indexOf(".");
 
-        if (pos_dot != -1) {
-            amount_integer = amount.substring(0,pos_dot);
-            amount_decimals_origin = amount.substring(pos_dot);
-            amount_decimals = amount_decimals_origin;
-
-            if (amount_decimals_origin == ".") {
-                amount_decimals = "";
+        if (amount.equals("0") || amount.equals(".")) {
+            return "";
+        }else if(amount.substring(amount.length() -1 ).equals(".")){
+            String amountToFormat = amount.substring(0,amount.length()-1);
+            amountToFormat = amountToFormat.replace( ",",  "");
+            if(amountToFormat.length() >= 7){
+                return format.format(Double.parseDouble(amountToFormat));
+            }else{
+                return format.format(Double.parseDouble(amountToFormat)).concat(".");
             }
+
+        }else if (pos_dot!= -1 && ((amount.length() - pos_dot) > 3)){
+            amount = amount.replace( ",",  "");
+            return format.format(Double.parseDouble(amount.substring(0, amount.length() - 1)));
+
+        }else if((format.format(Double.parseDouble(amount.replace( ",",  ""))).length() > 10)){
+            int selectionStarts = amountInput.getSelectionStart();
+            String amountToFormat = amount.substring(0,selectionStarts-1).concat(amount.substring(selectionStarts,amount.length()));
+            amountToFormat = amountToFormat.replace( ",",  "");
+            if(format.format(Double.parseDouble(amountToFormat)).length() > 10){
+                return "";
+            }else{
+                return format.format(Double.parseDouble(amountToFormat));
+            }
+        }else{
+            amount = amount.replace( ",",  "");
+            return format.format(Double.parseDouble(amount));
         }
 
-        Integer amount_number = Integer.parseInt(amount_integer);
-
-
-        NumberFormat format = NumberFormat.getInstance(Locale.UK);
-        format.setMaximumFractionDigits(2);
-        format.setMinimumFractionDigits(0);
-        String amount_formatted = format.format(amount_number);
-
-        if (!amount_decimals_origin.equals(amount_decimals)) {
-            amount_formatted = amount_formatted.concat(amount_decimals_origin);
-        } else {
-            amount_formatted = amount_formatted.concat(amount_decimals);
-        }
-
-        return amount_formatted;
     }
 
     public void enableNextButton(){
-        nextButton.setEnabled(true);
-        nextButton.setTextColor(Color.WHITE);
+        confirmButton.setVisibility(View.VISIBLE);
     }
 
     public void dissableNextButton(){
-        nextButton.setEnabled(false);
-        nextButton.setTextColor(getActivity().getResources().getColor(R.color.inactive_grey));
+        confirmButton.setVisibility(View.GONE);
     }
 }

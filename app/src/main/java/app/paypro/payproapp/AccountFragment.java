@@ -52,7 +52,7 @@ public class AccountFragment extends Fragment implements AccountFragmentsInterfa
         super.onActivityCreated(savedInstanceState);
 
         TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
-        toolbarTitle.setText("Account");
+        toolbarTitle.setText(getResources().getString(R.string.account_title));
 
         ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
         toolbar_back_button_image.setVisibility(View.INVISIBLE);
@@ -77,12 +77,15 @@ public class AccountFragment extends Fragment implements AccountFragmentsInterfa
         tabLayout.setupWithViewPager(viewPager);
 
         try {
-            this.refreshInfo(new GetAccountAsyncTask(getContext()).execute().get()[0]);
+            Account[] account = new GetAccountAsyncTask(getContext()).execute().get();
+            this.refreshInfo(account[0]);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
+        viewPager.setCurrentItem(1);
 
     }
 
@@ -98,8 +101,9 @@ public class AccountFragment extends Fragment implements AccountFragmentsInterfa
 
         if(account.getBalance() != null){
             NumberFormat format = NumberFormat.getInstance(Locale.UK);
+            format.setMinimumFractionDigits(2);
+            format.setMaximumFractionDigits(2);
             String amount = format.format(account.getBalance());
-//            amount = "μ\u20BF " + amount;
             currencyBalance.setText(amount);
         }else{
             currencyBalance.setText(R.string.balance_empty);

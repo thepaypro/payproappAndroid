@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,8 +49,8 @@ public class PhoneNumberActivity extends AppCompatActivity {
     private LinearLayout countryPrefixView;
 
     private ConstraintLayout mainView;
-    private LinearLayout progressBarLayout;
-    private LinearLayout nextTextLayout;
+    private ProgressBar progressBar;
+    private Button nextButton;
 
 
     @Override
@@ -58,29 +59,35 @@ public class PhoneNumberActivity extends AppCompatActivity {
         setContentView(R.layout.activity_phone_number);
 
         mainView = findViewById(R.id.main_view);
-        nextTextLayout = findViewById(R.id.toolbar_next_layout);
-        progressBarLayout = findViewById(R.id.toolbar_progress_bar_layout);
+        nextButton = findViewById(R.id.app_toolbar_confirm_button);
+        progressBar = findViewById(R.id.app_toolbar_progress_bar);
         countryPrefixView = findViewById(R.id.countryPrefixView);
 
         editText= findViewById(R.id.editText);
 
         editText.addTextChangedListener(filterTextWatcher);
 
-        android.support.v7.widget.Toolbar toolbar= findViewById(R.id.toolbar);
+        ImageButton toolbar_back_button_image = findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
-        setSupportActionBar(toolbar);
+        findViewById(R.id.app_toolbar_confirm_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchNextActivity();
+            }
+        });
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             alpha2Code = extras.getString("alpha2Code");
             callingCodes = extras.getString("callingCodes");
             phone_number = extras.getString("phone_number");
-//            if(extras.getString("errorMsg") != null){
-//                PPSnackbar.getSnackbar(mainView,getApplicationContext(),extras.getString("errorMsg")).show();
-//            }else{
-                editText.requestFocus();
-//                editText.setFocusable(true);
-//            }
+            editText.requestFocus();
 
             TextView alpha2CodeView = this.findViewById(R.id.alpha2CodeView);
             alpha2CodeView.setText(alpha2Code);
@@ -92,14 +99,14 @@ public class PhoneNumberActivity extends AppCompatActivity {
         }
 
         if(editText.getText().toString().length() > 0){
-            nextTextLayout.setVisibility(LinearLayout.VISIBLE);
+            nextButton.setVisibility(LinearLayout.VISIBLE);
         }else{
-            nextTextLayout.setVisibility(LinearLayout.INVISIBLE);
+            nextButton.setVisibility(LinearLayout.INVISIBLE);
         }
 
     }
 
-    public void launchSmsCodeActivity(final View v){
+    public void launchNextActivity(){
         final String phoneNumber = "+"+callingCodes+editText.getText().toString();
         disableView();
         try {
@@ -113,13 +120,11 @@ public class PhoneNumberActivity extends AppCompatActivity {
                             intentLogin.putExtra("passcode_state", "login");
                             startActivity(intentLogin);
                             finish();
-                            enableView();
                         } else if (object.getString("status").equals("true") && object.getString("isUser").equals("false")){
                             Intent intentSms = new Intent(PhoneNumberActivity.this, SmsCodeActivity.class);
                             intentSms.putExtra("username", phoneNumber);
                             startActivity(intentSms);
                             finish();
-                            enableView();
                         }else if (!object.getBoolean("status") && object.has("error_msg")){
                             enableView();
                             PPSnackbar.getSnackbar(mainView,getApplicationContext(),object.getString("error_msg")).show();
@@ -139,15 +144,15 @@ public class PhoneNumberActivity extends AppCompatActivity {
     }
 
     public void disableView(){
-        nextTextLayout.setVisibility(LinearLayout.GONE);
-        progressBarLayout.setVisibility(LinearLayout.VISIBLE);
+        nextButton.setVisibility(LinearLayout.GONE);
+        progressBar.setVisibility(LinearLayout.VISIBLE);
         countryPrefixView.setEnabled(false);
         editText.setEnabled(false);
     }
 
     public void enableView(){
-        nextTextLayout.setVisibility(LinearLayout.VISIBLE);
-        progressBarLayout.setVisibility(LinearLayout.GONE);
+        nextButton.setVisibility(LinearLayout.VISIBLE);
+        progressBar.setVisibility(LinearLayout.GONE);
         countryPrefixView.setEnabled(true);
         editText.setEnabled(true);
     }
@@ -156,7 +161,6 @@ public class PhoneNumberActivity extends AppCompatActivity {
         Intent intentList = new Intent(PhoneNumberActivity.this, PhoneNumberListActivity.class);
         intentList.putExtra("phone_number", editText.getText().toString());
         startActivity(intentList);
-//        finish();
     }
 
     private TextWatcher filterTextWatcher = new TextWatcher() {
@@ -164,9 +168,9 @@ public class PhoneNumberActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) {
             EditText editText= findViewById(R.id.editText);
             if(editText.getText().toString().length() > 0){
-                nextTextLayout.setVisibility(LinearLayout.VISIBLE);
+                nextButton.setVisibility(LinearLayout.VISIBLE);
             }else{
-                nextTextLayout.setVisibility(LinearLayout.INVISIBLE);
+                nextButton.setVisibility(LinearLayout.INVISIBLE);
             }
         }
 
@@ -178,5 +182,13 @@ public class PhoneNumberActivity extends AppCompatActivity {
         }
 
     };
+
+    public void hideVirtualKeyboard(){
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 
 }

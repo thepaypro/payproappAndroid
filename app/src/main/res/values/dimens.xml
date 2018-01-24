@@ -3,7 +3,6 @@
   <dimen name="google_1x">8dp</dimen>
 
   <dimen name="dots_height">30dp</dimen>
-  <dimen name="dots_margin_bottom">40dp</dimen>
   <dimen name="slide_title">30dp</dimen>
   <dimen name="slide_desc">16dp</dimen>
   <dimen name="desc_padding">40dp</dimen>
@@ -12,4 +11,7 @@
   <dimen name="design_bottom_navigation_active_text_size">10sp</dimen>
 
   <dimen name="passcode_circle_diameter">20dp</dimen>
+
+  <dimen name="custom_toolbar_height">44dp</dimen>
+  <dimen name="custom_search_toolbar_height">56dp</dimen>
 </resources>

@@ -2,14 +2,10 @@
 <resources>
   <color name="defaultTextColor">@android:color/black</color>
   <color name="defaultBackgroundColor">@android:color/transparent</color>
-
-  <color name="colorPrimary">#6666FF</color>
-  <color name="colorPrimaryDark">#3D3D7A</color>
   <color name="colorAccent">#565656</color>
 
   <!-- Screens background colors-->
   <color name="bg_slider">#3D3D7A</color>
-  <color name="bg_basic">#6666ff</color>
   <color name="bg_gray">#EBEBF1</color>
   <color name="bg_gray2">#FAFAFA</color>
 
@@ -21,24 +17,15 @@
   <color name="pp_purple">#7271ff</color>
   <color name="pp_pink_alpha">#e6ffccff</color>
   <color name="pp_purple_alpha">#e67271ff</color>
-
-
-  <!-- dots inactive colors -->
-  <color name="dot_dark_slider">#ffffff</color>
-
-  <!-- dots active colors -->
-  <color name="dot_light_slider">#7271FF</color>
-  
   <color name="PayPro_Line">#c8c7cc</color>
   <color name="PayPro_Background">#efeff4</color>
-  <color name="PayPro_Blue">#6666ff</color>
-
   <color name="pp_sm_gradTop">#70ffe2fd</color>
   <color name="pp_sm_gradMiddle">#b5987ff7</color>
+  <color name="PayPro_NavigationBar">#f7f7f7</color>
+  <color name="pp_ray_pink">#FF57DD</color>
 
-  <color name="inactive_grey">#a9a9a9</color>
-  <color name="secundary_grey">#747474</color>
-    <color name="PayPro_NavigationBar">#f7f7f7</color>
-
+  <!-- dots-->
+  <color name="dot_dark_slider">#7271FF</color>
+  <color name="dot_light_slider">#ffffff</color>
 
 </resources>

@@ -46,10 +46,12 @@ public class CommunityFragment extends Fragment {
         toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.replace(R.id.frame_layout, new InfoFragment());
-                transaction.commit();
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+//                transaction.replace(R.id.frame_layout, new InfoFragment());
+//                transaction.commit();
+                getFragmentManager().popBackStack();
+                ((TabActivity) getActivity()).hideVirtualKeyboard();
             }
         });
 

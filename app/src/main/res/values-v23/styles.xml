@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="PayProTheme" parent="AppTheme">
+    <style name="PayProTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
         <item name="android:statusBarColor">@color/PayPro_NavigationBar</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="colorPrimary">@color/PayPro_Blue</item>
-        <item name="colorPrimaryDark">@color/PayPro_Blue</item>
+        <item name="colorPrimary">@color/pp_light_purple</item>
+        <item name="colorPrimaryDark">@color/pp_light_purple</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

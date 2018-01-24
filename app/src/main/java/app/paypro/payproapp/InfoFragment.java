@@ -51,10 +51,12 @@ public class InfoFragment extends Fragment {
         toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.replace(R.id.frame_layout, new SettingsFragment());
-                transaction.commit();
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+//                transaction.replace(R.id.frame_layout, new SettingsFragment());
+//                transaction.commit();
+                getFragmentManager().popBackStack();
+                ((TabActivity) getActivity()).hideVirtualKeyboard();
             }
         });
 
@@ -64,12 +66,9 @@ public class InfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(
-                        R.anim.enter_from_right,
-                        R.anim.exit_to_left,
-                        R.anim.enter_from_left,
-                        R.anim.exit_to_right);
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                 transaction.replace(R.id.frame_layout, new CommunityFragment());
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
@@ -80,12 +79,9 @@ public class InfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(
-                        R.anim.enter_from_right,
-                        R.anim.exit_to_left,
-                        R.anim.enter_from_left,
-                        R.anim.exit_to_right);
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                 transaction.replace(R.id.frame_layout, new TermsFragment());
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });

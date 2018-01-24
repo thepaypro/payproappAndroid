@@ -1,5 +1,6 @@
 package app.paypro.payproapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -10,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ import app.paypro.payproapp.http.ResponseListener;
 import app.paypro.payproapp.transaction.Transaction;
 import app.paypro.payproapp.ui.button.swipe.OnStateChangeListener;
 import app.paypro.payproapp.ui.button.swipe.SwipeButton;
+import app.paypro.payproapp.utils.PPAlertDialog;
 import app.paypro.payproapp.utils.PPSnackbar;
 
 
@@ -42,8 +46,14 @@ public class SendMoneySendFragment extends Fragment {
     private TextView toText3;
     private TextView toText4;
     private LinearLayout progressBarLayout;
-    private Toolbar toolbar;
     private Boolean activityBlocked = false;
+
+    DialogInterface.OnClickListener defaultDialogInterface = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+
+        }
+    };
 
 
     public static SendMoneySendFragment newInstance() {
@@ -74,26 +84,6 @@ public class SendMoneySendFragment extends Fragment {
         toText3 = getActivity().findViewById(R.id.to_text_3);
         toText4 = getActivity().findViewById(R.id.to_text_4);
         progressBarLayout = getActivity().findViewById(R.id.activity_indicator);
-        toolbar = getActivity().findViewById(R.id.toolbar);
-
-        ((TabActivity)getActivity()).setSupportActionBar(toolbar);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!activityBlocked){
-                    ((TabActivity) getActivity()).hideVirtualKeyboard();
-                    getFragmentManager().popBackStack();
-                }
-            }
-        });
-
-        // Hide the virtual keyboard
-        View view = getActivity().getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getContext().INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
 
         final SendMoney sendMoney = Global.getSendMoney();
 
@@ -106,7 +96,8 @@ public class SendMoneySendFragment extends Fragment {
         }
 
         if(sendMoney.getMessage() == null){
-            toText2.setText("");
+            toText2.setText(R.string.default_transaction_msg);
+            sendMoney.setMessage(getResources().getString(R.string.default_transaction_msg));
         }else{
             toText2.setText(sendMoney.getMessage());
         }
@@ -142,12 +133,28 @@ public class SendMoneySendFragment extends Fragment {
                                 getActivity().finish();
                             }else if (!object.getBoolean("status") && object.has("error_msg")){
                                 hideActivityIndicator();
-                                PPSnackbar.getSnackbar(mainView,getContext(),object.getString("error_msg")).show();
                                 swipeButton.restartSwipeButton();
+                                switch (object.getString("error_msg")){
+                                    case "insufficient_funds":
+                                        DialogInterface.OnClickListener dialogInterfaceIF = new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                getFragmentManager().popBackStack();
+                                            }
+                                        };
+                                        PPAlertDialog.getAlertDialogBuilder(getContext(),"insufficient_funds",dialogInterfaceIF,dialogInterfaceIF).show();
+                                        break;
+                                    case "connection_error":
+                                        PPAlertDialog.getAlertDialogBuilder(getContext(),"connection_error",defaultDialogInterface,defaultDialogInterface).show();
+                                        break;
+                                    default:
+                                        PPAlertDialog.getAlertDialogBuilder(getContext(),"",defaultDialogInterface,defaultDialogInterface).show();
+
+                                }
                             }else{
                                 hideActivityIndicator();
-                                PPSnackbar.getSnackbar(mainView,getContext(),"").show();
                                 swipeButton.restartSwipeButton();
+                                PPAlertDialog.getAlertDialogBuilder(getContext(),"",defaultDialogInterface,defaultDialogInterface).show();
                             }
                         }
                     });
@@ -156,6 +163,33 @@ public class SendMoneySendFragment extends Fragment {
                 }
             }
 
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText(getResources().getString(R.string.send_title));
+
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+        toolbar_back_button_text.setText(getResources().getString(R.string.amount_title));
+        toolbar_back_button_text.setVisibility(View.VISIBLE);
+
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.VISIBLE);
+
+        Button confirmButton = getActivity().findViewById(R.id.app_toolbar_confirm_button);
+        confirmButton.setVisibility(View.GONE);
+
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!activityBlocked){
+                    getFragmentManager().popBackStack();
+                }
+            }
         });
     }
 

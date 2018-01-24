@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.Relation;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class Account {
     private String address;
 
     @ColumnInfo(name = "balance")
-    private Integer balance;
+    private Double balance;
 
     @ColumnInfo(name = "last_synced_transaction_id")
     private Integer last_synced_transaction_id;
@@ -51,12 +52,12 @@ public class Account {
         this.address = addressValue;
     }
 
-    public Integer getBalance()
+    public Double getBalance()
     {
         return balance;
     }
 
-    public void setBalance(Integer balanceValue)
+    public void setBalance(Double balanceValue)
     {
         this.balance = balanceValue;
     }

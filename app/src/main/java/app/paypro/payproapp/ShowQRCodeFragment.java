@@ -8,8 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import app.paypro.payproapp.asynctask.QRBitmapGeneratorAsyncTask;
 
@@ -19,9 +21,7 @@ import app.paypro.payproapp.asynctask.QRBitmapGeneratorAsyncTask;
 
 public class ShowQRCodeFragment extends Fragment {
 
-    String addr;
-    private Toolbar toolbar;
-    private Bitmap bitmap;
+    private String addr;
 
     public static ShowQRCodeFragment newInstance() {
         ShowQRCodeFragment fragment = new ShowQRCodeFragment();
@@ -48,21 +48,28 @@ public class ShowQRCodeFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ImageView qrImageView = getView().findViewById(R.id.qr_code);
-        ProgressBar progressBar = getView().findViewById(R.id.progress_bar);
-        toolbar = getActivity().findViewById(R.id.toolbar);
+        TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
+        toolbarTitle.setText("");
 
-        ((TabActivity)getActivity()).setSupportActionBar(toolbar);
+        TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
+        toolbar_back_button_text.setText(getResources().getString(R.string.account_title));
+        toolbar_back_button_text.setVisibility(View.VISIBLE);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setVisibility(View.VISIBLE);
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.replace(R.id.frame_layout, AccountFragment.newInstance());
-                transaction.commit();
+            public void onClick(View view) {
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+//                transaction.replace(R.id.frame_layout, AccountFragment.newInstance());
+//                transaction.commit();
+                getFragmentManager().popBackStack();
             }
         });
+
+        ImageView qrImageView = getView().findViewById(R.id.qr_code);
+        ProgressBar progressBar = getView().findViewById(R.id.progress_bar);
 
         QRBitmapGeneratorAsyncTask qrBitmapGeneratorAsyncTask = new QRBitmapGeneratorAsyncTask(qrImageView,progressBar);
         qrBitmapGeneratorAsyncTask.execute("bitcoin:"+addr);

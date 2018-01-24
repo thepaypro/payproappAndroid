@@ -214,10 +214,12 @@ public class ProfileView extends Fragment {
         toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-                transaction.replace(R.id.frame_layout, new SettingsFragment());
-                transaction.commit();
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+//                transaction.replace(R.id.frame_layout, new SettingsFragment());
+//                transaction.commit();
+                getFragmentManager().popBackStack();
+                ((TabActivity) getActivity()).hideVirtualKeyboard();
             }
         });
 
@@ -253,12 +255,9 @@ public class ProfileView extends Fragment {
             public void onClick( View v ) {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setCustomAnimations(
-                        R.anim.enter_from_right,
-                        R.anim.exit_to_left,
-                        R.anim.enter_from_left,
-                        R.anim.exit_to_right);
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                 transaction.replace(R.id.frame_layout, new ProfileEdit());
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         } );

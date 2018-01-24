@@ -1,20 +1,18 @@
 package app.paypro.payproapp;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.RelativeLayout;
 
 import com.android.support.BottomNavigationViewHelper;
 
@@ -32,11 +30,15 @@ import io.intercom.android.sdk.Intercom;
 
 public class TabActivity extends AppCompatActivity {
 
-    RelativeLayout activityMain;
-    Fragment navigationAccount;
-    BottomNavigationView navigation;
-    Boolean navigationEnabled = true;
+    private ConstraintLayout activityMain;
+    private Fragment navigationAccount;
+    private BottomNavigationView navigation;
+    private Boolean navigationEnabled = true;
+    private AsyncTask<Void,Void,Void> saveContactsAsyncTask;
 
+    public void setSaveContactsAsyncTask(AsyncTask<Void, Void, Void> saveContactsAsyncTask) {
+        this.saveContactsAsyncTask = saveContactsAsyncTask;
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,6 +46,8 @@ public class TabActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             if(navigationEnabled) {
+                findViewById(R.id.search_view).setVisibility(View.GONE);
+                findViewById(R.id.app_toolbar_layout).setVisibility(View.VISIBLE);
                 Fragment selectedFragment = null;
                 Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
                 Boolean selectedActualFragment = false;
@@ -84,6 +88,9 @@ public class TabActivity extends AppCompatActivity {
                     transaction.replace(R.id.frame_layout, selectedFragment);
                     hideVirtualKeyboard();
                     transaction.commit();
+                    if(!(selectedFragment instanceof ContactsFragment) && saveContactsAsyncTask != null){
+                        saveContactsAsyncTask.cancel(true);
+                    }
                 }
                 return true;
             }else{
@@ -91,6 +98,27 @@ public class TabActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public void onAttachFragment(Fragment fragment){
+        if (!(fragment instanceof ContactsFragment)){
+            findViewById(R.id.search_view).setVisibility(View.GONE);
+            findViewById(R.id.app_toolbar_layout).setVisibility(View.VISIBLE);
+            findViewById(R.id.app_toolbar_search_button).setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+        if (f instanceof ContactsFragment){
+            if(!((ContactsFragment) f).onBackPressed()){
+                super.onBackPressed();
+            }
+        }else{
+            super.onBackPressed();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,12 +184,16 @@ public class TabActivity extends AppCompatActivity {
         }
     }
     public void hideVirtualKeyboard(){
-        // Hide the virtual keyboard
         View view = getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public void showVirtualKeyboard(View v){
+        InputMethodManager imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+        imm.showSoftInput(v,InputMethodManager.SHOW_IMPLICIT);
     }
 
     @Override

@@ -68,7 +68,7 @@
             android:paddingLeft="8dp"
             android:lines="1"
             android:text="+34 123 45 67 89"
-            android:textColor="@color/secundary_grey"
+            android:textColor="?colorAccent"
             android:textSize="13sp"
             android:clickable="false"/>
     </LinearLayout>

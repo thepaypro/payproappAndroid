@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,30 +12,39 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <View style="@style/Divider"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/bg_gray">
+            android:layout_height="30dp"
+            android:background="@color/bg_gray"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/bitcoin_account_header_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:paddingLeft="15dp"
                 android:text="@string/bitcoin_account_header"
                 android:textSize="15sp" />
 
         </RelativeLayout>
 
+        <View style="@style/Divider"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/white"
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/address_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:background="@android:color/white"
                 android:orientation="horizontal">
 
@@ -43,50 +53,62 @@
                     android:id="@+id/address_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="10dp"
                     android:text="@string/address_label" />
 
                 <TextView
                     android:id="@+id/address_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp" />
+                    android:paddingRight="15dp"
+                    android:textIsSelectable="true"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:textSize="11sp"
+                    android:padding="10dp"
+                    android:textColor="@android:color/black" />
 
             </LinearLayout>
 
-            <LinearLayout
+            <View style="@style/DividerWithStartMargin"/>
+
+            <android.support.constraint.ConstraintLayout
                 android:id="@+id/qr_code_clickable"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
                 android:background="@android:color/white"
-                android:orientation="horizontal"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/qrcode_label"
-                    android:layout_gravity="end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="@string/qrcode_label" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="right"
-                    android:paddingRight="5dp"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="@string/qrcode_label"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="end"
-                        app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
-                </LinearLayout>
+                <ImageView
+                    android:id="@+id/arrow"
+                    android:layout_width="8dp"
+                    android:layout_height="13dp"
+                    android:layout_marginRight="16dp"
+                    android:contentDescription="@string/todo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@mipmap/arrow_right" />
 
-            </LinearLayout>
+            </android.support.constraint.ConstraintLayout>
+
+            <View style="@style/Divider"/>
+
         </LinearLayout>
 
     </LinearLayout>

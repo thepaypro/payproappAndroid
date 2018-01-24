@@ -6,6 +6,7 @@ package app.paypro.payproapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import java.io.InputStream;
 import org.json.JSONArray;
@@ -15,9 +16,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
@@ -27,6 +31,11 @@ import java.util.Comparator;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.view.View;
 import android.support.v7.app.ActionBar;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -35,15 +44,85 @@ public class PhoneNumberListActivity extends AppCompatActivity{
     private CountriesListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String phone_number = "";
+    private ImageButton searchButton;
+    private ConstraintLayout searchView;
+    private EditText searchText;
+    private ImageButton searchCloseButton;
+    private ImageButton searchBackButton;
+    private RelativeLayout appToolbarLayout;
+    private LinearLayout noResultsView;
+    private TextView noResultsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_number_list);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        appToolbarLayout = findViewById(R.id.app_toolbar_layout);
+        searchButton = findViewById(R.id.app_toolbar_search_button);
+        searchView = findViewById(R.id.search_view);
+        searchText = findViewById(R.id.search_text);
+        searchCloseButton = findViewById(R.id.search_close_button);
+        searchBackButton = findViewById(R.id.search_back_button);
+
+        noResultsView = findViewById(R.id.no_results_view);
+        noResultsText = findViewById(R.id.no_results_text);
+
+        ImageButton toolbar_back_button_image = findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        searchButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                showToolbarSearch();
+            }
+        });
+
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(mAdapter != null){
+                    mAdapter.getFilter().filter(charSequence);
+                }
+                if(charSequence.length() > 0){
+                    searchCloseButton.setVisibility(View.VISIBLE);
+                }else{
+                    searchCloseButton.setVisibility(View.GONE);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        searchBackButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                hideToolbarSearch();
+            }
+        });
+
+        searchCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchText.setText("");
+            }
+        });
+
 
         ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
@@ -66,22 +145,33 @@ public class PhoneNumberListActivity extends AppCompatActivity{
         mAdapter = new CountriesListAdapter(sortList(myDataset));
         mRecyclerView.setAdapter(mAdapter);
 
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (mAdapter.getItemCount() == 0){
+                    noResultsText.setText(String.format(getResources().getString(R.string.no_results), searchText.getText().toString()));
+                    noResultsView.setVisibility(View.VISIBLE);
+                }else {
+                    noResultsView.setVisibility(View.GONE);
+                }
+            }
+        });
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             phone_number = extras.getString("phone_number");
         }
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            // Respond to the action bar's Up/Home button
-//            case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public void onBackPressed() {
+        if(searchView.getVisibility() == View.VISIBLE) {
+            hideToolbarSearch();
+        }else{
+            super.onBackPressed();
+        }
+    }
 
     ArrayList<Country> sortList(ArrayList<Country> list) {
         Collections.sort(list, new Comparator<Country>() {
@@ -91,17 +181,6 @@ public class PhoneNumberListActivity extends AppCompatActivity{
             }
         });
         return list;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu, menu);
-
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
-        search(searchView);
-
-        return true;
     }
 
     public ArrayList<Country> loadCountriesJSON() {
@@ -129,21 +208,31 @@ public class PhoneNumberListActivity extends AppCompatActivity{
         return listdata;
     }
 
-    private void search(SearchView searchView) {
+    public void showToolbarSearch(){
+        appToolbarLayout.setVisibility(View.GONE);
+        searchView.setVisibility(View.VISIBLE);
+        searchView.bringToFront();
+        searchText.requestFocus();
+        showVirtualKeyboard(searchText);
+    }
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
+    public void hideToolbarSearch() {
+        hideVirtualKeyboard();
+        searchText.setText("");
+        searchView.setVisibility(View.GONE);
+        appToolbarLayout.setVisibility(View.VISIBLE);
+    }
 
-                return false;
-            }
+    public void hideVirtualKeyboard(){
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                mAdapter.getFilter().filter(newText);
-                return true;
-            }
-        });
+    public void showVirtualKeyboard(View v){
+        InputMethodManager imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+        imm.showSoftInput(v,InputMethodManager.SHOW_IMPLICIT);
     }
 }

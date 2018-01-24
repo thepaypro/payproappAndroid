@@ -76,12 +76,7 @@ public class PasscodeActivity extends AppCompatActivity{
         if (extras != null) {
             passcode_state = extras.getString("passcode_state");
             username = extras.getString("username");
-
-//            if(extras.getString("errorMsg") != null){
-//                PPSnackbar.getSnackbar(mainView,getApplicationContext(),extras.getString("errorMsg")).show();
-//            }else{
-                editText.requestFocus();
-//            }
+            editText.requestFocus();
 
             TextView titleTextView = this.findViewById(R.id.titleTextView);
             TextView descTextView = this.findViewById(R.id.descTextView);
@@ -361,6 +356,7 @@ public class PasscodeActivity extends AppCompatActivity{
                             finish();
                             break;
                         case "changePasscodeConfirm":
+                            disableView();
                             try {
                                 JSONObject changePasscodeParameters = new JSONObject();
                                 changePasscodeParameters.put("old_password", old_passcode.toString());
@@ -376,10 +372,19 @@ public class PasscodeActivity extends AppCompatActivity{
                                                 startActivity(intentComfirm);
                                                 finish();
                                             } else {
+                                                enableView();
                                                 shake();
                                                 editText.setText("");
-                                                InputMethodManager imm = (InputMethodManager)   getSystemService(Context.INPUT_METHOD_SERVICE);
-                                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                                                DialogInterface.OnClickListener dialogInterfaceOK = new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        Intent intent = new Intent(PasscodeActivity.this, PasscodeActivity.class);
+                                                        intent.putExtra("passcode_state", "old");
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                };
+                                                PPAlertDialog.getAlertDialogBuilder(PasscodeActivity.this,"error_change_passcode",dialogInterfaceOK,dialogInterfaceOK).show();
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
