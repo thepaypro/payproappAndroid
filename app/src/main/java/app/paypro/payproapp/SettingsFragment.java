@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +52,7 @@ public class SettingsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
-        toolbarTitle.setText("Settings");
+        toolbarTitle.setText(R.string.title_settings);
 
         ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
         toolbar_back_button_image.setVisibility(View.INVISIBLE);
@@ -124,6 +123,19 @@ public class SettingsFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), PasscodeActivity.class);
                 intent.putExtra("passcode_state", "old");
                 startActivity(intent);
+            }
+        } );
+
+        TableRow rowLanguage;
+        rowLanguage = getView().findViewById(R.id.rowLanguage);
+        rowLanguage.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick( View v ) {
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+                transaction.replace(R.id.frame_layout, new LanguageFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         } );
 

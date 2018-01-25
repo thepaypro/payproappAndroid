@@ -21,7 +21,7 @@ import app.paypro.payproapp.utils.PPSnackbar;
  * Created by rogerbaiget on 13/11/17.
  */
 
-public class SmsCodeActivity extends AppCompatActivity{
+public class SmsCodeActivity extends BaseActivity{
 
     private EditText editText;
     private TextView firstTextView;

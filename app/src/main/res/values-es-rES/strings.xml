@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">PayPro</string>
-    <string name="continue_button">Continuar</string>
-    <string name="bitcoin_account_header">CUENTA BITCOIN</string>
-    <string name="latest_transactions_header">" ÚLTIMAS TRANSACCIONES"</string>
-</resources>

@@ -39,7 +39,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-public class PhoneNumberListActivity extends AppCompatActivity{
+public class PhoneNumberListActivity extends BaseActivity{
     private RecyclerView mRecyclerView;
     private CountriesListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;

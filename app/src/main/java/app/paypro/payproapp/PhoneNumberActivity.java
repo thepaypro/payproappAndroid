@@ -40,7 +40,7 @@ import app.paypro.payproapp.utils.PPSnackbar;
  * Created by rogerbaiget on 10/11/17.
  */
 
-public class PhoneNumberActivity extends AppCompatActivity {
+public class PhoneNumberActivity extends BaseActivity {
 
     private String alpha2Code;
     private String callingCodes;

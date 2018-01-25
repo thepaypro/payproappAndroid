@@ -96,7 +96,7 @@ public class SendMoneyAmountFragment extends Fragment {
         super.onResume();
 
         TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
-        toolbarTitle.setText(getResources().getString(R.string.amount_title));
+        toolbarTitle.setText(getResources().getString(R.string.title_amount));
 
         TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
 

@@ -231,7 +231,7 @@ public class ContactsFragment extends Fragment {
 
                     SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("origin",getResources().getString(R.string.contacts_title));
+                    bundle.putString("origin",getResources().getString(R.string.title_contacts));
                     myfragment.setArguments(bundle);
                     FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -283,7 +283,7 @@ public class ContactsFragment extends Fragment {
         }
 
         TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
-        toolbarTitle.setText(getResources().getString(R.string.contacts_title));
+        toolbarTitle.setText(getResources().getString(R.string.title_contacts));
 
 
         getActivity().findViewById(R.id.app_toolbar_back_button_image).setVisibility(View.INVISIBLE);

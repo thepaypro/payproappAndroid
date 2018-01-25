@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutionException;
 import app.paypro.payproapp.asynctask.db.user.GetUserAsyncTask;
 import app.paypro.payproapp.db.entity.User;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends BaseActivity {
 
     private static Context mContext;
     private ViewPager viewPager;

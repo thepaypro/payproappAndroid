@@ -52,7 +52,7 @@ public class ShowQRCodeFragment extends Fragment {
         toolbarTitle.setText("");
 
         TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
-        toolbar_back_button_text.setText(getResources().getString(R.string.account_title));
+        toolbar_back_button_text.setText(getResources().getString(R.string.title_account));
         toolbar_back_button_text.setVisibility(View.VISIBLE);
 
         ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);

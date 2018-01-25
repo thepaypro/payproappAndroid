@@ -69,10 +69,10 @@ public class SendMoneyAddressFragment extends Fragment {
         super.onResume();
 
         TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
-        toolbarTitle.setText(getResources().getString(R.string.bitcoin_address_title));
+        toolbarTitle.setText(getResources().getString(R.string.title_bitcoin_address));
 
         TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
-        toolbar_back_button_text.setText(getResources().getString(R.string.contacts_title));
+        toolbar_back_button_text.setText(getResources().getString(R.string.title_contacts));
         toolbar_back_button_text.setVisibility(View.VISIBLE);
 
         ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
@@ -102,7 +102,7 @@ public class SendMoneyAddressFragment extends Fragment {
 
                     SendMoneyAmountFragment myfragment = new SendMoneyAmountFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("origin",getResources().getString(R.string.bitcoin_address_title));
+                    bundle.putString("origin",getResources().getString(R.string.title_bitcoin_address));
                     myfragment.setArguments(bundle);
                     FragmentManager fragmentManager = ((TabActivity)getContext()).getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();

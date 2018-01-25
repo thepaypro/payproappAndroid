@@ -32,7 +32,7 @@ import io.intercom.android.sdk.identity.Registration;
  * Created by rogerbaiget on 13/11/17.
  */
 
-public class PasscodeActivity extends AppCompatActivity{
+public class PasscodeActivity extends BaseActivity{
 
     private EditText editText;
     private ImageView firstImageView;

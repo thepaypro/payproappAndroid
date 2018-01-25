@@ -9,7 +9,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -28,7 +27,7 @@ import app.paypro.payproapp.utils.PPSnackbar;
 import io.intercom.android.sdk.Intercom;
 
 
-public class TabActivity extends AppCompatActivity {
+public class TabActivity extends BaseActivity {
 
     private ConstraintLayout activityMain;
     private Fragment navigationAccount;
@@ -46,8 +45,6 @@ public class TabActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             if(navigationEnabled) {
-                findViewById(R.id.search_view).setVisibility(View.GONE);
-                findViewById(R.id.app_toolbar_layout).setVisibility(View.VISIBLE);
                 Fragment selectedFragment = null;
                 Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
                 Boolean selectedActualFragment = false;
@@ -150,6 +147,14 @@ public class TabActivity extends AppCompatActivity {
         } else {
             navigation.setSelectedItemId(R.id.navigation_account);
         }
+    }
+
+    public void onLanguageChange(){
+        navigation.getMenu().getItem(0).setTitle(R.string.title_support);
+        navigation.getMenu().getItem(1).setTitle(R.string.title_scan);
+        navigation.getMenu().getItem(2).setTitle(R.string.title_send);
+        navigation.getMenu().getItem(3).setTitle(R.string.title_account);
+        navigation.getMenu().getItem(4).setTitle(R.string.title_settings);
     }
 
     public void refreshAccountInfo(final SwipeRefreshLayout swipeRefreshLayout){

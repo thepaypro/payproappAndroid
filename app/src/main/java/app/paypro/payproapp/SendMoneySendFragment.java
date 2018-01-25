@@ -171,10 +171,10 @@ public class SendMoneySendFragment extends Fragment {
         super.onResume();
 
         TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
-        toolbarTitle.setText(getResources().getString(R.string.send_title));
+        toolbarTitle.setText(getResources().getString(R.string.title_send));
 
         TextView toolbar_back_button_text = getActivity().findViewById(R.id.app_toolbar_back_button_text);
-        toolbar_back_button_text.setText(getResources().getString(R.string.amount_title));
+        toolbar_back_button_text.setText(getResources().getString(R.string.title_amount));
         toolbar_back_button_text.setVisibility(View.VISIBLE);
 
         ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);

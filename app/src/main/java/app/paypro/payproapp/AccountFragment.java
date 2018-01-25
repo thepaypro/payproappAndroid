@@ -52,7 +52,7 @@ public class AccountFragment extends Fragment implements AccountFragmentsInterfa
         super.onActivityCreated(savedInstanceState);
 
         TextView toolbarTitle = getActivity().findViewById(R.id.app_toolbar_title);
-        toolbarTitle.setText(getResources().getString(R.string.account_title));
+        toolbarTitle.setText(getResources().getString(R.string.title_account));
 
         ImageButton toolbar_back_button_image = getActivity().findViewById(R.id.app_toolbar_back_button_image);
         toolbar_back_button_image.setVisibility(View.INVISIBLE);
