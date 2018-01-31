@@ -96,6 +96,15 @@ public class PhoneNumberActivity extends AppCompatActivity {
             callingCodesView.setText("+"+callingCodes);
 
             editText.setText(phone_number);
+
+        }else{
+            callingCodes = "44";
+            TextView callingCodesView = this.findViewById(R.id.callingCodesView);
+            callingCodesView.setText("+"+callingCodes);
+
+            alpha2Code = "GB";
+            TextView alpha2CodeView = this.findViewById(R.id.alpha2CodeView);
+            alpha2CodeView.setText(alpha2Code);
         }
 
         if(editText.getText().toString().length() > 0){
