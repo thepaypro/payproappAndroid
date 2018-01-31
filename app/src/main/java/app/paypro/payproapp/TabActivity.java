@@ -31,7 +31,7 @@ import io.intercom.android.sdk.Intercom;
 public class TabActivity extends AppCompatActivity {
 
     private ConstraintLayout activityMain;
-    private Fragment navigationAccount;
+    private Fragment selectedFragment;
     private BottomNavigationView navigation;
     private Boolean navigationEnabled = true;
     private AsyncTask<Void,Void,Void> saveContactsAsyncTask;
@@ -48,7 +48,7 @@ public class TabActivity extends AppCompatActivity {
             if(navigationEnabled) {
                 findViewById(R.id.search_view).setVisibility(View.GONE);
                 findViewById(R.id.app_toolbar_layout).setVisibility(View.VISIBLE);
-                Fragment selectedFragment = null;
+                selectedFragment = null;
                 Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
                 Boolean selectedActualFragment = false;
                 switch (item.getItemId()) {
@@ -72,7 +72,6 @@ public class TabActivity extends AppCompatActivity {
                             selectedActualFragment = true;
                         }
                         selectedFragment = AccountFragment.newInstance();
-                        navigationAccount = selectedFragment;
                         break;
                     case R.id.navigation_settings:
                         if (f instanceof SettingsFragment) {
@@ -135,7 +134,7 @@ public class TabActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String optionMenuLoad = extras.getString("optionMenuLoad");
-            
+
             switch (optionMenuLoad)
             {
                 case "settings":
@@ -143,7 +142,7 @@ public class TabActivity extends AppCompatActivity {
                     transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
                     transaction.add(R.id.frame_layout, SettingsFragment.newInstance());
                     transaction.commit();
-                
+
                     navigation.setSelectedItemId(R.id.navigation_settings);
                     break;
             }
@@ -159,12 +158,14 @@ public class TabActivity extends AppCompatActivity {
                 public void getResult(JSONObject object) throws JSONException {
                     swipeRefreshLayout.setRefreshing(false);
                     try {
-                        if (object.getString("status").equals("true")) {
-                            ((AccountFragment) navigationAccount).onRefreshInfo(new GetAccountAsyncTask(getApplicationContext()).execute().get()[0]);
-                        }else if (!object.getBoolean("status") && object.has("error_msg")){
-                            PPSnackbar.getSnackbar(activityMain,getApplicationContext(),object.getString("error_msg")).show();
-                        } else {
-                            PPSnackbar.getSnackbar(activityMain,getApplicationContext(),"").show();
+                        if(selectedFragment instanceof AccountFragment){
+                            if (object.getString("status").equals("true")) {
+                                ((AccountFragment) selectedFragment).onRefreshInfo(new GetAccountAsyncTask(getApplicationContext()).execute().get()[0]);
+                            }else if (!object.getBoolean("status") && object.has("error_msg")){
+                                PPSnackbar.getSnackbar(activityMain,getApplicationContext(),object.getString("error_msg")).show();
+                            } else {
+                                PPSnackbar.getSnackbar(activityMain,getApplicationContext(),"").show();
+                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
