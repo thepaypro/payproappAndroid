@@ -51,6 +51,7 @@ public class PhoneNumberActivity extends AppCompatActivity {
     private ConstraintLayout mainView;
     private ProgressBar progressBar;
     private Button nextButton;
+    private ImageButton toolbar_back_button_image;
 
 
     @Override
@@ -67,7 +68,7 @@ public class PhoneNumberActivity extends AppCompatActivity {
 
         editText.addTextChangedListener(filterTextWatcher);
 
-        ImageButton toolbar_back_button_image = findViewById(R.id.app_toolbar_back_button_image);
+        toolbar_back_button_image = findViewById(R.id.app_toolbar_back_button_image);
         toolbar_back_button_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,6 +158,7 @@ public class PhoneNumberActivity extends AppCompatActivity {
         progressBar.setVisibility(LinearLayout.VISIBLE);
         countryPrefixView.setEnabled(false);
         editText.setEnabled(false);
+        toolbar_back_button_image.setEnabled(false);
     }
 
     public void enableView(){
@@ -164,6 +166,7 @@ public class PhoneNumberActivity extends AppCompatActivity {
         progressBar.setVisibility(LinearLayout.GONE);
         countryPrefixView.setEnabled(true);
         editText.setEnabled(true);
+        toolbar_back_button_image.setEnabled(true);
     }
 
     public void launchListActivity(View v) {
