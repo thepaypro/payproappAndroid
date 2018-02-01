@@ -225,6 +225,8 @@ public class ContactsFragment extends Fragment {
 
                     if(!contact.getBackFullName().isEmpty()){
                         sendMoney.setLabel(contact.getBackFullName());
+                    }else if (!contact.getName().isEmpty()){
+                        sendMoney.setLabel(contact.getName());
                     }
 
                     Global.setSendMoney(sendMoney);
