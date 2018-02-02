@@ -20,6 +20,8 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
@@ -111,7 +113,11 @@ public class SendMoneySendFragment extends Fragment {
 
                 HashMap<String,Object> transactionHashMap = new HashMap<>();
 
-                transactionHashMap.put("subject", sendMoney.getMessage());
+                try {
+                    transactionHashMap.put("subject", URLEncoder.encode(sendMoney.getMessage(),"UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 transactionHashMap.put("amount", sendMoney.getAmount());
 
                 if (sendMoney.getUserId() != null){
