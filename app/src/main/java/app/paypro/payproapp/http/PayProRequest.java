@@ -101,7 +101,7 @@ public class PayProRequest {
             }
         };
 
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(30000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(60000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -190,7 +190,7 @@ public class PayProRequest {
             }
         };
 
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(30000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(60000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -271,7 +271,7 @@ public class PayProRequest {
             }
         };
 
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(30000,
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(60000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
