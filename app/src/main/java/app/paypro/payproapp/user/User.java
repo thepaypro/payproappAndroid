@@ -18,6 +18,7 @@ import app.paypro.payproapp.http.PayProRequest;
 import app.paypro.payproapp.http.ResponseListener;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -142,8 +143,17 @@ public class User {
             @Override
             public void getResult(JSONObject object) throws JSONException {
                 try {
-                    if (object.has("user"))
+                    if (object.has("user") && object.has("version"))
                     {
+                        final JSONObject responseJSON = new JSONObject();
+                        JSONArray version = object.getJSONArray("version");
+                        for(int i = 0; i<version.length(); i++){
+                            if( ((JSONObject) version.get(i)).getString("os").equals("android")){
+                                JSONObject androidVersion = ((JSONObject) version.get(i));
+                                responseJSON.put("version", androidVersion);
+                            }
+                        }
+
                         JSONObject userJSON = object.getJSONObject("user");
 
                         Boolean firstTimeUser = false;
@@ -185,7 +195,6 @@ public class User {
                             public void getResult(JSONObject object) throws JSONException {
                                 try {
                                     if (object.getString("status").equals("true")) {
-                                        JSONObject responseJSON = new JSONObject();
                                         responseJSON.put("status", true);
                                         listener.getResult(responseJSON);
                                     } else {

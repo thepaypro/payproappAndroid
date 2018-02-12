@@ -25,6 +25,16 @@ public class PPAlertDialog {
         }
 
         switch (type) {
+            case "force_update":
+                builder.setMessage(R.string.force_update)
+                        .setPositiveButton(android.R.string.ok, okAction)
+                        .setNegativeButton(android.R.string.cancel, cancelAction);
+                return builder;
+            case "optional_update":
+                builder.setMessage(R.string.optional_update)
+                        .setPositiveButton(android.R.string.ok, okAction)
+                        .setNegativeButton(android.R.string.cancel, cancelAction);
+                return builder;
             case "error_username_exist":
                 builder.setMessage(R.string.error_username_exist)
                         .setPositiveButton(android.R.string.ok, okAction)

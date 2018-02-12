@@ -143,4 +143,8 @@
 
 
   <string name="no_results">No results for \"%1$s\"</string>
+
+
+  <string name="force_update">You need to update the app in order to keep using it</string>
+  <string name="optional_update">There is a newer version of the app. Do you want to update?</string>
 </resources>
