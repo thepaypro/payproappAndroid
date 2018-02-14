@@ -29,14 +29,20 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
+
         <activity
-            android:screenOrientation="portrait"
-            android:name=".WelcomeActivity"
-            android:theme="@style/PayProTheme">
+            android:name=".SplashActivity"
+            android:theme="@style/PayProSplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".WelcomeActivity"
+            android:theme="@style/PayProTheme">
         </activity>
         <activity
             android:screenOrientation="portrait"

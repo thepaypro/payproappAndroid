@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
 
+import app.paypro.payproapp.BuildConfig;
 import app.paypro.payproapp.PasscodeActivity;
 import app.paypro.payproapp.WelcomeActivity;
 import app.paypro.payproapp.asynctask.db.user.GetUserAsyncTask;
@@ -26,6 +27,28 @@ import java.util.concurrent.ExecutionException;
 
 
 public class User {
+
+
+    public static void checkVersion(final Context context, final ResponseListener<JSONObject> listener) throws JSONException{
+
+        JSONObject parameters = new JSONObject();
+        parameters.put("app_version", BuildConfig.VERSION_CODE);
+
+        PayProRequest.post(context, "app_version/android", parameters, new ResponseListener<JSONObject>() {
+            @Override
+            public void getResult(JSONObject object) throws JSONException {
+                if(object.has("need_update")){
+                    JSONObject responseJSON = new JSONObject();
+                    responseJSON.put("need_update", object.getString("need_update"));
+                    listener.getResult(responseJSON);
+                }else{
+                    JSONObject errorResponse = new JSONObject();
+                    errorResponse.put("status", false);
+                    listener.getResult(errorResponse);
+                }
+            }
+        });
+    }
 
     public static void register(final Context context, JSONObject parameters, final ResponseListener<JSONObject> listener) throws JSONException {
         PayProRequest.post(context, "register/", parameters, new ResponseListener<JSONObject>(){
@@ -143,17 +166,8 @@ public class User {
             @Override
             public void getResult(JSONObject object) throws JSONException {
                 try {
-                    if (object.has("user") && object.has("version"))
+                    if (object.has("user"))
                     {
-                        final JSONObject responseJSON = new JSONObject();
-                        JSONArray version = object.getJSONArray("version");
-                        for(int i = 0; i<version.length(); i++){
-                            if( ((JSONObject) version.get(i)).getString("os").equals("android")){
-                                JSONObject androidVersion = ((JSONObject) version.get(i));
-                                responseJSON.put("version", androidVersion);
-                            }
-                        }
-
                         JSONObject userJSON = object.getJSONObject("user");
 
                         Boolean firstTimeUser = false;
@@ -195,6 +209,7 @@ public class User {
                             public void getResult(JSONObject object) throws JSONException {
                                 try {
                                     if (object.getString("status").equals("true")) {
+                                        JSONObject responseJSON = new JSONObject();
                                         responseJSON.put("status", true);
                                         listener.getResult(responseJSON);
                                     } else {

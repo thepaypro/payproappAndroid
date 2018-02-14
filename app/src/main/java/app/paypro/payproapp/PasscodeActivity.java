@@ -3,7 +3,6 @@ package app.paypro.payproapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -236,55 +234,13 @@ public class PasscodeActivity extends AppCompatActivity{
                                     public void getResult(JSONObject object) {
                                         try {
                                             if(object.getBoolean("status")){
-                                                JSONObject version = object.getJSONObject("version");
-                                                int lastVersion = version.getInt("lastVersion");
-                                                int oldSuppVersion = version.getInt("oldestSupportedVersion");
-
-                                                if(BuildConfig.VERSION_CODE < oldSuppVersion){
-                                                    PPAlertDialog.getAlertDialogBuilder(PasscodeActivity.this, "force_update", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                            Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("market://search?q=" + "PayPro"));
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-                                                    }, new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                            finish();
-                                                        }
-                                                    }).show();
-                                                }else if (BuildConfig.VERSION_CODE < lastVersion){
-                                                    PPAlertDialog.getAlertDialogBuilder(PasscodeActivity.this, "optional_update", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                            Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("market://search?q=" + "PayPro"));
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-                                                    }, new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                                            enableView();
-                                                            Intercom.initialize(getApplication(), "android_sdk-33727861a67ba62364b150d95d3d8812f5e3584a", "u32hbwiy");
-                                                            Registration registration = Registration.create().withUserId(username);
-                                                            Intercom.client().registerIdentifiedUser(registration);
-                                                            Intent intentLogin = new Intent(PasscodeActivity.this, TabActivity.class);
-                                                            startActivity(intentLogin);
-                                                            finish();
-                                                        }
-                                                    }).show();
-
-                                                }else {
-                                                    enableView();
-                                                    Intercom.initialize(getApplication(), "android_sdk-33727861a67ba62364b150d95d3d8812f5e3584a", "u32hbwiy");
-                                                    Registration registration = Registration.create().withUserId(username);
-                                                    Intercom.client().registerIdentifiedUser(registration);
-                                                    Intent intentLogin = new Intent(PasscodeActivity.this, TabActivity.class);
-                                                    startActivity(intentLogin);
-                                                    finish();
-                                                }
-
+                                                enableView();
+                                                Intercom.initialize(getApplication(), "android_sdk-33727861a67ba62364b150d95d3d8812f5e3584a", "u32hbwiy");
+                                                Registration registration = Registration.create().withUserId(username);
+                                                Intercom.client().registerIdentifiedUser(registration);
+                                                Intent intentLogin = new Intent(PasscodeActivity.this, TabActivity.class);
+                                                startActivity(intentLogin);
+                                                finish();
                                             }else if (!object.getBoolean("status") && object.has("error_msg")){
                                                 enableView();
                                                 PPSnackbar.getSnackbar(mainView,getApplicationContext(),object.getString("error_msg")).show();
