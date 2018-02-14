@@ -43,6 +43,9 @@ public class User {
                     listener.getResult(responseJSON);
                 }else{
                     JSONObject errorResponse = new JSONObject();
+                    if(object.has("error_msg")){
+                        errorResponse.put("error_msg", object.getString("error_msg"));
+                    }
                     errorResponse.put("status", false);
                     listener.getResult(errorResponse);
                 }

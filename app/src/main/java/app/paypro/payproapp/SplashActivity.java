@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import app.paypro.payproapp.http.ResponseListener;
 import app.paypro.payproapp.user.User;
 import app.paypro.payproapp.utils.PPAlertDialog;
+import app.paypro.payproapp.utils.PPSnackbar;
 
 /**
  * Created by rogerbaiget on 14/2/18.
@@ -45,6 +46,10 @@ public class SplashActivity extends AppCompatActivity {
                             } else {
                                 startWellcomeActivity();
                             }
+                        }else if (object.has("error_msg")){
+                            PPSnackbar.getSnackbar(getWindow().getDecorView().getRootView(),getApplicationContext(),object.getString("error_msg")).show();
+                        }else{
+                            PPSnackbar.getSnackbar(getWindow().getDecorView().getRootView(),getApplicationContext(),object.getString("")).show();
                         }
                     }
                 });
